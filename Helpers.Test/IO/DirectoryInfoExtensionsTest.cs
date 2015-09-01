@@ -12,7 +12,7 @@ namespace Helpers.Test.IO
         public void GetChildFile()
         {
             // Setup
-            var directory = new DirectoryInfo(@"\Directory");
+            var directory = new DirectoryInfo(@"C:\Directory");
 
             // Execute
             var file = directory.File("File");
@@ -26,7 +26,7 @@ namespace Helpers.Test.IO
         public void GetChildFileWithNullFileName()
         {
             // Setup
-            var directory = new DirectoryInfo(@"\Directory");
+            var directory = new DirectoryInfo(@"C:\Directory");
 
             // Execute
             var file = directory.File(a_fileName: null);
@@ -47,7 +47,7 @@ namespace Helpers.Test.IO
         public void GetChildFilePath()
         {
             // Setup
-            var directory = new DirectoryInfo(@"\Directory");
+            var directory = new DirectoryInfo(@"C:\Directory");
 
             // Execute
             var path = directory.FilePath("File");
@@ -61,7 +61,7 @@ namespace Helpers.Test.IO
         public void GetChildFilePathWithNullFileName()
         {
             // Setup
-            var directory = new DirectoryInfo(@"\Directory");
+            var directory = new DirectoryInfo(@"C:\Directory");
 
             // Execute
             var path = directory.FilePath(a_fileName: null);
@@ -82,7 +82,7 @@ namespace Helpers.Test.IO
         public void GetChildDirectory()
         {
             // Setup
-            var directory = new DirectoryInfo(@"\Directory");
+            var directory = new DirectoryInfo(@"C:\Directory");
 
             // Execute
             var child = directory.Directory("Directory");
@@ -96,7 +96,7 @@ namespace Helpers.Test.IO
         public void GetChildWithNullDirectoryName()
         {
             // Setup
-            var directory = new DirectoryInfo(@"\Directory");
+            var directory = new DirectoryInfo(@"C:\Directory");
 
             // Execute
             var child = directory.Directory(a_directoryName: null);
@@ -118,7 +118,7 @@ namespace Helpers.Test.IO
         public void GetChildDirectoryPath()
         {
             // Setup
-            var directory = new DirectoryInfo(@"\Directory");
+            var directory = new DirectoryInfo(@"C:\Directory");
 
             // Execute
             var path = directory.DirectoryPath("Directory");
@@ -132,7 +132,7 @@ namespace Helpers.Test.IO
         public void GetChildDirectoryPathWithNull()
         {
             // Setup
-            var directory = new DirectoryInfo(@"\Directory");
+            var directory = new DirectoryInfo(@"C:\Directory");
 
             // Execute
             var path = directory.DirectoryPath(a_directoryName: null);
