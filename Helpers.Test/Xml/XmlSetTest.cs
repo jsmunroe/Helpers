@@ -57,7 +57,7 @@ namespace Helpers.Test.Xml
         public void AddEntityWithNull()
         {
             // Setup
-            var file = GetXmlFile(nameof(AddEntity));
+            var file = GetXmlFile(nameof(AddEntityWithNull));
             var set = new XmlSet<SimpleType>(file);
 
             // Execute
@@ -128,6 +128,41 @@ namespace Helpers.Test.Xml
             Assert.AreEqual(complex.Child.Value, result.Child.Value);
             Assert.AreEqual(complex.Child.Price, result.Child.Price);
             Assert.AreEqual(complex.Child.Date, result.Child.Date);
+        }
+
+
+        [TestMethod]
+        public void RevertSet()
+        {
+            // Setup up.
+            var file = GetXmlFile(nameof(RevertSet));
+            File.Delete(file);
+            var set = new XmlSet<SimpleType>(file);
+
+            var simple = new SimpleType
+            {
+                Name = "Test",
+                Value = 12.35,
+                Price = 4.50m,
+                Date = DateTime.Parse("9/1/2015")
+            };
+            set.Add(simple);
+            set.Save();
+
+            var simple2 = new SimpleType
+            {
+                Name = "Test 2",
+                Value = 43.001,
+                Price = 8.5m,
+                Date = DateTime.Parse("9/2/2015")
+            };
+
+            // Execute
+            set.Revert();
+
+            // Assert
+            Assert.AreEqual(1, set.Count);
+            Assert.AreEqual(simple.Name, set.First().Name);
         }
 
         class SimpleType

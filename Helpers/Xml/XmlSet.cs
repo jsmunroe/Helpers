@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Helpers.Xml
 {
-    public class XmlSet<TEntity> : ICollection<TEntity>
+    public class XmlSet<TEntity> : IFileSet<TEntity>
     {
         private int _version = 0;
         private readonly string _filePath;
@@ -152,6 +152,14 @@ namespace Helpers.Xml
             }
 
             document.Save(_filePath);
+        }
+
+        /// <summary>
+        /// Revert the set back to its file.
+        /// </summary>
+        public void Revert()
+        {
+            _entities = LoadEntities();
         }
 
         /// <summary>
