@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>JSMunroe-Helpers</id>
+    <version>$version$</version>
+    <title>Helpers</title>
+    <authors>JSMunroe.com, Jordan Munroe</authors>
+    <owners>Jordan Munroe</owners>
+    <projectUrl>https://github.com/jsmunroe/Helpers</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Helpers, extensions, and utilities.</description>
+    <releaseNotes>https://github.com/jsmunroe/Helpers</releaseNotes>
+    <copyright>Copyright &#x00A9; JSMunroe.com. All rights reserved.</copyright>
+    <tags>helpers extensions utilities</tags>
+  </metadata>
+  <files>
+	  <file src="Helpers\bin\$configuration$\Helpers.dll" target="lib" />
+  </files>
+</package>
