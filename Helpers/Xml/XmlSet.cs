@@ -133,6 +133,10 @@ namespace Helpers.Xml
         /// </summary>
         public void Save()
         {
+            var directory = Path.GetDirectoryName(_filePath) ?? "";
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+
             XDocument document;
             if (File.Exists(_filePath))
                 document = XDocument.Load(_filePath);
