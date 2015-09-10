@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="IO\DirectoryInfoExtensionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test\TestSetTest.cs" />
     <Compile Include="Xml\XmlSetTest.cs" />
   </ItemGroup>
   <ItemGroup>

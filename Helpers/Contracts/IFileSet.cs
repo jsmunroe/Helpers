@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Helpers.Xml
+namespace Helpers.Contracts
 {
     public interface IFileSet<TEntity> : ICollection<TEntity>
     {
