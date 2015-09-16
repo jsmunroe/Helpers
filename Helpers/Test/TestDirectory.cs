@@ -9,7 +9,17 @@ namespace Helpers.Test
 {
     public class TestFileSystem
     {
-        
+        private bool _caseSensitive;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="a_caseSensitive">Whether the file system is case sensitive.</param>
+
+        public TestFileSystem(bool a_caseSensitive = false)
+        {
+            _caseSensitive = a_caseSensitive;
+        }
     }
 
     public class TestDirectory : IDirectory
