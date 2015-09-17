@@ -59,6 +59,7 @@
     <Compile Include="SemanticVersionTest.cs" />
     <Compile Include="Test\TestDirectoryTest.cs" />
     <Compile Include="Test\TestFileSystemTest.cs" />
+    <Compile Include="Test\TestFileTest.cs" />
     <Compile Include="Xml\XmlSetTest.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,21 +7,6 @@ using Helpers.Contracts;
 
 namespace Helpers.Test
 {
-    public class TestFileSystem
-    {
-        private bool _caseSensitive;
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="a_caseSensitive">Whether the file system is case sensitive.</param>
-
-        public TestFileSystem(bool a_caseSensitive = false)
-        {
-            _caseSensitive = a_caseSensitive;
-        }
-    }
-
     public class TestDirectory : IDirectory
     {
         /// <summary>
@@ -29,6 +14,7 @@ namespace Helpers.Test
         /// </summary>
         /// <param name="a_path">Directory path.</param>
         public TestDirectory(string a_path)
+            : this(new TestFileSystem(), a_path)
         {
             
         }
@@ -38,10 +24,20 @@ namespace Helpers.Test
         /// </summary>
         /// <param name="a_fileSystem">Test file system.</param>
         /// <param name="a_path">Directory path.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
         public TestDirectory(TestFileSystem a_fileSystem, string a_path)
         {
-            FileSystem = a_fileSystem;
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            #endregion
+
+            FileSystem = a_fileSystem ?? new TestFileSystem();
             Path = a_path;
+
+            Name = System.IO.Path.GetFileName(Path);              
         }
 
         /// <summary>
@@ -57,7 +53,7 @@ namespace Helpers.Test
         /// <summary>
         /// Whether the directory exists.
         /// </summary>
-        public bool Exists { get; }
+        public bool Exists => FileSystem.DirectoryExists(Path);
 
         /// <summary>
         /// Directory name.
@@ -67,14 +63,33 @@ namespace Helpers.Test
         /// <summary>
         /// Parent directory.
         /// </summary>
-        public IDirectory Parent { get; }
+        public IDirectory Parent
+        {
+            get
+            {
+                var parentPath = System.IO.Path.GetDirectoryName(Path);
+                if (parentPath == null)
+                    return null;
+
+                return new TestDirectory(FileSystem, parentPath);
+            }
+        }
 
         /// <summary>
         /// All subdirectories.
         /// </summary>
-        public IEnumerable<IDirectory> Directories { get; }
+        public IEnumerable<IDirectory> Directories
+        {
+            get { return FileSystem.GetDirectories(Path).Select(i => new TestDirectory(FileSystem, i)); }
+        }
 
-
+        /// <summary>
+        /// All files in this directory.
+        /// </summary>
+        public IEnumerable<IFile> Files
+        {
+            get { return FileSystem.GetFiles(Path).Select(i => new TestFile(FileSystem, i)); }
+        }
 
         /// <summary>
         /// Get a direct child directory with the given name (<paramref name="a_name"/>).
@@ -83,7 +98,9 @@ namespace Helpers.Test
         /// <returns>Child directory.</returns>
         public IDirectory Directory(string a_name)
         {
-            throw new NotImplementedException();
+            var childPath = System.IO.Path.Combine(Path, a_name);
+
+            return new TestDirectory(FileSystem, childPath);
         }
 
         /// <summary>
@@ -93,7 +110,9 @@ namespace Helpers.Test
         /// <returns>File.</returns>
         public IFile File(string a_name)
         {
-            throw new NotImplementedException();
+            var childPath = System.IO.Path.Combine(Path, a_name);
+
+            return new TestFile(FileSystem, childPath);
         }
 
         /// <summary>

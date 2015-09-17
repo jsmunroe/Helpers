@@ -63,6 +63,11 @@ namespace Helpers.IO
         public IEnumerable<IDirectory> Directories => TargetDirectory.EnumerateDirectories().Select(i => new FsDirectory(i));
 
         /// <summary>
+        /// All files in this directory.
+        /// </summary>
+        public IEnumerable<IFile> Files => TargetDirectory.EnumerateFiles().Select(i => new FsFile(i));
+
+        /// <summary>
         /// Get a direct child directory with the given name (<paramref name="a_name"/>).
         /// </summary>
         /// <param name="a_name">Child directory name.</param>

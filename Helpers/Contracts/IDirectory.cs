@@ -26,6 +26,11 @@ namespace Helpers.Contracts
         IEnumerable<IDirectory> Directories { get; }
 
         /// <summary>
+        /// All files in this directory.
+        /// </summary>
+        IEnumerable<IFile> Files { get; }
+
+            /// <summary>
         /// Get a direct child directory with the given name (<paramref name="a_name"/>).
         /// </summary>
         /// <param name="a_name">Child directory name.</param>
