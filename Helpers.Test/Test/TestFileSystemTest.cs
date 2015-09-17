@@ -140,21 +140,6 @@ namespace Helpers.Test.Test
             Assert.IsTrue(results);
         }
 
-
-        [TestMethod]
-        public void DirectoryExistsWithMissingDrive()
-        {
-            // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.CreateDirectory(@"C:\This is a directory path");
-
-            // Execute
-            var results = fileSystem.DirectoryExists(@"\This is a directory path");
-
-            // Assert
-            Assert.IsTrue(results);
-        }
-
         [TestMethod]
         public void DirectoryExistsOnChildDirectory()
         {
