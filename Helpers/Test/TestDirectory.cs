@@ -122,5 +122,13 @@ namespace Helpers.Test
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Delete this directory and every child under it.
+        /// </summary>
+        public void Delete()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

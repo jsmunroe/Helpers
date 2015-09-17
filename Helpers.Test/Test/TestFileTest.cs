@@ -106,5 +106,31 @@ namespace Helpers.Test.Test
         }
 
 
+        [TestMethod]
+        public void CreateFile()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CreateFileWithNullStream()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+        
+        [TestMethod]
+        public void DeleteFile()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
+        [TestMethod]
+        public void DeleteNotExistingFile()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
     }
 }

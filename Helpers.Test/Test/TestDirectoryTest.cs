@@ -212,6 +212,20 @@ namespace Helpers.Test.Test
             Assert.IsTrue(result.Exists);
         }
 
+        [TestMethod]
+        public void DeleteDirectory()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
+        [TestMethod]
+        public void DeleteNotExistingDirectory()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
 
 
 

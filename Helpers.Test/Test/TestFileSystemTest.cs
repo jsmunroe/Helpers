@@ -356,5 +356,56 @@ namespace Helpers.Test.Test
         }
 
 
+        [TestMethod]
+        public void DeleteDirectory()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DeleteDirectoryWithNullPath()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DeleteDirectoryWithBadPath()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
+        [TestMethod]
+        public void DeleteNotExistingDirectory()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
+        [TestMethod]
+        public void DeleteFile()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DeleteFileWithNullPath()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DeleteFileWithBadPath()
+        {
+            Assert.Inconclusive("Not implemented!");
+        }
     }
 }

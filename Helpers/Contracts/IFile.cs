@@ -1,3 +1,5 @@
+using System.IO;
+
 namespace Helpers.Contracts
 {
     public interface IFile
@@ -21,5 +23,16 @@ namespace Helpers.Contracts
         /// Parent directory.
         /// </summary>
         IDirectory Directory { get; }
+
+        /// <summary>
+        /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
+        /// </summary>
+        /// <param name="a_contents">Stream contents.</param>
+        void Create(Stream a_contents);
+
+        /// <summary>
+        /// Delete this file.
+        /// </summary>
+        void Delete();
     }
 }

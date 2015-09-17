@@ -99,53 +99,13 @@ namespace Helpers.IO
         {
             TargetDirectory.Create();
         }
-    }
 
-    public class FsFile : IFile
-    {
         /// <summary>
-        /// Constructor.
+        /// Delete this directory and every child under it.
         /// </summary>
-        /// <param name="a_targetFile">Target file.</param>
-        public FsFile(FileInfo a_targetFile)
+        public void Delete()
         {
-            TargetFile = a_targetFile;
+            TargetDirectory.Delete(true);
         }
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="a_filePath">Path to the target file.</param>
-        public FsFile(string a_filePath)
-            : this(new FileInfo(a_filePath))
-        {
-
-        }
-
-        /// <summary>
-        /// Target file.
-        /// </summary>
-        public FileInfo TargetFile { get; }
-
-        /// <summary>
-        /// Whether the directory exists.
-        /// </summary>
-        public bool Exists => TargetFile.Exists;
-
-        /// <summary>
-        /// Directory name.
-        /// </summary>
-        public string Name => TargetFile.Name;
-
-        /// <summary>
-        /// Full path to this directory.
-        /// </summary>
-        public string Path => TargetFile.FullName;
-
-        /// <summary>
-        /// Parent directory.
-        /// </summary>
-        public IDirectory Directory => new FsDirectory(TargetFile.Directory);
     }
-
 }
