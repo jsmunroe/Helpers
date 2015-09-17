@@ -13,6 +13,11 @@ namespace Helpers.Contracts
         string Name { get; }
 
         /// <summary>
+        /// Full path to this file.
+        /// </summary>
+        string Path { get; }
+
+        /// <summary>
         /// Parent directory.
         /// </summary>
         IDirectory Directory { get; }

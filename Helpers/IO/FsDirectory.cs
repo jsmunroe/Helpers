@@ -53,6 +53,11 @@ namespace Helpers.IO
         public string Name => TargetDirectory.Name;
 
         /// <summary>
+        /// Full path to this directory.
+        /// </summary>
+        public string Path => TargetDirectory.FullName;
+
+        /// <summary>
         /// Parent directory.
         /// </summary>
         public IDirectory Parent => TargetDirectory.Parent == null ? null : new FsDirectory(TargetDirectory.Parent);
@@ -131,6 +136,11 @@ namespace Helpers.IO
         /// Directory name.
         /// </summary>
         public string Name => TargetFile.Name;
+
+        /// <summary>
+        /// Full path to this directory.
+        /// </summary>
+        public string Path => TargetFile.FullName;
 
         /// <summary>
         /// Parent directory.
