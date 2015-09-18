@@ -400,29 +400,6 @@ namespace Helpers.Test.Test
             fileSystem.DeleteDirectory(a_path: "?");
         }
 
-
-        [TestMethod]
-        public void DeleteDirectoryWithMissingDriveLetter()
-        {
-            // Setup
-            var root = Path.GetPathRoot(Environment.SystemDirectory);
-            var fileSystem = new TestFileSystem();
-            fileSystem.CreateDirectory($@"{root}directory1");
-            fileSystem.CreateDirectory($@"{root}directory2\child");
-            fileSystem.CreateFile($@"{root}directory2\file.rgb");
-
-            // Execute
-            fileSystem.DeleteDirectory(@"\DIRECTORY2");
-
-            // Assert
-            Assert.IsTrue(fileSystem.DirectoryExists($@"{root}directory1"));
-            Assert.IsFalse(fileSystem.DirectoryExists(($@"{root}directory2")));
-            Assert.IsFalse(fileSystem.DirectoryExists($@"{root}directory2\child"));
-            Assert.IsFalse(fileSystem.FileExists($@"{root}directory2\file.rgb"));
-        }
-
-
-
         [TestMethod]
         public void DeleteNotExistingDirectory()
         {
@@ -483,26 +460,6 @@ namespace Helpers.Test.Test
             // Execute
             fileSystem.DeleteFile(a_path: "/i/am/on/linux");
         }
-
-
-        [TestMethod]
-        public void DeleteFileWithMissingDrive()
-        {
-            // Setup
-            var root = Path.GetPathRoot(Environment.SystemDirectory);
-            var fileSystem = new TestFileSystem();
-            fileSystem.CreateFile($@"{root}directory2\file1.rgb");
-            fileSystem.CreateFile($@"{root}directory2\file2.rgb");
-
-            // Execute
-            fileSystem.DeleteFile(@"\directory2\file2.rgb");
-
-            // Assert
-            Assert.IsTrue(fileSystem.FileExists($@"{root}directory2\file1.rgb"));
-            Assert.IsFalse(fileSystem.FileExists($@"{root}directory2\file2.rgb"));
-        }
-
-
 
         [TestMethod]
         public void DeleteNotExistingFile()
