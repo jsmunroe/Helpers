@@ -78,7 +78,7 @@ namespace Helpers.Test
         /// <param name="a_contents">Stream contents.</param>
         public void Create(Stream a_contents)
         {
-            throw new NotImplementedException();
+            FileSystem.CreateFile(Path);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Helpers.Test
         /// </summary>
         public void Delete()
         {
-            throw new NotImplementedException();
+            FileSystem.DeleteFile(Path);
         }
     }
 }

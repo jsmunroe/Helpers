@@ -120,7 +120,7 @@ namespace Helpers.Test
         /// </summary>
         public void Create()
         {
-            throw new NotImplementedException();
+            FileSystem.CreateDirectory(Path);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace Helpers.Test
         /// </summary>
         public void Delete()
         {
-            throw new NotImplementedException();
+            FileSystem.DeleteDirectory(Path);
         }
     }
 }
