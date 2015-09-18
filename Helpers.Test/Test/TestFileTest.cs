@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Helpers.Test.Test
@@ -105,6 +106,64 @@ namespace Helpers.Test.Test
             Assert.AreEqual("a", result.Name);
         }
 
+        [TestMethod]
+        public void CreateFile()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = new TestFile(fileSystem, "\\this\\is\\a\\file.txt");
+            var stream = new MemoryStream();
 
+            // Execute
+            file.Create(stream); // Stream is ignored by this implementation.
+
+            // Assert
+            Assert.IsTrue(file.Exists);
+        }
+
+
+        [TestMethod]
+        public void CreateFileWithNullStream() // TestFile don't care.
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = new TestFile(fileSystem, "\\this\\is\\a\\file.txt");
+
+            // Execute
+            file.Create(a_contents: null);
+
+            // Assert
+            Assert.IsTrue(file.Exists);
+        }
+        
+        [TestMethod]
+        public void DeleteFile()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = new TestFile(fileSystem, "\\this\\is\\a\\file.txt");
+            file.Create(null);
+
+            // Execute
+            file.Delete();
+
+            // Assert
+            Assert.IsFalse(file.Exists);
+        }
+
+
+        [TestMethod]
+        public void DeleteNotExistingFile()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = new TestFile(fileSystem, "\\this\\is\\a\\file.txt");
+
+            // Execute
+            file.Delete();
+
+            // Assert
+            Assert.IsFalse(file.Exists);
+        }
     }
 }

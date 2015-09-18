@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -349,10 +350,174 @@ namespace Helpers.Test.Test
             fileSystem.CreateFile(@"x:\directory3\file.rgb");
 
             // Execute
-            string[] directoryPaths = fileSystem.GetDirectories(@"X:\");
+            var directoryPaths = fileSystem.GetDirectories(@"X:\");
 
             // Assert
             Assert.AreEqual(3, directoryPaths.Length);
+        }
+
+
+        [TestMethod]
+        public void DeleteDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.CreateDirectory(@"x:\directory1");
+            fileSystem.CreateDirectory(@"X:\DIRECTORY2\CHILD");
+            fileSystem.CreateFile(@"x:\directory2\file.rgb");
+
+            // Execute
+            fileSystem.DeleteDirectory(@"x:\directory2");
+
+            // Assert
+            Assert.IsTrue(fileSystem.DirectoryExists(@"x:\directory1"));
+            Assert.IsFalse(fileSystem.DirectoryExists((@"x:\directory2")));
+            Assert.IsFalse(fileSystem.DirectoryExists(@"x:\directory2\child"));
+            Assert.IsFalse(fileSystem.FileExists(@"x:\directory2\file.rgb"));
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DeleteDirectoryWithNullPath()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+
+            // Execute
+            fileSystem.DeleteDirectory(a_path: null);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DeleteDirectoryWithBadPath()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+
+            // Execute
+            fileSystem.DeleteDirectory(a_path: "?");
+        }
+
+
+        [TestMethod]
+        public void DeleteDirectoryWithMissingDriveLetter()
+        {
+            // Setup
+            var root = Path.GetPathRoot(Environment.SystemDirectory);
+            var fileSystem = new TestFileSystem();
+            fileSystem.CreateDirectory($@"{root}directory1");
+            fileSystem.CreateDirectory($@"{root}directory2\child");
+            fileSystem.CreateFile($@"{root}directory2\file.rgb");
+
+            // Execute
+            fileSystem.DeleteDirectory(@"\DIRECTORY2");
+
+            // Assert
+            Assert.IsTrue(fileSystem.DirectoryExists($@"{root}directory1"));
+            Assert.IsFalse(fileSystem.DirectoryExists(($@"{root}directory2")));
+            Assert.IsFalse(fileSystem.DirectoryExists($@"{root}directory2\child"));
+            Assert.IsFalse(fileSystem.FileExists($@"{root}directory2\file.rgb"));
+        }
+
+
+
+        [TestMethod]
+        public void DeleteNotExistingDirectory()
+        {
+            // Setup
+            var root = Path.GetPathRoot(Environment.SystemDirectory);
+            var fileSystem = new TestFileSystem();
+            fileSystem.CreateDirectory($@"{root}directory1");
+            fileSystem.CreateDirectory($@"{root}directory2\child");
+            fileSystem.CreateFile($@"{root}directory2\file.rgb");
+
+            // Execute
+            fileSystem.DeleteDirectory(@"\directory3");
+
+            // Assert
+            Assert.IsTrue(fileSystem.DirectoryExists($@"{root}directory1"));
+            Assert.IsTrue(fileSystem.DirectoryExists(($@"{root}directory2")));
+            Assert.IsTrue(fileSystem.DirectoryExists($@"{root}directory2\child"));
+            Assert.IsTrue(fileSystem.FileExists($@"{root}directory2\file.rgb"));
+        }
+
+
+        [TestMethod]
+        public void DeleteFile()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.CreateFile(@"x:\directory2\file1.rgb");
+            fileSystem.CreateFile(@"x:\directory2\file2.rgb");
+
+            // Execute
+            fileSystem.DeleteFile(@"x:\directory2\file2.rgb");
+
+            // Assert
+            Assert.IsTrue(fileSystem.FileExists(@"x:\directory2\file1.rgb"));
+            Assert.IsFalse(fileSystem.FileExists(@"x:\directory2\file2.rgb"));
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DeleteFileWithNullPath()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+
+            // Execute
+            fileSystem.DeleteFile(a_path: null);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void DeleteFileWithBadPath()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+
+            // Execute
+            fileSystem.DeleteFile(a_path: "/i/am/on/linux");
+        }
+
+
+        [TestMethod]
+        public void DeleteFileWithMissingDrive()
+        {
+            // Setup
+            var root = Path.GetPathRoot(Environment.SystemDirectory);
+            var fileSystem = new TestFileSystem();
+            fileSystem.CreateFile($@"{root}directory2\file1.rgb");
+            fileSystem.CreateFile($@"{root}directory2\file2.rgb");
+
+            // Execute
+            fileSystem.DeleteFile(@"\directory2\file2.rgb");
+
+            // Assert
+            Assert.IsTrue(fileSystem.FileExists($@"{root}directory2\file1.rgb"));
+            Assert.IsFalse(fileSystem.FileExists($@"{root}directory2\file2.rgb"));
+        }
+
+
+
+        [TestMethod]
+        public void DeleteNotExistingFile()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.CreateFile(@"x:\directory2\file1.rgb");
+            fileSystem.CreateFile(@"x:\directory2\file2.rgb");
+
+            // Execute
+            fileSystem.DeleteFile(@"x:\directory2\file3.rgb");
+
+            // Assert
+            Assert.IsTrue(fileSystem.FileExists(@"x:\directory2\file1.rgb"));
+            Assert.IsTrue(fileSystem.FileExists(@"x:\directory2\file2.rgb"));
         }
 
 

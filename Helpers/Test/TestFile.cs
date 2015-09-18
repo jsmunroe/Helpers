@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Helpers.Contracts;
 
 namespace Helpers.Test
@@ -69,6 +70,23 @@ namespace Helpers.Test
 
                 return new TestDirectory(FileSystem, parentPath);
             }
+        }
+
+        /// <summary>
+        /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
+        /// </summary>
+        /// <param name="a_contents">Stream contents.</param>
+        public void Create(Stream a_contents)
+        {
+            FileSystem.CreateFile(Path);
+        }
+
+        /// <summary>
+        /// Delete this file.
+        /// </summary>
+        public void Delete()
+        {
+            FileSystem.DeleteFile(Path);
         }
     }
 }

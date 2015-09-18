@@ -59,6 +59,28 @@ namespace Helpers.Test
         }
 
         /// <summary>
+        /// Delete the directory at the given path (<paramref name="a_path"/>) and all of its descendtent files and directories.
+        /// </summary>
+        /// <param name="a_path">Directory path.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        public void DeleteDirectory(string a_path)
+        {
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            #endregion
+
+            a_path = PreparePath(a_path);
+
+            var toDelete = _directories.Keys.Where(i => i.StartsWith(a_path, StringComparison.OrdinalIgnoreCase)).ToArray();
+
+            foreach (var key in toDelete)
+                _directories.Remove(key);
+        }
+
+        /// <summary>
         /// Create a file with the given path (<paramref name="a_path"/>) within this file system.
         /// </summary>
         /// <param name="a_path">File path.</param>
@@ -110,6 +132,32 @@ namespace Helpers.Test
 
             var files = _directories[directory];
             return files.ContainsKey(file);
+        }
+
+        /// <summary>
+        /// Delete the file at the given path (<paramref name="a_path"/>).
+        /// </summary>
+        /// <param name="a_path">File path.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        public void DeleteFile(string a_path)
+        {
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            #endregion
+
+            a_path = PreparePath(a_path);
+
+            var directory = Path.GetDirectoryName(a_path);
+            var file = Path.GetFileName(a_path);
+
+            if (!DirectoryExists(directory))
+                return;
+
+            var files = _directories[directory];
+            files.Remove(file);
         }
 
         /// <summary>
@@ -194,5 +242,6 @@ namespace Helpers.Test
 
             return othersParent.Equals(a_parent, StringComparison.OrdinalIgnoreCase);
         }
+
     }
 }

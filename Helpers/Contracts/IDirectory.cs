@@ -53,5 +53,10 @@ namespace Helpers.Contracts
         /// Create the directory and every parent that is not already created.
         /// </summary>
         void Create();
+
+        /// <summary>
+        /// Delete this directory and every child under it.
+        /// </summary>
+        void Delete();
     }
 }

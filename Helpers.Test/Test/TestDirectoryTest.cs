@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -212,7 +213,49 @@ namespace Helpers.Test.Test
             Assert.IsTrue(result.Exists);
         }
 
+        [TestMethod]
+        public void CreateDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = new TestDirectory(fileSystem, "\\this\\is\\a\\directory");
 
+            // Execute
+            directory.Create();
+
+            // Assert
+            Assert.IsTrue(directory.Exists);
+        }
+
+        [TestMethod]
+        public void DeleteDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = new TestDirectory(fileSystem, "\\this\\is\\a\\directory");
+            directory.Create();
+
+            // Execute
+            directory.Delete();
+
+            // Assert
+            Assert.IsFalse(directory.Exists);
+        }
+
+
+        [TestMethod]
+        public void DeleteNotExistingDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = new TestDirectory(fileSystem, "\\this\\is\\a\\directory");
+
+            // Execute
+            directory.Delete();
+
+            // Assert
+            Assert.IsFalse(directory.Exists);
+        }
 
 
     }

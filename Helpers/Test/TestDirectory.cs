@@ -120,7 +120,15 @@ namespace Helpers.Test
         /// </summary>
         public void Create()
         {
-            throw new NotImplementedException();
+            FileSystem.CreateDirectory(Path);
+        }
+
+        /// <summary>
+        /// Delete this directory and every child under it.
+        /// </summary>
+        public void Delete()
+        {
+            FileSystem.DeleteDirectory(Path);
         }
     }
 }
