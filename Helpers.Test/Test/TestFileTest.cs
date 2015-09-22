@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Helpers.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Helpers.Test.Test
@@ -165,5 +166,31 @@ namespace Helpers.Test.Test
             // Assert
             Assert.IsFalse(file.Exists);
         }
+
+        [TestMethod]
+        public void ChangeExtension()
+        {
+            // Setup
+            var file = new TestFile(@"x:\directory\File.txt");
+
+            // Execute
+            var result = file.ChangeExtension("jpg");
+
+            Assert.AreEqual("File.jpg", result.Name);
+            Assert.AreEqual(@"x:\directory\File.jpg", result.Path);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ChangeExtensionWithNull()
+        {
+            // Setup
+            var file = new TestFile(@"x:\directory\File.txt");
+
+            // Execute
+            var result = file.ChangeExtension(a_extension: null);
+        }
+
     }
 }
