@@ -90,6 +90,15 @@ namespace Helpers.Test
         }
 
         /// <summary>
+        /// Copy from the given file (<paramref name="a_source"/>) to this file.
+        /// </summary>
+        /// <param name="a_source">File from which to copy.</param>
+        public void CopyTo(IFile a_source)
+        {
+            FileSystem.CreateFile(a_source.Path);
+        }
+
+        /// <summary>
         /// Create a file that is this file but with the given extension (<paramref name="a_extension"/>).
         /// </summary>
         /// <param name="a_extension">New extension.</param>

@@ -69,6 +69,26 @@ namespace Helpers.IO
         }
 
         /// <summary>
+        /// Copy this file to the given file (<paramref name="a_source"/>).
+        /// </summary>
+        /// <param name="a_source">File to which to copy.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_source"/> is null.</exception>
+        public void CopyTo(IFile a_source)
+        {
+            #region Argument Validation
+
+            if (a_source == null)
+                throw new ArgumentNullException(nameof(a_source));
+
+            #endregion
+
+            if (TargetFile.Exists)
+                throw new FileNotFoundException("File cannot be copied because it does not exist.");
+
+            TargetFile.CopyTo(a_source.Path);
+        }
+
+        /// <summary>
         /// Create a file that is this file but with the given extension (<paramref name="a_extension"/>).
         /// </summary>
         /// <param name="a_extension">New extension.</param>

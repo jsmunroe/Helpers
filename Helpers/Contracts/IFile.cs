@@ -37,6 +37,12 @@ namespace Helpers.Contracts
         void Delete();
 
         /// <summary>
+        /// Copy from the given file (<paramref name="a_source"/>) to this file.
+        /// </summary>
+        /// <param name="a_source">File from which to copy.</param>
+        void CopyTo(IFile a_source);
+
+        /// <summary>
         /// Create a file that is this file but with the given extension (<paramref name="a_extension"/>).
         /// </summary>
         /// <param name="a_extension">New extension.</param>
