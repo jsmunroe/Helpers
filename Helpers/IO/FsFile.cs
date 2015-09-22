@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Helpers.Contracts;
 
 namespace Helpers.IO
@@ -65,6 +66,30 @@ namespace Helpers.IO
         public void Delete()
         {
             TargetFile.Delete();
+        }
+
+        /// <summary>
+        /// Create a file that is this file but with the given extension (<paramref name="a_extension"/>).
+        /// </summary>
+        /// <param name="a_extension">New extension.</param>
+        /// <returns>Created file with the new extension.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_extension"/> is null.</exception>
+        public IFile ChangeExtension(string a_extension)
+        {
+            #region Argument Validation
+
+            if (a_extension == null)
+                throw new ArgumentNullException(nameof(a_extension));
+
+            #endregion
+
+            var extension = a_extension.TrimStart('.');
+
+            var path = TargetFile.FullName;
+            var newPath = System.IO.Path.GetDirectoryName(path) + "\\" +
+                          System.IO.Path.GetFileNameWithoutExtension(path) + "." + extension;
+
+            return new FsFile(newPath);
         }
     }
 }
