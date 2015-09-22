@@ -88,5 +88,28 @@ namespace Helpers.Test
         {
             FileSystem.DeleteFile(Path);
         }
+
+        /// <summary>
+        /// Create a file that is this file but with the given extension (<paramref name="a_extension"/>).
+        /// </summary>
+        /// <param name="a_extension">New extension.</param>
+        /// <returns>Created file with the new extension.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_extension"/> is null.</exception>
+        public IFile ChangeExtension(string a_extension)
+        {
+            #region Argument Validation
+
+            if (a_extension == null)
+                throw new ArgumentNullException(nameof(a_extension));
+
+            #endregion
+
+            var extension = a_extension.TrimStart('.');
+
+            var newPath = System.IO.Path.GetDirectoryName(Path) + "\\" +
+                          System.IO.Path.GetFileNameWithoutExtension(Path) + "." + extension;
+
+            return new TestFile(newPath);
+        }
     }
 }
