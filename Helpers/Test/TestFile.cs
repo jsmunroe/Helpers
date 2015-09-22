@@ -118,7 +118,7 @@ namespace Helpers.Test
             var newPath = System.IO.Path.GetDirectoryName(Path) + "\\" +
                           System.IO.Path.GetFileNameWithoutExtension(Path) + "." + extension;
 
-            return new TestFile(newPath);
+            return new TestFile(FileSystem, newPath);
         }
     }
 }
