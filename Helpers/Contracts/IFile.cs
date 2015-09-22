@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace Helpers.Contracts
@@ -34,5 +35,13 @@ namespace Helpers.Contracts
         /// Delete this file.
         /// </summary>
         void Delete();
+
+        /// <summary>
+        /// Create a file that is this file but with the given extension (<paramref name="a_extension"/>).
+        /// </summary>
+        /// <param name="a_extension">New extension.</param>
+        /// <returns>Created file with the new extension.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_extension"/> is null.</exception>
+        IFile ChangeExtension(string a_extension);
     }
 }
