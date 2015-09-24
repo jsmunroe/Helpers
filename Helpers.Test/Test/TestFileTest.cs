@@ -15,13 +15,12 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
 
             // Execute
-            var file = new TestFile(fileSystem, "\\");
+            var file = new TestFile(fileSystem, "\\file.dat");
 
             // Assert
-            Assert.AreEqual("\\", file.Path);
+            Assert.AreEqual("\\file.dat", file.Path);
             Assert.AreSame(fileSystem, file.FileSystem);
         }
-
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -39,10 +38,10 @@ namespace Helpers.Test.Test
         public void ConstructTestFileWithNullFileSystem()
         {
             // Execute
-            var file = new TestFile(a_fileSystem: null, a_path: "\\");
+            var file = new TestFile(a_fileSystem: null, a_path: "\\file.dat");
 
             // Assert
-            Assert.AreEqual("\\", file.Path);
+            Assert.AreEqual("\\file.dat", file.Path);
             Assert.IsNotNull(file.FileSystem);
         }
 
@@ -53,7 +52,7 @@ namespace Helpers.Test.Test
             // Setup
             var path = "\\file\\does\\exist.dat";
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateFile(path);
+            fileSystem.CreateFile(path, new TestFileStats());
             var file = new TestFile(fileSystem, path);
 
             // Execute
@@ -113,17 +112,21 @@ namespace Helpers.Test.Test
             // Setup
             var fileSystem = new TestFileSystem();
             var file = new TestFile(fileSystem, "\\this\\is\\a\\file.txt");
-            var stream = new MemoryStream();
+            var stream = new MemoryStream(new byte[1234]);
 
             // Execute
             file.Create(stream); // Stream is ignored by this implementation.
 
             // Assert
             Assert.IsTrue(file.Exists);
+            Assert.AreEqual(1234, file.Size);
+            Assert.AreEqual(DateTime.UtcNow.Date, file.CreatedTimeUtc.Date);
+            Assert.AreEqual(DateTime.UtcNow.Hour, file.CreatedTimeUtc.Hour);
         }
 
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void CreateFileWithNullStream() // TestFile don't care.
         {
             // Setup
@@ -132,9 +135,6 @@ namespace Helpers.Test.Test
 
             // Execute
             file.Create(a_contents: null);
-
-            // Assert
-            Assert.IsTrue(file.Exists);
         }
         
         [TestMethod]
@@ -143,7 +143,8 @@ namespace Helpers.Test.Test
             // Setup
             var fileSystem = new TestFileSystem();
             var file = new TestFile(fileSystem, "\\this\\is\\a\\file.txt");
-            file.Create(null);
+            var stream = new MemoryStream();
+            file.Create(stream);
 
             // Execute
             file.Delete();

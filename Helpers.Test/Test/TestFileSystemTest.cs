@@ -159,13 +159,19 @@ namespace Helpers.Test.Test
         public void CreateFile()
         {
             // Setup
+            var created = DateTime.UtcNow;
+            var lastModified = DateTime.UtcNow;
             var fileSystem = new TestFileSystem();
 
             // Execute
-            fileSystem.CreateFile(@"X:\Directory\File.dat");
+            fileSystem.CreateFile(@"X:\Directory\File.dat", new TestFileStats { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
 
             // Assert
             Assert.IsTrue(fileSystem.FileExists(@"X:\Directory\File.dat"));
+            var stats = fileSystem.GetFileStats(@"X:\Directory\File.dat");
+            Assert.AreEqual(14067, stats.Size);
+            Assert.AreEqual(created, stats.CreatedTimeUtc);
+            Assert.AreEqual(lastModified, stats.LastModifiedTimeUtc);
         }
 
 
@@ -177,7 +183,19 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
 
             // Execute
-            fileSystem.CreateFile(a_path: null);
+            fileSystem.CreateFile(a_path: null, a_stats: new TestFileStats());
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CreateFileWithNullStats()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+
+            // Execute
+            fileSystem.CreateFile(a_path: @"X:\Directory\File.dat", a_stats: null);
         }
 
 
@@ -189,7 +207,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
 
             // Execute
-            fileSystem.CreateFile(a_path: "thisIsABadPath.txt");
+            fileSystem.CreateFile("thisIsABadPath.txt", new TestFileStats());
         }
 
         [TestMethod]
@@ -199,7 +217,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
 
             // Execute
-            fileSystem.CreateFile(@"C:\File.dat");
+            fileSystem.CreateFile(@"C:\File.dat", new TestFileStats());
 
             // Assert
             Assert.IsTrue(fileSystem.FileExists(@"C:\File.dat"));
@@ -207,11 +225,41 @@ namespace Helpers.Test.Test
 
 
         [TestMethod]
+        public void GetFileStats()
+        {
+            // Setup
+            var created = DateTime.UtcNow;
+            var lastModified = DateTime.UtcNow;
+            var fileSystem = new TestFileSystem();
+            fileSystem.CreateFile(@"X:\Directory\File.dat", new TestFileStats { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+
+            // Execute
+            var stats = fileSystem.GetFileStats(@"X:\Directory\File.dat");
+
+            // Assert
+            Assert.AreEqual(14067, stats.Size);
+            Assert.AreEqual(created, stats.CreatedTimeUtc);
+            Assert.AreEqual(lastModified, stats.LastModifiedTimeUtc);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetFileStatsWithNullpath()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.CreateFile(@"X:\Directory\File.dat", new TestFileStats());
+
+            // Execute
+            var stats = fileSystem.GetFileStats(a_path: null);
+        }
+        
+        [TestMethod]
         public void FileExists()
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateFile(@"X:\Directory\File.dat");
+            fileSystem.CreateFile(@"X:\Directory\File.dat", new TestFileStats());
 
             // Execute
             var result = fileSystem.FileExists(@"x:\directory\file.DAT");
@@ -250,10 +298,10 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateFile(@"x:\mydirectory\file1.dat");
-            fileSystem.CreateFile(@"x:\mydirectory\file2.dat");
-            fileSystem.CreateFile(@"x:\mydirectory\file3.dat");
-            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat");
+            fileSystem.CreateFile(@"x:\mydirectory\file1.dat", new TestFileStats());
+            fileSystem.CreateFile(@"x:\mydirectory\file2.dat", new TestFileStats());
+            fileSystem.CreateFile(@"x:\mydirectory\file3.dat", new TestFileStats());
+            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats());
 
             // Execute
             var filePaths = fileSystem.GetFiles(@"X:\MYDIRECTORY");
@@ -307,7 +355,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.CreateDirectory(@"x:\mydirectory\directory1");
             fileSystem.CreateDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb");
+            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
 
             // Execute
             string[] directoryPaths = fileSystem.GetDirectories(@"X:\MYDIRECTORY");
@@ -347,7 +395,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.CreateDirectory(@"x:\directory1");
             fileSystem.CreateDirectory(@"x:\directory2\child");
-            fileSystem.CreateFile(@"x:\directory3\file.rgb");
+            fileSystem.CreateFile(@"x:\directory3\file.rgb", new TestFileStats());
 
             // Execute
             var directoryPaths = fileSystem.GetDirectories(@"X:\");
@@ -364,7 +412,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.CreateDirectory(@"x:\directory1");
             fileSystem.CreateDirectory(@"X:\DIRECTORY2\CHILD");
-            fileSystem.CreateFile(@"x:\directory2\file.rgb");
+            fileSystem.CreateFile(@"x:\directory2\file.rgb", new TestFileStats());
 
             // Execute
             fileSystem.DeleteDirectory(@"x:\directory2");
@@ -408,7 +456,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.CreateDirectory($@"{root}directory1");
             fileSystem.CreateDirectory($@"{root}directory2\child");
-            fileSystem.CreateFile($@"{root}directory2\file.rgb");
+            fileSystem.CreateFile($@"{root}directory2\file.rgb", new TestFileStats());
 
             // Execute
             fileSystem.DeleteDirectory(@"\directory3");
@@ -426,8 +474,8 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateFile(@"x:\directory2\file1.rgb");
-            fileSystem.CreateFile(@"x:\directory2\file2.rgb");
+            fileSystem.CreateFile(@"x:\directory2\file1.rgb", new TestFileStats());
+            fileSystem.CreateFile(@"x:\directory2\file2.rgb", new TestFileStats());
 
             // Execute
             fileSystem.DeleteFile(@"x:\directory2\file2.rgb");
@@ -466,8 +514,8 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateFile(@"x:\directory2\file1.rgb");
-            fileSystem.CreateFile(@"x:\directory2\file2.rgb");
+            fileSystem.CreateFile(@"x:\directory2\file1.rgb", new TestFileStats());
+            fileSystem.CreateFile(@"x:\directory2\file2.rgb", new TestFileStats());
 
             // Execute
             fileSystem.DeleteFile(@"x:\directory2\file3.rgb");

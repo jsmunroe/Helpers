@@ -116,7 +116,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.CreateDirectory(@"x:\mydirectory\directory1");
             fileSystem.CreateDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb");
+            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -132,10 +132,10 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateFile(@"x:\mydirectory\file1.dat");
-            fileSystem.CreateFile(@"x:\mydirectory\file2.dat");
-            fileSystem.CreateFile(@"x:\mydirectory\file3.dat");
-            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat");
+            fileSystem.CreateFile(@"x:\mydirectory\file1.dat", new TestFileStats());
+            fileSystem.CreateFile(@"x:\mydirectory\file2.dat", new TestFileStats());
+            fileSystem.CreateFile(@"x:\mydirectory\file3.dat", new TestFileStats());
+            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -152,7 +152,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.CreateDirectory(@"x:\mydirectory\directory1");
             fileSystem.CreateDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb");
+            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -171,7 +171,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.CreateDirectory(@"x:\mydirectory\directory1");
             fileSystem.CreateDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb");
+            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -198,11 +198,13 @@ namespace Helpers.Test.Test
         public void GetChildFileByName()
         {
             // Setup
+            var created = DateTime.UtcNow;
+            var lastModified = DateTime.UtcNow;
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateFile(@"x:\mydirectory\file1.dat");
-            fileSystem.CreateFile(@"x:\mydirectory\file2.dat");
-            fileSystem.CreateFile(@"x:\mydirectory\file3.dat");
-            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat");
+            fileSystem.CreateFile(@"x:\mydirectory\file1.dat", new TestFileStats { Size = 1024, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.CreateFile(@"x:\mydirectory\file2.dat", new TestFileStats { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.CreateFile(@"x:\mydirectory\file3.dat", new TestFileStats { Size = 2017, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats { Size = 8740, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -211,6 +213,9 @@ namespace Helpers.Test.Test
             // Assert
             Assert.AreEqual("File1.dat", result.Name);
             Assert.IsTrue(result.Exists);
+            Assert.AreEqual(1024, result.Size);
+            Assert.AreEqual(created, result.LastModifiedTimeUtc);
+            Assert.AreEqual(lastModified, result.LastModifiedTimeUtc);
         }
 
         [TestMethod]

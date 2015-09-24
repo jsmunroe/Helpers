@@ -8,7 +8,7 @@ namespace Helpers.Test
 {
     public class TestFileSystem
     {
-        private readonly Dictionary<string, Dictionary<string, string>> _directories = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Dictionary<string, TestFileStats>> _directories = new Dictionary<string, Dictionary<string, TestFileStats>>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Create the directory with the given path (<paramref name="a_path"/>) within this file system.
@@ -29,7 +29,7 @@ namespace Helpers.Test
 
             if (!_directories.ContainsKey(a_path))
             {
-                _directories.Add(a_path, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+                _directories.Add(a_path, new Dictionary<string, TestFileStats>(StringComparer.OrdinalIgnoreCase));
 
                 var parent = Path.GetDirectoryName(a_path);
                 if (parent != null)
@@ -84,13 +84,19 @@ namespace Helpers.Test
         /// Create a file with the given path (<paramref name="a_path"/>) within this file system.
         /// </summary>
         /// <param name="a_path">File path.</param>
+        /// <param name="a_stats">File stats.</param>
         /// <returns>This file system used with fluent interface.</returns>
-        public TestFileSystem CreateFile(string a_path)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_stats"/> is null.</exception>
+        public TestFileSystem CreateFile(string a_path, TestFileStats a_stats)
         {
             #region Argument Validation
 
             if (a_path == null)
                 throw new ArgumentNullException(nameof(a_path));
+
+            if (a_stats == null)
+                throw new ArgumentNullException(nameof(a_stats));
 
             #endregion
 
@@ -102,7 +108,7 @@ namespace Helpers.Test
             CreateDirectory(directory);
 
             var files = _directories[directory];
-            files.Add(file, file);
+            files.Add(file, a_stats);
 
             return this;
         }
@@ -179,7 +185,7 @@ namespace Helpers.Test
             if (!DirectoryExists(a_path))
                 return new string[0];
 
-            var files = _directories[a_path].Values.Select(i => Path.Combine(a_path, i));
+            var files = _directories[a_path].Keys.Select(i => Path.Combine(a_path, i));
 
             return files.ToArray();
         }
@@ -243,5 +249,66 @@ namespace Helpers.Test
             return othersParent.Equals(a_parent, StringComparison.OrdinalIgnoreCase);
         }
 
+        /// <summary>
+        /// Get the stats for the given path (<paramref name="a_path"/>).
+        /// </summary>
+        /// <param name="a_path">Relative path.</param>
+        /// <returns>File stats.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        public TestFileStats GetFileStats(string a_path)
+        {
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            #endregion
+
+            a_path = PreparePath(a_path);
+
+            var directory = Path.GetDirectoryName(a_path);
+
+            if (directory == null)
+                return null;
+
+            var file = Path.GetFileName(a_path);
+
+            if (!DirectoryExists(directory))
+                return null;
+
+            var files = _directories[directory];
+
+            if (files.ContainsKey(file))
+                return files[file];
+
+            return null;
+        }
+    }
+
+    public class TestFileStats
+    {
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public TestFileStats()
+        {
+            CreatedTimeUtc = DateTime.UtcNow;
+            LastModifiedTimeUtc = DateTime.UtcNow;
+        }
+
+        /// <summary>
+        /// Size of the file.
+        /// </summary>
+        public long Size { get; set; }
+
+        /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        public DateTime CreatedTimeUtc { get; set; }
+
+        /// <summary>
+        /// Time of last modification (UTC).
+        /// </summary>
+        public DateTime LastModifiedTimeUtc { get; set; }
     }
 }

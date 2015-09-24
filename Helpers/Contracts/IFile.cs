@@ -26,6 +26,21 @@ namespace Helpers.Contracts
         IDirectory Directory { get; }
 
         /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        DateTime CreatedTimeUtc { get; }
+
+        /// <summary>
+        /// Time of last modification (UTC).
+        /// </summary>
+        DateTime LastModifiedTimeUtc { get; }
+
+        /// <summary>
+        /// Size of the file.
+        /// </summary>
+        long Size { get; }
+
+        /// <summary>
         /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
         /// </summary>
         /// <param name="a_contents">Stream contents.</param>

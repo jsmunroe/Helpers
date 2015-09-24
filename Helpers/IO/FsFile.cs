@@ -51,6 +51,21 @@ namespace Helpers.IO
         public IDirectory Directory => new FsDirectory(TargetFile.Directory);
 
         /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        public DateTime CreatedTimeUtc => TargetFile.CreationTimeUtc;
+
+        /// <summary>
+        /// Time of last modification (UTC).
+        /// </summary>
+        public DateTime LastModifiedTimeUtc => TargetFile.LastAccessTimeUtc;
+
+        /// <summary>
+        /// Size of the file.
+        /// </summary>
+        public long Size => TargetFile.Length;
+
+        /// <summary>
         /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
         /// </summary>
         /// <param name="a_contents">Stream contents.</param>

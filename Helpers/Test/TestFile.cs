@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using Helpers.Contracts;
 
 namespace Helpers.Test
@@ -33,14 +34,27 @@ namespace Helpers.Test
 
             FileSystem = a_fileSystem ?? new TestFileSystem();
             Path = a_path;
-
+            
             Name = System.IO.Path.GetFileName(Path);
+
+            FileStats = FileSystem.GetFileStats(Path) ?? 
+                new TestFileStats
+                {
+                    Size = 0,
+                    CreatedTimeUtc = DateTime.UtcNow,
+                    LastModifiedTimeUtc = DateTime.UtcNow,
+                };
         }
 
         /// <summary>
         /// File system.
         /// </summary>
         public TestFileSystem FileSystem { get; }
+        
+        /// <summary>
+        /// File stats.
+        /// </summary>
+        public TestFileStats FileStats { get; }
 
         /// <summary>
         /// Path.
@@ -73,12 +87,39 @@ namespace Helpers.Test
         }
 
         /// <summary>
+        /// Size of the file.
+        /// </summary>
+        public long Size => FileStats.Size;
+
+        /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        public DateTime CreatedTimeUtc => FileStats.CreatedTimeUtc;
+
+        /// <summary>
+        /// Time of last modification (UTC).
+        /// </summary>
+        public DateTime LastModifiedTimeUtc => FileStats.LastModifiedTimeUtc;
+
+        /// <summary>
         /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
         /// </summary>
         /// <param name="a_contents">Stream contents.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_contents"/> is null.</exception>
         public void Create(Stream a_contents)
         {
-            FileSystem.CreateFile(Path);
+            #region Argument Validation
+
+            if (a_contents == null)
+                throw new ArgumentNullException(nameof(a_contents));
+
+            #endregion
+
+            FileStats.Size = a_contents.Length;
+            FileStats.CreatedTimeUtc = DateTime.UtcNow;
+            FileStats.LastModifiedTimeUtc = DateTime.UtcNow;
+
+            FileSystem.CreateFile(Path, FileStats);
         }
 
         /// <summary>
@@ -95,7 +136,14 @@ namespace Helpers.Test
         /// <param name="a_source">File from which to copy.</param>
         public void CopyTo(IFile a_source)
         {
-            FileSystem.CreateFile(a_source.Path);
+            var stats = new TestFileStats
+            {
+                Size = a_source.Size,
+                CreatedTimeUtc = DateTime.UtcNow,
+                LastModifiedTimeUtc = DateTime.UtcNow,
+            };
+
+            FileSystem.CreateFile(a_source.Path, stats);
         }
 
         /// <summary>
