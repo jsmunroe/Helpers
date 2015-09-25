@@ -15,8 +15,8 @@ namespace Helpers.Test
         /// </summary>
         /// <param name="a_path">Directory to create.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
-        /// <returns>This file system used with fluent interface.</returns>
-        public TestFileSystem CreateDirectory(string a_path)
+        /// <returns>Created test directory.</returns>
+        public TestDirectory CreateDirectory(string a_path)
         {
             #region Argument Validation
 
@@ -36,7 +36,7 @@ namespace Helpers.Test
                     CreateDirectory(parent);
             }
 
-            return this;
+            return new TestDirectory(this, a_path);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Helpers.Test
         /// <returns>This file system used with fluent interface.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_stats"/> is null.</exception>
-        public TestFileSystem CreateFile(string a_path, TestFileStats a_stats)
+        public TestFile CreateFile(string a_path, TestFileStats a_stats)
         {
             #region Argument Validation
 
@@ -110,7 +110,7 @@ namespace Helpers.Test
             var files = _directories[directory];
             files.Add(file, a_stats);
 
-            return this;
+            return new TestFile(this, a_path);
         }
 
         /// <summary>
