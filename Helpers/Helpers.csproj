@@ -49,6 +49,7 @@
     <Compile Include="IO\FsFile.cs" />
     <Compile Include="MathEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScopeProvider.cs" />
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="Test\TestDirectory.cs" />
     <Compile Include="Test\TestFile.cs" />

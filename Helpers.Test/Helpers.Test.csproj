@@ -66,6 +66,7 @@
     <Compile Include="Test\TestFileSystemTest.cs" />
     <Compile Include="Test\TestFileTest.cs" />
     <Compile Include="MathExTest.cs" />
+    <Compile Include="ScopeProviderTest.cs" />
     <Compile Include="Xml\XmlSetTest.cs" />
   </ItemGroup>
   <ItemGroup>
