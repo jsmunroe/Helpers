@@ -74,6 +74,9 @@ namespace Helpers.Test
 
             a_path = PreparePath(a_path);
 
+            if (!DirectoryExists(a_path))
+                throw new DirectoryNotFoundException($"Directory at path \"{a_path}\" does not exist.");
+
             var toDelete = _directories.Keys.Where(i => i.StartsWith(a_path, StringComparison.OrdinalIgnoreCase)).ToArray();
 
             foreach (var key in toDelete)
@@ -183,7 +186,7 @@ namespace Helpers.Test
             a_path = PreparePath(a_path);
 
             if (!DirectoryExists(a_path))
-                return new string[0];
+                throw new DirectoryNotFoundException($"Directory at path \"{a_path}\" does not exist.");
 
             var files = _directories[a_path].Keys.Select(i => Path.Combine(a_path, i));
 
@@ -207,9 +210,47 @@ namespace Helpers.Test
 
             a_path = PreparePath(a_path);
 
+            if (!DirectoryExists(a_path))
+                throw new DirectoryNotFoundException($"Directory at path \"{a_path}\" does not exist.");
+
             var paths = _directories.Keys.Where(i => IsChildDirectory(a_path, i));
 
             return paths.ToArray();
+        }
+
+        /// <summary>
+        /// Get the stats for the given path (<paramref name="a_path"/>).
+        /// </summary>
+        /// <param name="a_path">Relative path.</param>
+        /// <returns>File stats.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        public TestFileStats GetFileStats(string a_path)
+        {
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            #endregion
+
+            a_path = PreparePath(a_path);
+
+            var directory = Path.GetDirectoryName(a_path);
+
+            if (directory == null)
+                return null;
+
+            var file = Path.GetFileName(a_path);
+
+            if (!DirectoryExists(directory))
+                return null;
+
+            var files = _directories[directory];
+
+            if (files.ContainsKey(file))
+                return files[file];
+
+            return null;
         }
 
         /// <summary>
@@ -247,41 +288,6 @@ namespace Helpers.Test
                 return false;
 
             return othersParent.Equals(a_parent, StringComparison.OrdinalIgnoreCase);
-        }
-
-        /// <summary>
-        /// Get the stats for the given path (<paramref name="a_path"/>).
-        /// </summary>
-        /// <param name="a_path">Relative path.</param>
-        /// <returns>File stats.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
-        public TestFileStats GetFileStats(string a_path)
-        {
-            #region Argument Validation
-
-            if (a_path == null)
-                throw new ArgumentNullException(nameof(a_path));
-
-            #endregion
-
-            a_path = PreparePath(a_path);
-
-            var directory = Path.GetDirectoryName(a_path);
-
-            if (directory == null)
-                return null;
-
-            var file = Path.GetFileName(a_path);
-
-            if (!DirectoryExists(directory))
-                return null;
-
-            var files = _directories[directory];
-
-            if (files.ContainsKey(file))
-                return files[file];
-
-            return null;
         }
     }
 

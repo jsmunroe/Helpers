@@ -249,6 +249,7 @@ namespace Helpers.Test.Test
 
 
         [TestMethod]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
         public void DeleteNotExistingDirectory()
         {
             // Setup

@@ -334,18 +334,15 @@ namespace Helpers.Test.Test
             fileSystem.GetFiles(a_path: "meow meow meow");
         }
 
-
         [TestMethod]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
         public void GetFilesInNonExistantDirectory()
         {
             // Setup
             var fileSystem = new TestFileSystem();
 
             // Execute
-            var filePaths = fileSystem.GetFiles(@"X:\MYDIRECTORY");
-
-            // Assert
-            Assert.AreEqual(0, filePaths.Length);
+            fileSystem.GetFiles(@"X:\MYDIRECTORY");
         }
 
         [TestMethod]
@@ -387,6 +384,17 @@ namespace Helpers.Test.Test
             fileSystem.GetDirectories(a_path: "x:\\????");
         }
 
+
+        [TestMethod]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
+        public void GetDirectoriesInNonExistantDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+
+            // Execute
+            fileSystem.GetDirectories(@"X:\MYDIRECTORY");
+        }
 
         [TestMethod]
         public void GetDirectoryInRoot()
@@ -449,6 +457,7 @@ namespace Helpers.Test.Test
         }
 
         [TestMethod]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
         public void DeleteNotExistingDirectory()
         {
             // Setup
