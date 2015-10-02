@@ -36,25 +36,12 @@ namespace Helpers.Test
             Path = a_path;
             
             Name = System.IO.Path.GetFileName(Path);
-
-            FileStats = FileSystem.GetFileStats(Path) ?? 
-                new TestFileStats
-                {
-                    Size = 0,
-                    CreatedTimeUtc = DateTime.UtcNow,
-                    LastModifiedTimeUtc = DateTime.UtcNow,
-                };
         }
 
         /// <summary>
         /// File system.
         /// </summary>
         public TestFileSystem FileSystem { get; }
-        
-        /// <summary>
-        /// File stats.
-        /// </summary>
-        public TestFileStats FileStats { get; }
 
         /// <summary>
         /// Path.
@@ -89,17 +76,17 @@ namespace Helpers.Test
         /// <summary>
         /// Size of the file.
         /// </summary>
-        public long Size => FileStats.Size;
+        public long Size => FileSystem.GetFileStats(Path).Size;
 
         /// <summary>
         /// Time of creation (UTC).
         /// </summary>
-        public DateTime CreatedTimeUtc => FileStats.CreatedTimeUtc;
+        public DateTime CreatedTimeUtc => FileSystem.GetFileStats(Path).CreatedTimeUtc;
 
         /// <summary>
         /// Time of last modification (UTC).
         /// </summary>
-        public DateTime LastModifiedTimeUtc => FileStats.LastModifiedTimeUtc;
+        public DateTime LastModifiedTimeUtc => FileSystem.GetFileStats(Path).LastModifiedTimeUtc;
 
         /// <summary>
         /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
@@ -115,11 +102,12 @@ namespace Helpers.Test
 
             #endregion
 
-            FileStats.Size = a_contents.Length;
-            FileStats.CreatedTimeUtc = DateTime.UtcNow;
-            FileStats.LastModifiedTimeUtc = DateTime.UtcNow;
+            var fileStats = new TestFileStats();
+            fileStats.Size = a_contents.Length;
+            fileStats.CreatedTimeUtc = DateTime.UtcNow;
+            fileStats.LastModifiedTimeUtc = DateTime.UtcNow;
 
-            FileSystem.CreateFile(Path, FileStats);
+            FileSystem.CreateFile(Path, fileStats);
         }
 
         /// <summary>
@@ -131,19 +119,33 @@ namespace Helpers.Test
         }
 
         /// <summary>
-        /// Copy from the given file (<paramref name="a_source"/>) to this file.
+        /// Copy this file to the given file (<paramref name="a_dest"/>).
         /// </summary>
-        /// <param name="a_source">File from which to copy.</param>
-        public void CopyTo(IFile a_source)
+        /// <param name="a_dest">File to which to copy.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_dest"/> is null.</exception>
+        public void CopyTo(IFile a_dest)
         {
+            #region Argument Validation
+
+            if (a_dest == null)
+                throw new ArgumentNullException(nameof(a_dest));
+
+            #endregion
+
+            if (!Directory.Exists)
+                throw new DirectoryNotFoundException("Cannot CopyTo because directory of source file does not exist");
+
+            if (!Exists)
+                throw new FileNotFoundException("Cannot CopyTo because source file does not exist.");
+
             var stats = new TestFileStats
             {
-                Size = a_source.Size,
+                Size = Size,
                 CreatedTimeUtc = DateTime.UtcNow,
                 LastModifiedTimeUtc = DateTime.UtcNow,
             };
 
-            FileSystem.CreateFile(a_source.Path, stats);
+            FileSystem.CreateFile(a_dest.Path, stats);
         }
 
         /// <summary>

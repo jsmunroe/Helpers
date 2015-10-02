@@ -193,5 +193,74 @@ namespace Helpers.Test.Test
             var result = file.ChangeExtension(a_extension: null);
         }
 
+
+        [TestMethod]
+        public void CopyTo()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = fileSystem.CreateFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
+            var dest = new TestFile(fileSystem, @"x:\directory\file2.bmp");
+
+            // Execute
+            file.CopyTo(dest);
+
+            // Assert
+            Assert.IsTrue(dest.Exists);
+            Assert.AreEqual(240, dest.Size);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CopyToWithNullDest()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = fileSystem.CreateFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
+
+            // Execute
+            file.CopyTo(a_dest: null);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void CopyToWithNotExistingSource()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.CreateDirectory(@"x:\directory");
+            var file = new TestFile(fileSystem, @"x:\directory\File.bmp");
+            var dest = new TestFile(fileSystem, @"x:\directory\file2.bmp");
+
+            // Execute
+            file.CopyTo(dest);
+        }
+
+        [TestMethod]
+        public void CopyToWithExistingDest()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = fileSystem.CreateFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
+            var dest = fileSystem.CreateFile(@"x:\directory\File2.bmp", new TestFileStats { Size = 480 });
+
+            // Execute
+            file.CopyTo(dest);
+
+            // Assert
+            Assert.IsTrue(dest.Exists);
+            Assert.AreEqual(240, dest.Size);
+        }
+
+        //[TestMethod]
+        public void TestMethod()
+        {
+            var file = new FileInfo(@"C:\dir\NoExisty.txt");
+
+            file.CopyTo(null);
+        }
+
+
     }
 }

@@ -111,7 +111,7 @@ namespace Helpers.Test
             CreateDirectory(directory);
 
             var files = _directories[directory];
-            files.Add(file, a_stats);
+            files[file] = a_stats;
 
             return new TestFile(this, a_path);
         }
