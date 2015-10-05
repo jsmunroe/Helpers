@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Extensions\CollectionHelpersTest.cs" />
     <Compile Include="Extensions\DictionaryHelpersTest.cs" />
+    <Compile Include="Extensions\DirectoryHelpersTest.cs" />
     <Compile Include="IO\DirectoryInfoExtensionsTest.cs" />
     <Compile Include="IO\FsFileTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
