@@ -159,6 +159,7 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
+            fileSystem.CreateDirectory("\\this\\is\\a");
             var file = new TestFile(fileSystem, "\\this\\is\\a\\file.txt");
 
             // Execute
@@ -166,6 +167,19 @@ namespace Helpers.Test.Test
 
             // Assert
             Assert.IsFalse(file.Exists);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
+        public void DeleteFromNotExistingFile()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = new TestFile(fileSystem, "\\this\\is\\a\\file.txt");
+
+            // Execute
+            file.Delete();
         }
 
         [TestMethod]
@@ -253,12 +267,12 @@ namespace Helpers.Test.Test
             Assert.AreEqual(240, dest.Size);
         }
 
-        //[TestMethod]
+        [TestMethod]
         public void TestMethod()
         {
-            var file = new FileInfo(@"C:\dir\NoExisty.txt");
+            var file = new FileInfo(@"C:\NoExisty.txt");
 
-            file.CopyTo(null);
+            file.Delete();
         }
 
 

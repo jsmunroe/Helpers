@@ -115,6 +115,9 @@ namespace Helpers.Test
         /// </summary>
         public void Delete()
         {
+            if (!Directory.Exists)
+                throw new DirectoryNotFoundException("Cannot CopyTo because directory of source file does not exist");
+
             FileSystem.DeleteFile(Path);
         }
 
