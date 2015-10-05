@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -128,6 +129,9 @@ namespace Helpers.Test
         /// </summary>
         public void Delete()
         {
+            if (!Exists)
+                throw new DirectoryNotFoundException($"Directory at path \"{Path}\" does not exist.");
+
             FileSystem.DeleteDirectory(Path);
         }
 

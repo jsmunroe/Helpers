@@ -258,9 +258,15 @@ namespace Helpers.Test.Test
 
             // Execute
             directory.Delete();
+        }
 
-            // Assert
-            Assert.IsFalse(directory.Exists);
+
+        //[TestMethod]
+        public void TestMethod()
+        {
+            var file = new DirectoryInfo(@"C:\NoExisty");
+
+            file.Delete();
         }
 
 

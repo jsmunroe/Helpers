@@ -74,9 +74,6 @@ namespace Helpers.Test
 
             a_path = PreparePath(a_path);
 
-            if (!DirectoryExists(a_path))
-                throw new DirectoryNotFoundException($"Directory at path \"{a_path}\" does not exist.");
-
             var toDelete = _directories.Keys.Where(i => i.StartsWith(a_path, StringComparison.OrdinalIgnoreCase)).ToArray();
 
             foreach (var key in toDelete)

@@ -267,7 +267,7 @@ namespace Helpers.Test.Test
             Assert.AreEqual(240, dest.Size);
         }
 
-        [TestMethod]
+        // [TestMethod]
         public void TestMethod()
         {
             var file = new FileInfo(@"C:\NoExisty.txt");
