@@ -52,7 +52,7 @@ namespace Helpers.Test.Test
             // Setup
             var path = "\\file\\does\\exist.dat";
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateFile(path, new TestFileStats());
+            fileSystem.StageFile(path, new TestFileStats());
             var file = new TestFile(fileSystem, path);
 
             // Execute
@@ -159,7 +159,7 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateDirectory("\\this\\is\\a");
+            fileSystem.StageDirectory("\\this\\is\\a");
             var file = new TestFile(fileSystem, "\\this\\is\\a\\file.txt");
 
             // Execute
@@ -213,7 +213,7 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            var file = fileSystem.CreateFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
+            var file = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
             var dest = new TestFile(fileSystem, @"x:\directory\file2.bmp");
 
             // Execute
@@ -230,7 +230,7 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            var file = fileSystem.CreateFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
+            var file = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
 
             // Execute
             file.CopyTo(a_dest: null);
@@ -243,7 +243,7 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            fileSystem.CreateDirectory(@"x:\directory");
+            fileSystem.StageDirectory(@"x:\directory");
             var file = new TestFile(fileSystem, @"x:\directory\File.bmp");
             var dest = new TestFile(fileSystem, @"x:\directory\file2.bmp");
 
@@ -256,8 +256,8 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            var file = fileSystem.CreateFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
-            var dest = fileSystem.CreateFile(@"x:\directory\File2.bmp", new TestFileStats { Size = 480 });
+            var file = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
+            var dest = fileSystem.StageFile(@"x:\directory\File2.bmp", new TestFileStats { Size = 480 });
 
             // Execute
             file.CopyTo(dest);

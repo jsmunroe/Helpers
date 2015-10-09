@@ -121,7 +121,7 @@ namespace Helpers.Test
         /// </summary>
         public void Create()
         {
-            FileSystem.CreateDirectory(Path);
+            FileSystem.StageDirectory(Path);
         }
 
         /// <summary>

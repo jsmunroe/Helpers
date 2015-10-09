@@ -17,16 +17,16 @@ namespace Helpers.Test.Extensions
         public void InitializeTest()
         {
             _fileSystem = new TestFileSystem();
-            _fileSystem.CreateDirectory(@"\Root\Directory");
-            _fileSystem.CreateDirectory(@"\Root\Directory\Sub1");
-            _fileSystem.CreateDirectory(@"\Root\Directory\Sub1\Sub2");
-            _fileSystem.CreateDirectory(@"\Root\Directory\Sub1\Sub2\File1.dat");
-            _fileSystem.CreateDirectory(@"\Root\Directory\Sub1\Sub2\File2.dat");
-            _fileSystem.CreateDirectory(@"\Root\Directory\Sub1\Sub3");
-            _fileSystem.CreateDirectory(@"\Root\Directory\Sub1\Sub3\File1.dat");
-            _fileSystem.CreateDirectory(@"\Root\Directory\Sub1\Sub3\File2.dat");
-            _fileSystem.CreateDirectory(@"\Root\Directory\Sub1\File1.dat");
-            _fileSystem.CreateDirectory(@"\Root\Directory\Sub1\File2.dat");
+            _fileSystem.StageDirectory(@"\Root\Directory");
+            _fileSystem.StageDirectory(@"\Root\Directory\Sub1");
+            _fileSystem.StageDirectory(@"\Root\Directory\Sub1\Sub2");
+            _fileSystem.StageDirectory(@"\Root\Directory\Sub1\Sub2\File1.dat");
+            _fileSystem.StageDirectory(@"\Root\Directory\Sub1\Sub2\File2.dat");
+            _fileSystem.StageDirectory(@"\Root\Directory\Sub1\Sub3");
+            _fileSystem.StageDirectory(@"\Root\Directory\Sub1\Sub3\File1.dat");
+            _fileSystem.StageDirectory(@"\Root\Directory\Sub1\Sub3\File2.dat");
+            _fileSystem.StageDirectory(@"\Root\Directory\Sub1\File1.dat");
+            _fileSystem.StageDirectory(@"\Root\Directory\Sub1\File2.dat");
         }
 
 

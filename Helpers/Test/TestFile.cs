@@ -107,7 +107,7 @@ namespace Helpers.Test
             fileStats.CreatedTimeUtc = DateTime.UtcNow;
             fileStats.LastModifiedTimeUtc = DateTime.UtcNow;
 
-            FileSystem.CreateFile(Path, fileStats);
+            FileSystem.StageFile(Path, fileStats);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace Helpers.Test
                 LastModifiedTimeUtc = DateTime.UtcNow,
             };
 
-            FileSystem.CreateFile(a_dest.Path, stats);
+            FileSystem.StageFile(a_dest.Path, stats);
         }
 
         /// <summary>

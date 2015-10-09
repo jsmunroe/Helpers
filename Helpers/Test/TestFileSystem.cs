@@ -10,13 +10,26 @@ namespace Helpers.Test
     {
         private readonly Dictionary<string, Dictionary<string, TestFileStats>> _directories = new Dictionary<string, Dictionary<string, TestFileStats>>(StringComparer.OrdinalIgnoreCase);
 
+
         /// <summary>
         /// Create the directory with the given path (<paramref name="a_path"/>) within this file system.
         /// </summary>
         /// <param name="a_path">Directory to create.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
         /// <returns>Created test directory.</returns>
+        [Obsolete("Use StageDirectory instead.")]
         public TestDirectory CreateDirectory(string a_path)
+        {
+            return StageDirectory(a_path);
+        }
+
+        /// <summary>
+        /// Create the directory with the given path (<paramref name="a_path"/>) within this file system.
+        /// </summary>
+        /// <param name="a_path">Directory to create.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        /// <returns>Created test directory.</returns>
+        public TestDirectory StageDirectory(string a_path)
         {
             #region Argument Validation
 
@@ -33,7 +46,7 @@ namespace Helpers.Test
 
                 var parent = Path.GetDirectoryName(a_path);
                 if (parent != null)
-                    CreateDirectory(parent);
+                    StageDirectory(parent);
             }
 
             return new TestDirectory(this, a_path);
@@ -88,7 +101,21 @@ namespace Helpers.Test
         /// <returns>This file system used with fluent interface.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_stats"/> is null.</exception>
+        [Obsolete("Use 'StageFile' instead.")]
         public TestFile CreateFile(string a_path, TestFileStats a_stats)
+        {
+            return StageFile(a_path, a_stats);
+        }
+
+        /// <summary>
+        /// Create a file with the given path (<paramref name="a_path"/>) within this file system.
+        /// </summary>
+        /// <param name="a_path">File path.</param>
+        /// <param name="a_stats">File stats.</param>
+        /// <returns>This file system used with fluent interface.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_stats"/> is null.</exception>
+        public TestFile StageFile(string a_path, TestFileStats a_stats = null)
         {
             #region Argument Validation
 
@@ -105,7 +132,7 @@ namespace Helpers.Test
             var directory = Path.GetDirectoryName(a_path);
             var file = Path.GetFileName(a_path);
 
-            CreateDirectory(directory);
+            StageDirectory(directory);
 
             var files = _directories[directory];
             files[file] = a_stats;
