@@ -104,6 +104,9 @@ namespace Helpers.IO
 
             #endregion
 
+            if (a_relativePath == "")
+                return this;
+
             var value = _path + _delimiter + a_relativePath;
 
             var path = new PathBuilder(value, _delimiter);
