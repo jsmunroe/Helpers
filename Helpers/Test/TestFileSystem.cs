@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Helpers.IO;
 
 namespace Helpers.Test
 {
@@ -17,7 +18,7 @@ namespace Helpers.Test
         /// <param name="a_path">Directory to create.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
         /// <returns>Created test directory.</returns>
-        [Obsolete("Use StageDirectory instead.")]
+        [Obsolete("Use 'StageDirectory' instead.")]
         public TestDirectory CreateDirectory(string a_path)
         {
             return StageDirectory(a_path);
@@ -44,7 +45,7 @@ namespace Helpers.Test
             {
                 _directories.Add(a_path, new Dictionary<string, TestFileStats>(StringComparer.OrdinalIgnoreCase));
 
-                var parent = Path.GetDirectoryName(a_path);
+                var parent = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot).Parent();
                 if (parent != null)
                     StageDirectory(parent);
             }
@@ -129,8 +130,9 @@ namespace Helpers.Test
 
             a_path = PreparePath(a_path);
 
-            var directory = Path.GetDirectoryName(a_path);
-            var file = Path.GetFileName(a_path);
+            var pb = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot);
+            var directory = pb.Parent();
+            var file = pb.Name();
 
             StageDirectory(directory);
 
@@ -157,8 +159,10 @@ namespace Helpers.Test
 
             a_path = PreparePath(a_path);
 
-            var directory = Path.GetDirectoryName(a_path);
-            var file = Path.GetFileName(a_path);
+            var pb = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot);
+            var directory = pb.Parent();
+            var file = pb.Name();
+
 
             if (!DirectoryExists(directory))
                 return false;
@@ -183,8 +187,9 @@ namespace Helpers.Test
 
             a_path = PreparePath(a_path);
 
-            var directory = Path.GetDirectoryName(a_path);
-            var file = Path.GetFileName(a_path);
+            var pb = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot);
+            var directory = pb.Parent();
+            var file = pb.Name();
 
             if (!DirectoryExists(directory))
                 return;
@@ -212,7 +217,7 @@ namespace Helpers.Test
             if (!DirectoryExists(a_path))
                 throw new DirectoryNotFoundException($"Directory at path \"{a_path}\" does not exist.");
 
-            var files = _directories[a_path].Keys.Select(i => Path.Combine(a_path, i));
+            var files = _directories[a_path].Keys.Select(i => PathBuilder.Create(a_path).Child(i).ToString());
 
             return files.ToArray();
         }
@@ -259,12 +264,14 @@ namespace Helpers.Test
 
             a_path = PreparePath(a_path);
 
-            var directory = Path.GetDirectoryName(a_path);
+            var pb = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot);
+
+            var directory = pb.Parent();
 
             if (directory == null)
                 return null;
 
-            var file = Path.GetFileName(a_path);
+            var file = pb.Name();
 
             if (!DirectoryExists(directory))
                 return null;
@@ -280,12 +287,12 @@ namespace Helpers.Test
         /// <summary>
         /// Prepare the given path (<paramref name="a_path"/>).
         /// </summary>
-        /// <param name="a_path">Path to prepare.</param>
+        /// <param name="a_path">PathResult to prepare.</param>
         /// <returns>Prepared.</returns>
         protected virtual string PreparePath(string a_path)
         {
             if (!Regex.IsMatch(a_path, @"^(?:[a-zA-Z]\:\\|\\)"))
-                throw new ArgumentException("Path is not rooted or invalid!", nameof(a_path));
+                throw new ArgumentException("PathResult is not rooted or invalid!", nameof(a_path));
 
             a_path = Path.GetFullPath(a_path);
 
@@ -306,7 +313,7 @@ namespace Helpers.Test
             if (a_parent == null)
                 return false;
 
-            var othersParent = Path.GetDirectoryName(a_other);
+            var othersParent = PathBuilder.Create(a_other).WithRoot(PathBuilder.WindowsDriveRoot).Parent()?.ToString();
 
             if (othersParent == null)
                 return false;

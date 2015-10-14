@@ -34,7 +34,7 @@ namespace Helpers
         /// </summary>
         /// <param name="a_major">Major version.</param>
         /// <param name="a_minor">Minor version.</param>
-        /// <param name="a_patch">Path version.</param>
+        /// <param name="a_patch">PathResult version.</param>
         /// <param name="a_release">Special pre-release and build metadata.</param>
         public SemanticVersion(int a_major, int a_minor, int a_patch, string a_release = null)
         {

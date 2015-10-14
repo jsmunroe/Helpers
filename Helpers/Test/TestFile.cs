@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.RegularExpressions;
 using Helpers.Contracts;
+using Helpers.IO;
 
 namespace Helpers.Test
 {
@@ -35,7 +36,7 @@ namespace Helpers.Test
             FileSystem = a_fileSystem ?? new TestFileSystem();
             Path = a_path;
             
-            Name = System.IO.Path.GetFileName(Path);
+            Name = PathBuilder.Create(Path).Name();
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace Helpers.Test
         public TestFileSystem FileSystem { get; }
 
         /// <summary>
-        /// Path.
+        /// PathResult.
         /// </summary>
         public string Path { get; }
 
@@ -65,7 +66,7 @@ namespace Helpers.Test
         {
             get
             {
-                var parentPath = System.IO.Path.GetDirectoryName(Path);
+                var parentPath = PathBuilder.Create(Path).Parent();
                 if (parentPath == null)
                     return null;
 
@@ -168,8 +169,8 @@ namespace Helpers.Test
 
             var extension = a_extension.TrimStart('.');
 
-            var newPath = System.IO.Path.GetDirectoryName(Path) + "\\" +
-                          System.IO.Path.GetFileNameWithoutExtension(Path) + "." + extension;
+            var newName = PathBuilder.Create(Path).NameWithoutExtension() + "." + extension;
+            var newPath = PathBuilder.Create(Path).Parent().Child(newName);
 
             return new TestFile(FileSystem, newPath);
         }

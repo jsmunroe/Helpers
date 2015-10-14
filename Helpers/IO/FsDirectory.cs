@@ -30,7 +30,7 @@ namespace Helpers.IO
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="a_directoryPath">Path to the target directory.</param>
+        /// <param name="a_directoryPath">PathResult to the target directory.</param>
         public FsDirectory(string a_directoryPath)
             : this(new DirectoryInfo(a_directoryPath))
         {

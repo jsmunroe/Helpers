@@ -50,7 +50,7 @@ namespace Helpers.IO
 
             #endregion
 
-            return Path.Combine(a_directory.FullName, a_fileName);
+            return PathBuilder.Create(a_directory.FullName).Child(a_fileName);
         }
 
         /// <summary>
@@ -97,8 +97,8 @@ namespace Helpers.IO
                 throw new ArgumentNullException(nameof(a_directoryName));
 
             #endregion
-
-            return Path.Combine(a_directory.FullName, a_directoryName);
+           
+            return PathBuilder.Create(a_directory.FullName).Child(a_directoryName);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Helpers.IO
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="a_filePath">Path to the target file.</param>
+        /// <param name="a_filePath">PathResult to the target file.</param>
         public FsFile(string a_filePath)
             : this(new FileInfo(a_filePath))
         {
@@ -121,8 +121,8 @@ namespace Helpers.IO
             var extension = a_extension.TrimStart('.');
 
             var path = TargetFile.FullName;
-            var newPath = System.IO.Path.GetDirectoryName(path) + "\\" +
-                          System.IO.Path.GetFileNameWithoutExtension(path) + "." + extension;
+            var newName = PathBuilder.Create(path).NameWithoutExtension() + "." + extension;
+            var newPath = PathBuilder.Create(path).Parent().Child(newName);
 
             return new FsFile(newPath);
         }

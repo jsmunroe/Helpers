@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Helpers.Contracts;
+using Helpers.IO;
 
 namespace Helpers.Xml
 {
@@ -20,7 +21,7 @@ namespace Helpers.Xml
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="a_filePath">Path to the XML document file.</param>
+        /// <param name="a_filePath">PathResult to the XML document file.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_filePath"/> is null.</exception>
         public XmlSet(string a_filePath)
         {
@@ -134,7 +135,7 @@ namespace Helpers.Xml
         /// </summary>
         public void Save()
         {
-            var directory = Path.GetDirectoryName(_filePath) ?? "";
+            var directory = PathBuilder.Create(_filePath).Parent() ?? "";
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
 
@@ -281,7 +282,7 @@ namespace Helpers.Xml
         /// <returns>Created empty document.</returns>
         protected virtual XDocument CreateEmptyDocument()
         {
-            var rootElementName = Path.GetFileNameWithoutExtension(_filePath) ?? typeof(TEntity).Name + "Set";
+            var rootElementName = PathBuilder.Create(_filePath).NameWithoutExtension() ?? typeof(TEntity).Name + "Set";
 
             return new XDocument(
                 new XDeclaration("1.0", "utf-8", "yes"),
