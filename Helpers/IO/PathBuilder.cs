@@ -109,6 +109,8 @@ namespace Helpers.IO
 
             var value = _path + _delimiter + a_relativePath;
 
+            value = value.Replace(_delimiter + _delimiter, _delimiter);
+
             var path = new PathBuilder(value, _delimiter);
 
             return ApplyOptions(path);

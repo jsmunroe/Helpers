@@ -261,12 +261,23 @@ namespace Helpers.Test.Test
         }
 
 
-        //[TestMethod]
-        public void TestMethod()
+        [TestMethod]
+        public void CustomTest_I()
         {
-            var file = new DirectoryInfo(@"C:\NoExisty");
+            var fileSystem = new TestFileSystem();
+            fileSystem.StageDirectory(@"\Root\Directory");
+            fileSystem.StageDirectory(@"\Root\Directory\Sub1");
+            fileSystem.StageDirectory(@"\Root\Directory\Sub2");
+            fileSystem.StageDirectory(@"\Root\Directory\Sub3");
+            fileSystem.StageFile(@"\Root\Directory\File1.hsf", new TestFileStats());
+            fileSystem.StageFile(@"\Root\Directory\File2.hsf", new TestFileStats());
+            fileSystem.StageFile(@"\Root\Directory\File3.hsf", new TestFileStats());
 
-            file.Delete();
+            var directory = new TestDirectory(fileSystem, @"\");
+
+            var result = directory.Directory(@"Root\Directory\Sub1").Exists;
+
+            Assert.IsTrue(result);
         }
 
 

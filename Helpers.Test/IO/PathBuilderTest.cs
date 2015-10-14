@@ -63,6 +63,19 @@ namespace Helpers.Test.IO
 
 
         [TestMethod]
+        public void ChildOffOfRoot()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"C:\");
+
+            // Execute
+            var result = path.Child("next");
+
+            // Assert
+            Assert.AreEqual(@"C:\next", result);
+        }
+
+        [TestMethod]
         public void ChildWithCustomDelimiter()
         {
             // Setup
@@ -76,6 +89,19 @@ namespace Helpers.Test.IO
         }
 
 
+        [TestMethod]
+        public void ChildWithEmptyRelativePath()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\path");
+
+            // Execute
+            var result = path.Child("");
+
+            // Assert
+            Assert.AreEqual(@"\some\odd\path", result);
+        }
+        
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ChildWithNullRelativePath()
