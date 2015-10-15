@@ -107,17 +107,51 @@ namespace Helpers.IO
             if (a_relativePath == "")
                 return this;
 
-            var value = _path + _delimiter + a_relativePath;
+            if (a_relativePath == _delimiter)
+                return this;
 
-            value = value.Replace(_delimiter + _delimiter, _delimiter);
+            var pathValue = "";
 
-            var path = new PathBuilder(value, _delimiter);
+            if (_path == "")
+                pathValue = a_relativePath;
+            else
+                pathValue = _path + _delimiter + a_relativePath;
+
+            pathValue = pathValue.Replace(_delimiter + _delimiter, _delimiter);
+
+            var path = new PathBuilder(pathValue, _delimiter);
 
             return ApplyOptions(path);
         }
 
         /// <summary>
-        /// Get the parent path.
+        /// Get a sibling of this path's element with the given name (<paramref name="a_siblingName"/>).
+        /// </summary>
+        /// <param name="a_siblingName">Sibling name.</param>
+        /// <returns>Created sibling path.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_siblingName"/> is null.</exception>
+        public PathBuilder Sibling(string a_siblingName)
+        {
+            #region Argument Validation
+
+            if (a_siblingName == null)
+                throw new ArgumentNullException(nameof(a_siblingName));
+
+            #endregion
+
+            if (IsRoot(_path))
+                return null;
+
+            var parent = Parent();
+
+            if (parent == null)
+                parent = ApplyOptions(new PathBuilder(""));
+
+            return parent.Child(a_siblingName);
+        }
+
+        /// <summary>
+        /// Get the parent element's path.
         /// </summary>
         /// <returns>Parent path.</returns>
         public PathBuilder Parent()
@@ -219,5 +253,6 @@ namespace Helpers.IO
         {
             return a_pathBuilder?.ToString();
         }
+
     }
 }

@@ -115,6 +115,114 @@ namespace Helpers.Test.IO
 
 
         [TestMethod]
+        public void ChildOffOfExplicitRoot()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"C:\").WithRoot(PathBuilder.WindowsDriveRoot);
+
+            // Execute
+            var result = path.Child("next");
+
+            // Assert
+            Assert.AreEqual(@"C:\next", result);
+        }
+
+
+        [TestMethod]
+        public void ChildOffOfEmpty()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"");
+
+            // Execute
+            var result = path.Child("next");
+
+            // Assert
+            Assert.AreEqual(@"next", result);
+        }
+
+
+        [TestMethod]
+        public void Sibling()
+        {
+            // Setup
+            var path = PathBuilder.Create(@":some:odd:path", ":");
+
+            // Execute
+            var result = path.Sibling("next");
+
+            // Assert
+            Assert.AreEqual(@":some:odd:next", result);
+        }
+        
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void SiblingWithNullName()
+        {
+            // Setup
+            var path = PathBuilder.Create(@":some:odd:path", ":");
+
+            // Execute
+            var result = path.Sibling(a_siblingName: null);
+        }
+
+
+        [TestMethod]
+        public void SiblingWithEmpty()
+        {
+            // Setup
+            var path = PathBuilder.Create(@":some:odd:path", ":");
+
+            // Execute
+            var result = path.Sibling("");
+
+            // Assert
+            Assert.AreEqual(@":some:odd", result);
+        }
+
+
+        [TestMethod]
+        public void SiblingWithRelativePath()
+        {
+            // Setup
+            var path = PathBuilder.Create(@":some:odd:path", ":");
+
+            // Execute
+            var result = path.Sibling("another:path");
+
+            // Assert
+            Assert.AreEqual(@":some:odd:another:path", result);
+        }
+
+
+        [TestMethod]
+        public void SiblingWithRelativePathStartingWithDelimiter()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"#some#odd#path", "#");
+
+            // Execute
+            var result = path.Sibling("#another");
+
+            // Assert
+            Assert.AreEqual(@"#some#odd#another", result);
+        }
+
+
+        [TestMethod]
+        public void SiblingsWithRelativePathOfOnlyDelimiter()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"#some#odd#path", "#");
+
+            // Execute
+            var result = path.Sibling("#");
+
+            // Assert
+            Assert.AreEqual(@"#some#odd", result);
+        }
+
+        [TestMethod]
         public void Parent()
         {
             // Setup
