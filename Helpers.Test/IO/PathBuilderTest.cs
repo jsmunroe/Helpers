@@ -32,6 +32,17 @@ namespace Helpers.Test.IO
 
 
         [TestMethod]
+        public void ConstructWithEndingDelimiter()
+        {
+            // Execute
+            var result = new PathBuilder(@":some:odd:path:", ":");
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual(@":some:odd:path:", result.ToString());
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ConstructWithNullPath()
         {
@@ -354,6 +365,22 @@ namespace Helpers.Test.IO
             Assert.AreEqual(@"path", result);
         }
 
+
+        [TestMethod]
+        public void NameWithEndingDelimiter()
+        {
+            // Setup
+            var path = PathBuilder.Create(@":some:odd:path:", ":");
+
+            // Execute
+            var result = path.Name();
+
+            // Assert
+            Assert.AreEqual(@"path", result);
+        }
+
+
+
         [TestMethod]
         public void NameWithoutExtension()
         {
@@ -368,7 +395,7 @@ namespace Helpers.Test.IO
         }
 
         [TestMethod]
-        public void NameFromRootWithoutExtension_I()
+        public void NameWithoutExtensionFromRoot_I()
         {
             // Setup
             var path = PathBuilder.Create(@"\");
@@ -381,7 +408,7 @@ namespace Helpers.Test.IO
         }
 
         [TestMethod]
-        public void NameFromRootWithoutExtension_II()
+        public void NameWithoutExtensionFromRoot_II()
         {
             // Setup
             var path = PathBuilder.Create(@"root.dat");
@@ -419,7 +446,70 @@ namespace Helpers.Test.IO
             Assert.AreEqual(@"path", result);
         }
 
+        [TestMethod]
+        public void Extension()
+        {
+            // Setup
+            var path = PathBuilder.Create(@":some:odd:path.txt", ":");
 
+            // Execute
+            var result = path.Extension();
+
+            // Assert
+            Assert.AreEqual(".txt", result);
+        }
+
+        [TestMethod]
+        public void ExtensionFromRoot_I()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\");
+
+            // Execute
+            var result = path.Extension();
+
+            // Assert
+            Assert.AreEqual(@"", result);
+        }
+
+        [TestMethod]
+        public void ExtensionFromRoot_II()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"root.dat");
+
+            // Execute
+            var result = path.Extension();
+
+            // Assert
+            Assert.AreEqual(@".dat", result);
+        }
+
+        [TestMethod]
+        public void ExtensionFromEmpty()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"");
+
+            // Execute
+            var result = path.Extension();
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void ExtensionWithCustomDelimiter()
+        {
+            // Setup
+            var path = PathBuilder.Create(@":some:odd:path.jpg", ":");
+
+            // Execute
+            var result = path.Extension();
+
+            // Assert
+            Assert.AreEqual(@".jpg", result);
+        }
         [TestMethod]
         public void Temp()
         {

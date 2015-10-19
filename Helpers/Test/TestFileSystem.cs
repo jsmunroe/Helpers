@@ -296,7 +296,7 @@ namespace Helpers.Test
 
             a_path = Path.GetFullPath(a_path);
 
-            if (!Regex.IsMatch(a_path, @"^(?:[a-zA-Z]\:\\)"))
+            if (!Regex.IsMatch(a_path, @"^(?:[a-zA-Z]\:\\)$"))
                 a_path = a_path.TrimEnd('\\');
 
             return a_path;

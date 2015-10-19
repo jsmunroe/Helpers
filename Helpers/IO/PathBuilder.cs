@@ -114,6 +114,8 @@ namespace Helpers.IO
 
             if (_path == "")
                 pathValue = a_relativePath;
+            else if (_path.EndsWith(_delimiter))
+                pathValue = _path + a_relativePath;
             else
                 pathValue = _path + _delimiter + a_relativePath;
 
@@ -160,6 +162,10 @@ namespace Helpers.IO
                 return null;
 
             var lastIndex = _path.LastIndexOf(_delimiter, StringComparison.Ordinal);
+
+            if (lastIndex >= _path.Length - 1)
+                lastIndex = _path.LastIndexOf(_delimiter, lastIndex - 1, StringComparison.Ordinal);
+
             if (lastIndex < 0)
                 return null;
 
@@ -174,7 +180,7 @@ namespace Helpers.IO
         }
 
         /// <summary>
-        /// Gets the name of the last segment in this path.
+        /// Get the name of the last segment in this path.
         /// </summary>
         /// <returns>Name of the last segment.</returns>
         public string Name()
@@ -182,18 +188,29 @@ namespace Helpers.IO
             if (_path == "")
                 return null;
 
+            if (IsRoot(_path))
+                return "";
+
             var lastIndex = _path.LastIndexOf(_delimiter, StringComparison.Ordinal);
+
+            if (lastIndex >= _path.Length - 1)
+                lastIndex = _path.LastIndexOf(_delimiter, lastIndex - 1, StringComparison.Ordinal);
+
             if (lastIndex < 0)
                 return _path;
 
             var value = _path.Substring(lastIndex + 1);
 
+            if (value.EndsWith(_delimiter))
+                value = value.Substring(0, value.Length - _delimiter.Length);
+
             return value;
         }
 
         /// <summary>
-        /// Gets the name of the last segment in this path without its extension.
+        /// Get the name of the last segment in this path without its extension.
         /// </summary>
+        /// <param name="a_extensionMarker">String that indicates the start of an extension.</param>
         /// <returns>Name of the last segment without its extension.</returns>
         public string NameWithoutExtension(string a_extensionMarker = ".")
         {
@@ -207,6 +224,27 @@ namespace Helpers.IO
                 return name;
 
             var value = name.Substring(0, lastIndex);
+
+            return value;
+        }
+
+        /// <summary>
+        /// Get the extension of the last segment with its marker (".").
+        /// </summary>
+        /// <param name="a_extensionMarker">String that indicates the start of an extension.</param>
+        /// <returns>Extension of the last segment.</returns>
+        public string Extension(string a_extensionMarker = ".")
+        {
+            var name = Name();
+
+            if (name == null)
+                return null;
+
+            var lastIndex = name.LastIndexOf(a_extensionMarker, StringComparison.Ordinal);
+            if (lastIndex < 0)
+                return name;
+
+            var value = name.Substring(lastIndex);
 
             return value;
         }
