@@ -180,6 +180,19 @@ namespace Helpers.Test.Collections
 
 
         [TestMethod]
+        public void CreateFileOnEmptyRoot()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+
+            // Execute
+            fileSystem.CreateFile(@"File.dat", "Value");
+
+            // Assert
+            Assert.IsTrue(fileSystem.FileExists(@"File.dat"));
+        }
+
+        [TestMethod]
         public void GetLeafValue()
         {
             // Setup

@@ -108,7 +108,7 @@ namespace Helpers.Collections
             if (Regex.IsMatch(a_path, @"^[A-Za-z]\:\\"))
                 path = path.WithRoot(PathBuilder.WindowsDriveRoot);
 
-            var directory = path.Parent();
+            var directory = path.Parent() ?? "";
             var file = path.Name();
 
             CreateDirectory(directory);
@@ -140,9 +140,8 @@ namespace Helpers.Collections
             if (Regex.IsMatch(a_path, @"^[A-Za-z]\:\\"))
                 path = path.WithRoot(PathBuilder.WindowsDriveRoot);
 
-            var directory = path.Parent();
+            var directory = path.Parent() ?? "";
             var file = path.Name();
-
 
             if (!DirectoryExists(directory))
                 return false;
