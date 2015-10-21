@@ -41,20 +41,6 @@ namespace Helpers.Test.Collections
             fileSystem.CreateDirectory(a_path: null);
         }
 
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void CreateDirectoryWithBadPath()
-        {
-            // Setup
-            var fileSystem = new PathTree<string>();
-            var path = @"X:\This is bad a directory path?";
-
-            // Execute
-            fileSystem.CreateDirectory(path);
-        }
-
-
         [TestMethod]
         public void CreateDirectoryMoreThanOnce()
         {
@@ -110,19 +96,6 @@ namespace Helpers.Test.Collections
 
             // Execute
             var results = fileSystem.DirectoryExists(a_path: null);
-        }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void DirectoryExistsWithBadPath()
-        {
-            // Setup
-            var fileSystem = new PathTree<string>();
-            var path = @"X:\This is bad a directory path?";
-
-            // Execute
-            fileSystem.DirectoryExists(path);
         }
 
         [TestMethod]
@@ -260,19 +233,6 @@ namespace Helpers.Test.Collections
             var result = fileSystem.FileExists(a_path: null);
         }
 
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void FileExistsWithBadPath()
-        {
-            // Setup
-            var fileSystem = new PathTree<string>();
-
-            // Execute
-            var result = fileSystem.FileExists(a_path: @"X:\ccccc?.bat");
-        }
-
-
         [TestMethod]
         public void GetFilesInDirectory()
         {
@@ -340,19 +300,6 @@ namespace Helpers.Test.Collections
             fileSystem.GetDirectories(a_path: null);
         }
 
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GetDirectoriesInBadDirectory()
-        {
-            // Setup
-            var fileSystem = new PathTree<string>();
-
-            // Execute
-            fileSystem.GetDirectories(a_path: "x:\\????");
-        }
-
-
         [TestMethod]
         [ExpectedException(typeof(DirectoryNotFoundException))]
         public void GetDirectoriesInNonExistantDirectory()
@@ -410,18 +357,6 @@ namespace Helpers.Test.Collections
 
             // Execute
             fileSystem.DeleteDirectory(a_path: null);
-        }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void DeleteDirectoryWithBadPath()
-        {
-            // Setup
-            var fileSystem = new PathTree<string>();
-
-            // Execute
-            fileSystem.DeleteDirectory(a_path: "?");
         }
 
         [TestMethod]

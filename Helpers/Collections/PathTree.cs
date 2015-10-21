@@ -32,7 +32,11 @@ namespace Helpers.Collections
             {
                 _directories.Add(a_path, new Dictionary<string, TLeaf>(StringComparer.OrdinalIgnoreCase));
 
-                var parent = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot).Parent();
+                var path = PathBuilder.Create(a_path);
+                if (Regex.IsMatch(a_path, @"^[A-Za-z]\:\\"))
+                    path = path.WithRoot(PathBuilder.WindowsDriveRoot);
+
+                var parent = path.Parent();
                 if (parent != null)
                     CreateDirectory(parent);
             }
@@ -100,9 +104,12 @@ namespace Helpers.Collections
 
             a_path = PreparePath(a_path);
 
-            var pb = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot);
-            var directory = pb.Parent();
-            var file = pb.Name();
+            var path = PathBuilder.Create(a_path);
+            if (Regex.IsMatch(a_path, @"^[A-Za-z]\:\\"))
+                path = path.WithRoot(PathBuilder.WindowsDriveRoot);
+
+            var directory = path.Parent();
+            var file = path.Name();
 
             CreateDirectory(directory);
 
@@ -129,9 +136,12 @@ namespace Helpers.Collections
 
             a_path = PreparePath(a_path);
 
-            var pb = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot);
-            var directory = pb.Parent();
-            var file = pb.Name();
+            var path = PathBuilder.Create(a_path);
+            if (Regex.IsMatch(a_path, @"^[A-Za-z]\:\\"))
+                path = path.WithRoot(PathBuilder.WindowsDriveRoot);
+
+            var directory = path.Parent();
+            var file = path.Name();
 
 
             if (!DirectoryExists(directory))
@@ -157,9 +167,12 @@ namespace Helpers.Collections
 
             a_path = PreparePath(a_path);
 
-            var pb = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot);
-            var directory = pb.Parent();
-            var file = pb.Name();
+            var path = PathBuilder.Create(a_path);
+            if (Regex.IsMatch(a_path, @"^[A-Za-z]\:\\"))
+                path = path.WithRoot(PathBuilder.WindowsDriveRoot);
+
+            var directory = path.Parent();
+            var file = path.Name();
 
             if (!DirectoryExists(directory))
                 return;
@@ -234,14 +247,16 @@ namespace Helpers.Collections
 
             a_path = PreparePath(a_path);
 
-            var pb = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot);
+            var path = PathBuilder.Create(a_path);
+            if (Regex.IsMatch(a_path, @"^[A-Za-z]\:\\"))
+                path = path.WithRoot(PathBuilder.WindowsDriveRoot);
 
-            var directory = pb.Parent();
+            var directory = path.Parent();
 
             if (directory == null)
                 return default(TLeaf);
 
-            var file = pb.Name();
+            var file = path.Name();
 
             if (!DirectoryExists(directory))
                 return default(TLeaf);
@@ -261,11 +276,6 @@ namespace Helpers.Collections
         /// <returns>Prepared.</returns>
         protected virtual string PreparePath(string a_path)
         {
-            //if (!Regex.IsMatch(a_path, @"^(?:[a-zA-Z]\:\\|\\)"))
-            //    throw new ArgumentException("PathResult is not rooted or invalid!", nameof(a_path));
-
-            a_path = Path.GetFullPath(a_path);
-
             if (!Regex.IsMatch(a_path, @"^(?:[a-zA-Z]\:\\)$"))
                 a_path = a_path.TrimEnd('\\');
 
@@ -283,7 +293,11 @@ namespace Helpers.Collections
             if (a_parent == null)
                 return false;
 
-            var othersParent = PathBuilder.Create(a_other).WithRoot(PathBuilder.WindowsDriveRoot).Parent()?.ToString();
+            var path = PathBuilder.Create(a_other);
+            if (Regex.IsMatch(a_other, @"^[A-Za-z]\:\\"))
+                path = path.WithRoot(PathBuilder.WindowsDriveRoot);
+
+            var othersParent = path.Parent()?.ToString();
 
             if (othersParent == null)
                 return false;
