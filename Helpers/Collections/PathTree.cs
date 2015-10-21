@@ -5,19 +5,19 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Helpers.IO;
 
-namespace Helpers.Test
+namespace Helpers.Collections
 {
-    public class TestFileSystem
+    public class PathTree<TLeaf>
     {
-        private readonly Dictionary<string, Dictionary<string, TestFileStats>> _directories = new Dictionary<string, Dictionary<string, TestFileStats>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Dictionary<string, TLeaf>> _directories = new Dictionary<string, Dictionary<string, TLeaf>>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Create the directory with the given path (<paramref name="a_path"/>) within this file system.
         /// </summary>
         /// <param name="a_path">Directory to create.</param>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
-        /// <returns>Created test directory.</returns>
-        public TestDirectory StageDirectory(string a_path)
+        /// <returns>Created path directory.</returns>
+        public PathDirectory<TLeaf> CreateDirectory(string a_path)
         {
             #region Argument Validation
 
@@ -30,14 +30,14 @@ namespace Helpers.Test
 
             if (!_directories.ContainsKey(a_path))
             {
-                _directories.Add(a_path, new Dictionary<string, TestFileStats>(StringComparer.OrdinalIgnoreCase));
+                _directories.Add(a_path, new Dictionary<string, TLeaf>(StringComparer.OrdinalIgnoreCase));
 
                 var parent = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot).Parent();
                 if (parent != null)
-                    StageDirectory(parent);
+                    CreateDirectory(parent);
             }
 
-            return new TestDirectory(this, a_path);
+            return new PathDirectory<TLeaf>(this, a_path);
         }
 
         /// <summary>
@@ -85,11 +85,11 @@ namespace Helpers.Test
         /// Create a file with the given path (<paramref name="a_path"/>) within this file system.
         /// </summary>
         /// <param name="a_path">File path.</param>
-        /// <param name="a_stats">File stats.</param>
+        /// <param name="a_value">File value.</param>
         /// <returns>This file system used with fluent interface.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_stats"/> is null.</exception>
-        public TestFile StageFile(string a_path, TestFileStats a_stats = null)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_value"/> is null.</exception>
+        public PathFile<TLeaf> CreateFile(string a_path, TLeaf a_value)
         {
             #region Argument Validation
 
@@ -104,12 +104,12 @@ namespace Helpers.Test
             var directory = pb.Parent();
             var file = pb.Name();
 
-            StageDirectory(directory);
+            CreateDirectory(directory);
 
             var files = _directories[directory];
-            files[file] = a_stats ?? new TestFileStats();
+            files[file] = a_value;
 
-            return new TestFile(this, a_path);
+            return new PathFile<TLeaf>(this, a_path);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace Helpers.Test
         /// <param name="a_path">Relative path.</param>
         /// <returns>File stats.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
-        public TestFileStats GetFileStats(string a_path)
+        public TLeaf GetLeafValue(string a_path)
         {
             #region Argument Validation
 
@@ -239,19 +239,19 @@ namespace Helpers.Test
             var directory = pb.Parent();
 
             if (directory == null)
-                return null;
+                return default(TLeaf);
 
             var file = pb.Name();
 
             if (!DirectoryExists(directory))
-                return null;
+                return default(TLeaf);
 
             var files = _directories[directory];
 
             if (files.ContainsKey(file))
                 return files[file];
 
-            return null;
+            return default(TLeaf);
         }
 
         /// <summary>
@@ -290,37 +290,5 @@ namespace Helpers.Test
 
             return othersParent.Equals(a_parent, StringComparison.OrdinalIgnoreCase);
         }
-    }
-
-    public class TestFileStats
-    {
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public TestFileStats()
-        {
-            CreatedTimeUtc = DateTime.UtcNow;
-            LastModifiedTimeUtc = DateTime.UtcNow;
-        }
-
-        /// <summary>
-        /// Size of the file.
-        /// </summary>
-        public long Size { get; set; }
-
-        /// <summary>
-        /// Tag object.
-        /// </summary>
-        public object Tag { get; set; }
-
-        /// <summary>
-        /// Time of creation (UTC).
-        /// </summary>
-        public DateTime CreatedTimeUtc { get; set; }
-
-        /// <summary>
-        /// Time of last modification (UTC).
-        /// </summary>
-        public DateTime LastModifiedTimeUtc { get; set; }
     }
 }

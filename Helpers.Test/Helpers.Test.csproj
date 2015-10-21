@@ -56,6 +56,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Collections\PathDirectoryTest.cs" />
+    <Compile Include="Collections\PathFileTest.cs" />
+    <Compile Include="Collections\PathTreeTest.cs" />
     <Compile Include="Extensions\CollectionHelpersTest.cs" />
     <Compile Include="Extensions\DictionaryHelpersTest.cs" />
     <Compile Include="Extensions\DirectoryHelpersTest.cs" />

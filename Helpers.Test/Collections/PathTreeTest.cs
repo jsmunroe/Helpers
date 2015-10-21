@@ -1,31 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.IO;
-using System.Linq;
+using Helpers.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Helpers.Test.Test
+namespace Helpers.Test.Collections
 {
     [TestClass]
-    public class TestFileSystemTest
+    public class PathTreeTest
     {
         [TestMethod]
-        public void ConstructTestFileSystemTest()
+        public void ConstructPathTree()
         {
             // Execute
-            new TestFileSystem();
+            new PathTree<string>();
         }
-
 
         [TestMethod]
         public void CreateDirectory()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
             var path = @"X:\This is a directory path\";
 
             // Execute
-            fileSystem.StageDirectory(path);
+            fileSystem.CreateDirectory(path);
 
             // Assert
             Assert.IsTrue(fileSystem.DirectoryExists(path));
@@ -37,10 +35,10 @@ namespace Helpers.Test.Test
         public void CreateDirectoryWithNull()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
-            fileSystem.StageDirectory(a_path: null);
+            fileSystem.CreateDirectory(a_path: null);
         }
 
 
@@ -49,11 +47,11 @@ namespace Helpers.Test.Test
         public void CreateDirectoryWithBadPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
             var path = @"X:\This is bad a directory path?";
 
             // Execute
-            fileSystem.StageDirectory(path);
+            fileSystem.CreateDirectory(path);
         }
 
 
@@ -61,25 +59,25 @@ namespace Helpers.Test.Test
         public void CreateDirectoryMoreThanOnce()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
             var path = @"X:\This is bad a directory path";
 
             // Execute
-            fileSystem.StageDirectory(path);
-            fileSystem.StageDirectory(path);
+            fileSystem.CreateDirectory(path);
+            fileSystem.CreateDirectory(path);
         }
 
         [TestMethod]
         public void DirectoryExists()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
             var path = @"X:\This is a directory path\";
-            fileSystem.StageDirectory(path);
+            fileSystem.CreateDirectory(path);
 
             // Execute
             path = path.ToLower(); // Ignores case.
-            var results = fileSystem.DirectoryExists(path.ToLower()); 
+            var results = fileSystem.DirectoryExists(path.ToLower());
 
             // Assert
             Assert.IsTrue(results);
@@ -90,7 +88,7 @@ namespace Helpers.Test.Test
         public void DirectoryExistsWithNotExistingDirectory()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
             var path = @"X:\This is a directory path\";
 
             // Execute
@@ -108,7 +106,7 @@ namespace Helpers.Test.Test
         public void DirectoryExistsWithNull()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             var results = fileSystem.DirectoryExists(a_path: null);
@@ -120,7 +118,7 @@ namespace Helpers.Test.Test
         public void DirectoryExistsWithBadPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
             var path = @"X:\This is bad a directory path?";
 
             // Execute
@@ -131,8 +129,8 @@ namespace Helpers.Test.Test
         public void DirectoryExistsWithMissingEndSlash()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageDirectory(@"X:\This is a directory path\");
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateDirectory(@"X:\This is a directory path\");
 
             // Execute
             var results = fileSystem.DirectoryExists(@"X:\This is a directory path");
@@ -145,8 +143,8 @@ namespace Helpers.Test.Test
         public void DirectoryExistsOnChildDirectory()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageDirectory(@"X:\Parent\Child");
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateDirectory(@"X:\Parent\Child");
 
             // Execute
             var results = fileSystem.DirectoryExists(@"X:\Parent");
@@ -161,17 +159,14 @@ namespace Helpers.Test.Test
             // Setup
             var created = DateTime.UtcNow;
             var lastModified = DateTime.UtcNow;
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
-            fileSystem.StageFile(@"X:\Directory\File.dat", new TestFileStats { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.CreateFile(@"X:\Directory\File.dat", "Value");
 
             // Assert
             Assert.IsTrue(fileSystem.FileExists(@"X:\Directory\File.dat"));
-            var stats = fileSystem.GetFileStats(@"X:\Directory\File.dat");
-            Assert.AreEqual(14067, stats.Size);
-            Assert.AreEqual(created, stats.CreatedTimeUtc);
-            Assert.AreEqual(lastModified, stats.LastModifiedTimeUtc);
+            Assert.AreEqual("Value", fileSystem.GetLeafValue(@"X:\Directory\File.dat"));
         }
 
 
@@ -180,22 +175,21 @@ namespace Helpers.Test.Test
         public void CreateFileWithNull()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
-            fileSystem.StageFile(a_path: null, a_stats: new TestFileStats());
+            fileSystem.CreateFile(a_path: null, a_value: "Value");
         }
 
 
         [TestMethod]
-        //[ExpectedException(typeof(ArgumentNullException))] Now allows null!
         public void CreateFileWithNullStats()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
-            fileSystem.StageFile(a_path: @"X:\Directory\File.dat", a_stats: null);
+            fileSystem.CreateFile(a_path: @"X:\Directory\File.dat", a_value: null);
         }
 
 
@@ -204,20 +198,20 @@ namespace Helpers.Test.Test
         public void CreateFileWithNotRootedPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
-            fileSystem.StageFile("thisIsABadPath.txt", new TestFileStats());
+            fileSystem.CreateFile("thisIsABadPath.txt", "Value");
         }
 
         [TestMethod]
         public void CreateFileOnRoot()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
-            fileSystem.StageFile(@"C:\File.dat", new TestFileStats());
+            fileSystem.CreateFile(@"C:\File.dat", "Value");
 
             // Assert
             Assert.IsTrue(fileSystem.FileExists(@"C:\File.dat"));
@@ -225,21 +219,19 @@ namespace Helpers.Test.Test
 
 
         [TestMethod]
-        public void GetFileStats()
+        public void GetLeafValue()
         {
             // Setup
             var created = DateTime.UtcNow;
             var lastModified = DateTime.UtcNow;
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"X:\Directory\File.dat", new TestFileStats { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"X:\Directory\File.dat", "Value");
 
             // Execute
-            var stats = fileSystem.GetFileStats(@"X:\Directory\File.dat");
+            var result = fileSystem.GetLeafValue(@"X:\Directory\File.dat");
 
             // Assert
-            Assert.AreEqual(14067, stats.Size);
-            Assert.AreEqual(created, stats.CreatedTimeUtc);
-            Assert.AreEqual(lastModified, stats.LastModifiedTimeUtc);
+            Assert.AreEqual("Value", result);
         }
 
         [TestMethod]
@@ -247,19 +239,19 @@ namespace Helpers.Test.Test
         public void GetFileStatsWithNullpath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"X:\Directory\File.dat", new TestFileStats());
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"X:\Directory\File.dat", "Value");
 
             // Execute
-            var stats = fileSystem.GetFileStats(a_path: null);
+            fileSystem.GetLeafValue(a_path: null);
         }
-        
+
         [TestMethod]
         public void FileExists()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"X:\Directory\File.dat", new TestFileStats());
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"X:\Directory\File.dat", "Value");
 
             // Execute
             var result = fileSystem.FileExists(@"x:\directory\file.DAT");
@@ -274,7 +266,7 @@ namespace Helpers.Test.Test
         public void FileExistsWithNullPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             var result = fileSystem.FileExists(a_path: null);
@@ -286,7 +278,7 @@ namespace Helpers.Test.Test
         public void FileExistsWithBadPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             var result = fileSystem.FileExists(a_path: @"X:\ccccc?.bat");
@@ -297,11 +289,11 @@ namespace Helpers.Test.Test
         public void GetFilesInDirectory()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileStats());
-            fileSystem.StageFile(@"x:\mydirectory\file2.dat", new TestFileStats());
-            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileStats());
-            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats());
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"x:\mydirectory\file1.dat", "Value");
+            fileSystem.CreateFile(@"x:\mydirectory\file2.dat", "Value");
+            fileSystem.CreateFile(@"x:\mydirectory\file3.dat", "Value");
+            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat", "Value");
 
             // Execute
             var filePaths = fileSystem.GetFiles(@"X:\MYDIRECTORY");
@@ -316,10 +308,10 @@ namespace Helpers.Test.Test
         public void GetFilesInDirectoryWithNull()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
-           fileSystem.GetFiles(a_path: null);
+            fileSystem.GetFiles(a_path: null);
         }
 
 
@@ -328,7 +320,7 @@ namespace Helpers.Test.Test
         public void GetFilesinDirectoryWithBadPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             fileSystem.GetFiles(a_path: "meow meow meow");
@@ -339,7 +331,7 @@ namespace Helpers.Test.Test
         public void GetFilesInNonExistantDirectory()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             fileSystem.GetFiles(@"X:\MYDIRECTORY");
@@ -349,10 +341,10 @@ namespace Helpers.Test.Test
         public void GetDirectoriesInDirectory()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageDirectory(@"x:\mydirectory\directory1");
-            fileSystem.StageDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateDirectory(@"x:\mydirectory\directory1");
+            fileSystem.CreateDirectory(@"x:\mydirectory\directory2\child");
+            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb", "Value");
 
             // Execute
             string[] directoryPaths = fileSystem.GetDirectories(@"X:\MYDIRECTORY");
@@ -366,7 +358,7 @@ namespace Helpers.Test.Test
         public void GetDirectoriesInDirectoryWithNull()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             fileSystem.GetDirectories(a_path: null);
@@ -378,7 +370,7 @@ namespace Helpers.Test.Test
         public void GetDirectoriesInBadDirectory()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             fileSystem.GetDirectories(a_path: "x:\\????");
@@ -390,7 +382,7 @@ namespace Helpers.Test.Test
         public void GetDirectoriesInNonExistantDirectory()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             fileSystem.GetDirectories(@"X:\MYDIRECTORY");
@@ -400,10 +392,10 @@ namespace Helpers.Test.Test
         public void GetDirectoryInRoot()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageDirectory(@"x:\directory1");
-            fileSystem.StageDirectory(@"x:\directory2\child");
-            fileSystem.StageFile(@"x:\directory3\file.rgb", new TestFileStats());
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateDirectory(@"x:\directory1");
+            fileSystem.CreateDirectory(@"x:\directory2\child");
+            fileSystem.CreateFile(@"x:\directory3\file.rgb", "Value");
 
             // Execute
             var directoryPaths = fileSystem.GetDirectories(@"X:\");
@@ -417,10 +409,10 @@ namespace Helpers.Test.Test
         public void DeleteDirectory()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageDirectory(@"x:\directory1");
-            fileSystem.StageDirectory(@"X:\DIRECTORY2\CHILD");
-            fileSystem.StageFile(@"x:\directory2\file.rgb", new TestFileStats());
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateDirectory(@"x:\directory1");
+            fileSystem.CreateDirectory(@"X:\DIRECTORY2\CHILD");
+            fileSystem.CreateFile(@"x:\directory2\file.rgb", "Value");
 
             // Execute
             fileSystem.DeleteDirectory(@"x:\directory2");
@@ -438,7 +430,7 @@ namespace Helpers.Test.Test
         public void DeleteDirectoryWithNullPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             fileSystem.DeleteDirectory(a_path: null);
@@ -450,7 +442,7 @@ namespace Helpers.Test.Test
         public void DeleteDirectoryWithBadPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             fileSystem.DeleteDirectory(a_path: "?");
@@ -461,10 +453,10 @@ namespace Helpers.Test.Test
         {
             // Setup
             var root = Path.GetPathRoot(Environment.SystemDirectory);
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageDirectory($@"{root}directory1");
-            fileSystem.StageDirectory($@"{root}directory2\child");
-            fileSystem.StageFile($@"{root}directory2\file.rgb", new TestFileStats());
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateDirectory($@"{root}directory1");
+            fileSystem.CreateDirectory($@"{root}directory2\child");
+            fileSystem.CreateFile($@"{root}directory2\file.rgb", "Value");
 
             // Execute
             fileSystem.DeleteDirectory(@"\directory3");
@@ -481,9 +473,9 @@ namespace Helpers.Test.Test
         public void DeleteFile()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"x:\directory2\file1.rgb", new TestFileStats());
-            fileSystem.StageFile(@"x:\directory2\file2.rgb", new TestFileStats());
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"x:\directory2\file1.rgb", "Value");
+            fileSystem.CreateFile(@"x:\directory2\file2.rgb", "Value");
 
             // Execute
             fileSystem.DeleteFile(@"x:\directory2\file2.rgb");
@@ -499,7 +491,7 @@ namespace Helpers.Test.Test
         public void DeleteFileWithNullPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             fileSystem.DeleteFile(a_path: null);
@@ -511,7 +503,7 @@ namespace Helpers.Test.Test
         public void DeleteFileWithBadPath()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
+            var fileSystem = new PathTree<string>();
 
             // Execute
             fileSystem.DeleteFile(a_path: "/i/am/on/linux");
@@ -521,9 +513,9 @@ namespace Helpers.Test.Test
         public void DeleteNotExistingFile()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"x:\directory2\file1.rgb", new TestFileStats());
-            fileSystem.StageFile(@"x:\directory2\file2.rgb", new TestFileStats());
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"x:\directory2\file1.rgb", "Value");
+            fileSystem.CreateFile(@"x:\directory2\file2.rgb", "Value");
 
             // Execute
             fileSystem.DeleteFile(@"x:\directory2\file3.rgb");
