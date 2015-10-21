@@ -58,5 +58,10 @@ namespace Helpers.Contracts
         /// Delete this directory and every child under it.
         /// </summary>
         void Delete();
+
+        /// <summary>
+        /// Delete every child under this directory and leave the directory itself alone.
+        /// </summary>
+        void Empty();
     }
 }

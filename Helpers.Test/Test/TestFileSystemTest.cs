@@ -188,7 +188,6 @@ namespace Helpers.Test.Test
 
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CreateFileWithNullStats()
         {
             // Setup

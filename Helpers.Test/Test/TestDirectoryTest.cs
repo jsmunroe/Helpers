@@ -262,6 +262,39 @@ namespace Helpers.Test.Test
 
 
         [TestMethod]
+        public void EmptyDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = fileSystem.StageDirectory(@"\directory");
+            fileSystem.StageDirectory(@"\directory\child1");
+            fileSystem.StageDirectory(@"\directory\child2");
+            fileSystem.StageDirectory(@"\directory\child3");
+            fileSystem.StageFile(@"\directory\file1.dat");
+            fileSystem.StageFile(@"\directory\file2.dat");
+            fileSystem.StageFile(@"\directory\file3.dat");
+            fileSystem.StageFile(@"\directory\child2\fileA.dat");
+            fileSystem.StageFile(@"\directory\child2\fileB.dat");
+            fileSystem.StageFile(@"\directory\child2\fileC.dat");
+
+            // Execute
+            directory.Empty();
+
+            // Assert
+            Assert.IsTrue(fileSystem.DirectoryExists(@"\directory"));
+            Assert.IsFalse(fileSystem.DirectoryExists(@"\directory\child1"));
+            Assert.IsFalse(fileSystem.DirectoryExists(@"\directory\child2"));
+            Assert.IsFalse(fileSystem.DirectoryExists(@"\directory\child3"));
+            Assert.IsFalse(fileSystem.FileExists(@"\directory\file1.dat"));
+            Assert.IsFalse(fileSystem.FileExists(@"\directory\file2.dat"));
+            Assert.IsFalse(fileSystem.FileExists(@"\directory\file3.dat"));
+            Assert.IsFalse(fileSystem.FileExists(@"\directory\child2\fileA.dat"));
+            Assert.IsFalse(fileSystem.FileExists(@"\directory\child2\fileB.dat"));
+            Assert.IsFalse(fileSystem.FileExists(@"\directory\child2\fileC.dat"));
+        }
+
+
+        [TestMethod]
         public void CustomTest_I()
         {
             var fileSystem = new TestFileSystem();

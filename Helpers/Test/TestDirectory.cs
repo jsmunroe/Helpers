@@ -137,6 +137,21 @@ namespace Helpers.Test
         }
 
         /// <summary>
+        /// Delete every child under this directory and leave the directory itself alone.
+        /// </summary>
+        public void Empty()
+        {
+            if (!Exists)
+                throw new DirectoryNotFoundException($"Directory at path \"{Path}\" does not exist.");
+
+            foreach (var file in Files)
+                file.Delete();
+
+            foreach (var directory in Directories)
+                directory.Delete();
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>

@@ -123,9 +123,6 @@ namespace Helpers.Test
             if (a_path == null)
                 throw new ArgumentNullException(nameof(a_path));
 
-            if (a_stats == null)
-                throw new ArgumentNullException(nameof(a_stats));
-
             #endregion
 
             a_path = PreparePath(a_path);
@@ -137,7 +134,7 @@ namespace Helpers.Test
             StageDirectory(directory);
 
             var files = _directories[directory];
-            files[file] = a_stats;
+            files[file] = a_stats ?? new TestFileStats();
 
             return new TestFile(this, a_path);
         }

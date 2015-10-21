@@ -109,6 +109,18 @@ namespace Helpers.IO
         }
 
         /// <summary>
+        /// Delete every child under this directory and leave the directory itself alone.
+        /// </summary>
+        public void Empty()
+        {
+            foreach (var file in TargetDirectory.GetFiles())
+                file.Delete();
+
+            foreach (var directory in TargetDirectory.GetDirectories())
+                directory.Delete(true);
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>
