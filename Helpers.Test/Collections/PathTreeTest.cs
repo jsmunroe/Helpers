@@ -192,18 +192,6 @@ namespace Helpers.Test.Collections
             fileSystem.CreateFile(a_path: @"X:\Directory\File.dat", a_value: null);
         }
 
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void CreateFileWithNotRootedPath()
-        {
-            // Setup
-            var fileSystem = new PathTree<string>();
-
-            // Execute
-            fileSystem.CreateFile("thisIsABadPath.txt", "Value");
-        }
-
         [TestMethod]
         public void CreateFileOnRoot()
         {
@@ -312,18 +300,6 @@ namespace Helpers.Test.Collections
 
             // Execute
             fileSystem.GetFiles(a_path: null);
-        }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void GetFilesinDirectoryWithBadPath()
-        {
-            // Setup
-            var fileSystem = new PathTree<string>();
-
-            // Execute
-            fileSystem.GetFiles(a_path: "meow meow meow");
         }
 
         [TestMethod]
@@ -495,18 +471,6 @@ namespace Helpers.Test.Collections
 
             // Execute
             fileSystem.DeleteFile(a_path: null);
-        }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void DeleteFileWithBadPath()
-        {
-            // Setup
-            var fileSystem = new PathTree<string>();
-
-            // Execute
-            fileSystem.DeleteFile(a_path: "/i/am/on/linux");
         }
 
         [TestMethod]

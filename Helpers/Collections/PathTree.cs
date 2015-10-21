@@ -261,8 +261,8 @@ namespace Helpers.Collections
         /// <returns>Prepared.</returns>
         protected virtual string PreparePath(string a_path)
         {
-            if (!Regex.IsMatch(a_path, @"^(?:[a-zA-Z]\:\\|\\)"))
-                throw new ArgumentException("PathResult is not rooted or invalid!", nameof(a_path));
+            //if (!Regex.IsMatch(a_path, @"^(?:[a-zA-Z]\:\\|\\)"))
+            //    throw new ArgumentException("PathResult is not rooted or invalid!", nameof(a_path));
 
             a_path = Path.GetFullPath(a_path);
 
