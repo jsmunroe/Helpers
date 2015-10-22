@@ -60,6 +60,9 @@ namespace Helpers.Collections
 
             a_path = PreparePath(a_path);
 
+            if (a_path == "")
+                return _directories.Any(i => !Regex.IsMatch(a_path, @"^([A-Za-z]\:\\|\\)"));
+
             return _directories.ContainsKey(a_path);
         }
 
@@ -298,7 +301,9 @@ namespace Helpers.Collections
 
             var othersParent = path.Parent()?.ToString();
 
-            if (othersParent == null)
+            if (othersParent == null && a_parent == "" && a_other != "" && !a_other.Contains('\\')) // "" is a parent of "Sub"
+                return true;
+            else if (othersParent == null)
                 return false;
 
             return othersParent.Equals(a_parent, StringComparison.OrdinalIgnoreCase);

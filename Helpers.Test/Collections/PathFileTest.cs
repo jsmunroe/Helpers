@@ -1,7 +1,10 @@
 using System;
 using System.IO;
 using Helpers.Collections;
+using Helpers.Contracts;
+using Helpers.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Helpers.Test.Collections
 {
@@ -194,6 +197,21 @@ namespace Helpers.Test.Collections
 
 
         [TestMethod]
+        public void ChangeExtensionOnNotRootedFile()
+        {
+            // Setup
+            var pathTree = new PathTree<string>();
+            var file = new PathFile<string>(pathTree, @"File.txt");
+
+            // Execute
+            var result = file.ChangeExtension("jpg");
+
+            Assert.AreEqual("File.jpg", result.Name);
+            Assert.AreEqual("File.jpg", result.Path);
+        }
+
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ChangeExtensionWithNull()
         {
@@ -263,6 +281,52 @@ namespace Helpers.Test.Collections
             // Assert
             Assert.IsTrue(dest.Exists);
             Assert.AreEqual("Value", dest.Value);
+        }
+
+        [TestMethod]
+        public void CopyToWithCopier()
+        {
+            // Setup
+            var mockCopier = new Mock<IFileCopier<PathFile<string>, TestFile>>();
+            var pathTree = new PathTree<string>();
+            var file = pathTree.CreateFile(@"x:\directory\File.dat", "Value");
+            var dest = new TestFile(@"C:\temp\test.dat");
+
+            // Execute
+            file.CopyTo(dest, mockCopier.Object);
+
+            // Assert
+            mockCopier.Verify(i => i.Copy(file, dest), Times.Once);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CopyToWithCopierWithNullDestinationFile()
+        {
+            // Setup
+            var mockCopier = new Mock<IFileCopier<PathFile<string>, TestFile>>();
+            var pathTree = new PathTree<string>();
+            var file = pathTree.CreateFile(@"x:\directory\File.dat", "Value");
+            var dest = new TestFile(@"C:\temp\test.dat");
+
+            // Execute
+            file.CopyTo(a_dest: null, a_fileCopier: mockCopier.Object);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CopyToWithNullCopier()
+        {
+            // Setup
+            var mockCopier = new Mock<IFileCopier<PathFile<string>, TestFile>>();
+            var pathTree = new PathTree<string>();
+            var file = pathTree.CreateFile(@"x:\directory\File.dat", "Value");
+            var dest = new TestFile(@"C:\temp\test.dat");
+
+            // Execute
+            file.CopyTo(a_dest: dest, a_fileCopier: null);
         }
 
     }

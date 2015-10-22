@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Helpers.Contracts;
 using Helpers.IO;
+using Helpers.Test;
 
 namespace Helpers.Collections
 {
@@ -113,6 +114,30 @@ namespace Helpers.Collections
         }
 
         /// <summary>
+        /// Copy this file to the given file (<paramref name="a_dest"/>) using the given file copier (<paramref name="a_fileCopier"/>).
+        /// </summary>
+        /// <typeparam name="TDest">Type of destination file.</typeparam>
+        /// <param name="a_dest">Destination file.</param>
+        /// <param name="a_fileCopier">File copier.</param>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_dest"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_fileCopier"/> is null.</exception>
+        public void CopyTo<TDest>(TDest a_dest, IFileCopier<PathFile<TLeaf>, TDest> a_fileCopier)
+            where TDest : IFile
+        {
+            #region Argument Validation
+
+            if (a_dest == null)
+                throw new ArgumentNullException(nameof(a_dest));
+
+            if (a_fileCopier == null)
+                throw new ArgumentNullException(nameof(a_fileCopier));
+
+            #endregion
+
+            a_fileCopier.Copy(this, a_dest);
+        }
+
+        /// <summary>
         /// Create a file that is this file but with the given extension (<paramref name="a_extension"/>).
         /// </summary>
         /// <param name="a_extension">New extension.</param>
@@ -130,7 +155,7 @@ namespace Helpers.Collections
             var extension = a_extension.TrimStart('.');
 
             var newName = PathBuilder.Create(Path).NameWithoutExtension() + "." + extension;
-            var newPath = PathBuilder.Create(Path).Parent().Child(newName);
+            var newPath = PathBuilder.Create(Path).Sibling(newName);
 
             return new PathFile<TLeaf>(FileSystem, newPath);
         }
@@ -187,5 +212,6 @@ namespace Helpers.Collections
         }
 
         #endregion
+
     }
 }

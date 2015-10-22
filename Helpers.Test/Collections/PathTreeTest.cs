@@ -302,6 +302,25 @@ namespace Helpers.Test.Collections
             Assert.AreEqual(3, directoryPaths.Length);
         }
 
+
+        [TestMethod]
+        public void GetDirectoriesInRoot()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateDirectory("directory1");
+            fileSystem.CreateDirectory(@"directory2\child");
+            fileSystem.CreateFile(@"directory3\file.rgb", "Value");
+            fileSystem.CreateDirectory(@"x:\directory4");
+            fileSystem.CreateDirectory(@"\directory5");
+
+            // Execute
+            string[] directoryPaths = fileSystem.GetDirectories("");
+
+            // Assert
+            Assert.AreEqual(3, directoryPaths.Length);
+        }
+
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetDirectoriesInDirectoryWithNull()
