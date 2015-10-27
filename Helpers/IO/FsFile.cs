@@ -97,7 +97,7 @@ namespace Helpers.IO
 
             #endregion
 
-            if (TargetFile.Exists)
+            if (!TargetFile.Exists)
                 throw new FileNotFoundException("File cannot be copied because it does not exist.");
 
             TargetFile.CopyTo(a_dest.Path, true);
