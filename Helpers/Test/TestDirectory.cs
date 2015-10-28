@@ -60,7 +60,7 @@ namespace Helpers.Test
         /// <summary>
         /// Whether this directory is empty of subdirectories and files.
         /// </summary>
-        public bool IsEmpty => !(Files.Any() || Directories.Any());
+        public bool IsEmpty => Exists && !(Files.Any() || Directories.Any());
 
         /// <summary>
         /// Directory name.

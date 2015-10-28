@@ -49,7 +49,7 @@ namespace Helpers.Test.Collections
 
 
         [TestMethod]
-        public void CallExistsOnExistingFile()
+        public void GetExistsOnExistingFile()
         {
             // Setup
             var path = "\\directory\\does\\exist";
@@ -65,7 +65,7 @@ namespace Helpers.Test.Collections
         }
 
         [TestMethod]
-        public void CallExistsWithNonexistingFile()
+        public void GetExistsWithNonexistingFile()
         {
             // Setup
             var fileSystem = new PathTree<string>();
@@ -73,6 +73,50 @@ namespace Helpers.Test.Collections
 
             // Execute
             var result = directory.Exists;
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void GetIsEmptyOnEmptyDirectory()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = fileSystem.CreateDirectory("\\directory\\does\\not\\exist");
+
+            // Execute
+            var result = directory.IsEmpty;
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+
+        [TestMethod]
+        public void GetIsEmptyOnNonemptyDirectory()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = fileSystem.CreateDirectory("\\directory\\does\\not\\exist");
+
+            // Execute
+            var result = directory.Parent.IsEmpty;
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+        [TestMethod]
+        public void GetIsEmptyOnNotExistingDirectory()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = new PathDirectory<string>(fileSystem, "\\directory\\does\\not\\exist");
+
+            // Execute
+            var result = directory.IsEmpty;
 
             // Assert
             Assert.IsFalse(result);

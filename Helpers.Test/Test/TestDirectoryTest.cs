@@ -48,7 +48,7 @@ namespace Helpers.Test.Test
 
 
         [TestMethod]
-        public void CallExistsOnExistingFile()
+        public void GetExistsOnExistingFile()
         {
             // Setup
             var path = "\\directory\\does\\exist";
@@ -64,7 +64,7 @@ namespace Helpers.Test.Test
         }
 
         [TestMethod]
-        public void CallExistsWithNonexistingFile()
+        public void GetExistsWithNonexistingFile()
         {
             // Setup
             var fileSystem = new TestFileSystem();
@@ -77,6 +77,50 @@ namespace Helpers.Test.Test
             Assert.IsFalse(result);
         }
 
+
+        [TestMethod]
+        public void GetIsEmptyOnEmptyDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = fileSystem.StageDirectory("\\directory\\does\\not\\exist");
+
+            // Execute
+            var result = directory.IsEmpty;
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+
+        [TestMethod]
+        public void GetIsEmptyOnNonemptyDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = fileSystem.StageDirectory("\\directory\\does\\not\\exist");
+
+            // Execute
+            var result = directory.Parent.IsEmpty;
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+        [TestMethod]
+        public void GetIsEmptyOnNotExistingDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = new TestDirectory(fileSystem, "\\directory\\does\\not\\exist");
+
+            // Execute
+            var result = directory.IsEmpty;
+
+            // Assert
+            Assert.IsFalse(result);
+        }
 
         [TestMethod]
         public void GetName()
