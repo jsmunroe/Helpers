@@ -11,6 +11,11 @@ namespace Helpers.Contracts
         bool Exists { get; }
 
         /// <summary>
+        /// Whether this directory is empty of subdirectories and files.
+        /// </summary>
+        bool IsEmpty { get; }
+
+        /// <summary>
         /// Directory name.
         /// </summary>
         string Name { get; }

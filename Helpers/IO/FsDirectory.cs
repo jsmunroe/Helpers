@@ -48,6 +48,11 @@ namespace Helpers.IO
         public bool Exists => TargetDirectory.Exists;
 
         /// <summary>
+        /// Whether this directory is empty of subdirectories and files.
+        /// </summary>
+        public bool IsEmpty => !(Files.Any() || Directories.Any());
+
+        /// <summary>
         /// Directory name.
         /// </summary>
         public string Name => TargetDirectory.Name;

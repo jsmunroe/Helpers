@@ -58,6 +58,11 @@ namespace Helpers.Test
         public bool Exists => FileSystem.DirectoryExists(Path);
 
         /// <summary>
+        /// Whether this directory is empty of subdirectories and files.
+        /// </summary>
+        public bool IsEmpty => !(Files.Any() || Directories.Any());
+
+        /// <summary>
         /// Directory name.
         /// </summary>
         public string Name { get; }
