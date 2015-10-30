@@ -1,4 +1,5 @@
 using System;
+using Helpers.Archetecture;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Helpers.Test.Archetecture
