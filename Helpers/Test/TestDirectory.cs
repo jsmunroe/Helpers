@@ -48,9 +48,24 @@ namespace Helpers.Test
         public TestFileSystem FileSystem { get; }
 
         /// <summary>
+        /// Directory name.
+        /// </summary>
+        public string Name { get; }
+
+        /// <summary>
         /// PathResult.
         /// </summary>
         public PathBuilder Path { get; }
+
+        /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        public DateTime CreatedTimeUtc { get; } = new DateTime();
+
+        /// <summary>
+        /// Time of last modification (UTC).
+        /// </summary>
+        public DateTime LastModifiedTimeUtc { get; } = new DateTime();
 
         /// <summary>
         /// Whether the directory exists.
@@ -62,10 +77,6 @@ namespace Helpers.Test
         /// </summary>
         public bool IsEmpty => Exists && !(Files.Any() || Directories.Any());
 
-        /// <summary>
-        /// Directory name.
-        /// </summary>
-        public string Name { get; }
 
         /// <summary>
         /// Parent directory.

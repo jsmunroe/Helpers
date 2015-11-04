@@ -48,6 +48,7 @@
     <Compile Include="Contracts\IFile.cs" />
     <Compile Include="Contracts\IFileCopier.cs" />
     <Compile Include="Contracts\IFileSet.cs" />
+    <Compile Include="Contracts\IFileSystemBase.cs" />
     <Compile Include="Extensions\CollectionHelpers.cs" />
     <Compile Include="Extensions\DictionaryHelpers.cs" />
     <Compile Include="Extensions\DirectoryHelpers.cs" />

@@ -51,6 +51,11 @@ namespace Helpers.Collections
         public PathBuilder Path { get; }
 
         /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        public DateTime CreatedTimeUtc { get; }
+
+        /// <summary>
         /// Whether the directory exists.
         /// </summary>
         public bool Exists => FileSystem.DirectoryExists(Path);
@@ -162,6 +167,20 @@ namespace Helpers.Collections
         {
             return Path;
         }
+
+        #region IFileSystemBase Members
+
+        /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        DateTime IFileSystemBase.CreatedTimeUtc => DateTime.UtcNow;
+
+        /// <summary>
+        /// Time of last modification (UTC).
+        /// </summary>
+        DateTime IFileSystemBase.LastModifiedTimeUtc => DateTime.UtcNow;
+
+        #endregion
 
         #region IDirectory 
 

@@ -63,6 +63,16 @@ namespace Helpers.IO
         public PathBuilder Path => new PathBuilder(TargetDirectory.FullName);
 
         /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        public DateTime CreatedTimeUtc => TargetDirectory.CreationTimeUtc;
+
+        /// <summary>
+        /// Time of last modification (UTC).
+        /// </summary>
+        public DateTime LastModifiedTimeUtc => TargetDirectory.LastAccessTimeUtc;
+
+        /// <summary>
         /// Parent directory.
         /// </summary>
         public IDirectory Parent => TargetDirectory.Parent == null ? null : new FsDirectory(TargetDirectory.Parent);

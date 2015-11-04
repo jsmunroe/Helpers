@@ -40,6 +40,11 @@ namespace Helpers.Collections
         public PathBuilder Path { get; }
 
         /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        public DateTime CreatedTimeUtc { get; }
+
+        /// <summary>
         /// Whether the file exists.
         /// </summary>
         public bool Exists => FileSystem.FileExists(Path);
@@ -169,6 +174,20 @@ namespace Helpers.Collections
             return Path;
         }
 
+        #region IFileSystemBase Members
+
+        /// <summary>
+        /// Time of creation (UTC).
+        /// </summary>
+        DateTime IFileSystemBase.CreatedTimeUtc => DateTime.UtcNow;
+
+        /// <summary>
+        /// Time of last modification (UTC).
+        /// </summary>
+        DateTime IFileSystemBase.LastModifiedTimeUtc => DateTime.UtcNow;
+
+        #endregion
+
         #region IFile Members
 
         /// <summary>
@@ -176,15 +195,6 @@ namespace Helpers.Collections
         /// </summary>
         long IFile.Size => 0;
 
-        /// <summary>
-        /// Time of creation (UTC).
-        /// </summary>
-        DateTime IFile.CreatedTimeUtc => DateTime.UtcNow;
-
-        /// <summary>
-        /// Time of last modification (UTC).
-        /// </summary>
-        DateTime IFile.LastModifiedTimeUtc => DateTime.UtcNow;
 
         /// <summary>
         /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.

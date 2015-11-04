@@ -1,29 +1,13 @@
 ﻿using System.Collections.Generic;
-using Helpers.IO;
 
 namespace Helpers.Contracts
 {
-    public interface IDirectory
+    public interface IDirectory : IFileSystemBase
     {
-        /// <summary>
-        /// Whether the directory exists.
-        /// </summary>
-        bool Exists { get; }
-
         /// <summary>
         /// Whether this directory is empty of subdirectories and files.
         /// </summary>
         bool IsEmpty { get; }
-
-        /// <summary>
-        /// Directory name.
-        /// </summary>
-        string Name { get; }
-
-        /// <summary>
-        /// Full path to this directory.
-        /// </summary>
-        PathBuilder Path { get; }
 
         /// <summary>
         /// Parent directory.
