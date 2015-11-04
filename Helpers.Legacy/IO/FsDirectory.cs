@@ -60,7 +60,7 @@ namespace Helpers.IO
         /// <summary>
         /// Full path to this directory.
         /// </summary>
-        public string Path => TargetDirectory.FullName;
+        public PathBuilder Path => new PathBuilder(TargetDirectory.FullName);
 
         /// <summary>
         /// Parent directory.

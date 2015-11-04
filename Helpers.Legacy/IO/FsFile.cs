@@ -43,7 +43,7 @@ namespace Helpers.IO
         /// <summary>
         /// Full path to this directory.
         /// </summary>
-        public string Path => TargetFile.FullName;
+        public PathBuilder Path => new PathBuilder(TargetFile.FullName);
 
         /// <summary>
         /// Parent directory.

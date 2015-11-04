@@ -23,7 +23,7 @@ namespace Helpers.Contracts
         /// <summary>
         /// Full path to this directory.
         /// </summary>
-        string Path { get; }
+        PathBuilder Path { get; }
 
         /// <summary>
         /// Parent directory.

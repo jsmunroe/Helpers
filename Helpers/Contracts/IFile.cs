@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Helpers.IO;
 
 namespace Helpers.Contracts
 {
@@ -18,7 +19,7 @@ namespace Helpers.Contracts
         /// <summary>
         /// Full path to this file.
         /// </summary>
-        string Path { get; }
+        PathBuilder Path { get; }
 
         /// <summary>
         /// Parent directory.

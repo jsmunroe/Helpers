@@ -35,7 +35,7 @@ namespace Helpers.Collections
             #endregion
 
             FileSystem = a_pathTree ?? new PathTree<TLeaf>();
-            Path = a_path;
+            Path = new PathBuilder(a_path);
 
             Name = PathBuilder.Create(Path).Name();
         }
@@ -48,7 +48,7 @@ namespace Helpers.Collections
         /// <summary>
         /// PathResult.
         /// </summary>
-        public string Path { get; }
+        public PathBuilder Path { get; }
 
         /// <summary>
         /// Whether the directory exists.

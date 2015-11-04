@@ -37,7 +37,7 @@ namespace Helpers.Test
             #endregion
 
             FileSystem = a_fileSystem ?? new TestFileSystem();
-            Path = a_path;
+            Path = new PathBuilder(a_path);
 
             Name = PathBuilder.Create(Path).Name();
         }
@@ -50,7 +50,7 @@ namespace Helpers.Test
         /// <summary>
         /// PathResult.
         /// </summary>
-        public string Path { get; }
+        public PathBuilder Path { get; }
 
         /// <summary>
         /// Whether the directory exists.
