@@ -165,7 +165,7 @@ namespace Helpers.Test.Collections
             var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
 
             // Execute
-            var result = directory.Directories;
+            var result = directory.Directories();
 
             // Assert
             Assert.AreEqual(3, result.Count());
@@ -184,11 +184,44 @@ namespace Helpers.Test.Collections
             var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
 
             // Execute
-            var filePaths = directory.Files;
+            var filePaths = directory.Files();
 
             // Assert
             Assert.AreEqual(3, filePaths.Count());
         }
+
+        [TestMethod]
+        public void GetChildFilesBySearchPattern()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"x:\mydirectory\file1.dat", "Value");
+            fileSystem.CreateFile(@"x:\mydirectory\file2.dat", "Value");
+            fileSystem.CreateFile(@"x:\mydirectory\file3.css", "Value");
+            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat", "Value");
+            var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            var filePaths = directory.Files("*.css");
+
+            // Assert
+            Assert.AreEqual(1, filePaths.Count());
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetChildFilesWithNullSearchPattern()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            directory.Files(a_pattern: null);
+        }
+
+
 
         [TestMethod]
         public void GetChildDirectoryByName()

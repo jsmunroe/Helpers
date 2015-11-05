@@ -173,7 +173,8 @@ namespace Helpers.Test
         /// </summary>
         /// <param name="a_path">Directory path.</param>
         /// <returns>File paths.</returns>
-        public string[] GetFiles(string a_path)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        public PathBuilder[] GetFiles(string a_path)
         {
             #region Argument Validation
 
@@ -187,7 +188,36 @@ namespace Helpers.Test
             if (!DirectoryExists(a_path))
                 throw new DirectoryNotFoundException($"Directory at path \"{a_path}\" does not exist.");
 
-            var files = _directories[a_path].Keys.Select(i => PathBuilder.Create(a_path).Child(i).ToString());
+            var files = _directories[a_path].Keys.Select(i => PathBuilder.Create(a_path).Child(i));
+
+            return files.ToArray();
+        }
+
+        /// <summary>
+        /// Get the paths of the files in the directory with the given path (<paramref name="a_path"/>) that match the 
+        ///     given search pattern (<paramref name="a_searchPattern"/>).
+        /// </summary>
+        /// <param name="a_path">Directory path.</param>
+        /// <param name="a_searchPattern">Search pattern.</param>
+        /// <returns>File paths.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_searchPattern"/> is null.</exception>
+        public PathBuilder[] GetFiles(string a_path, string a_searchPattern)
+        {
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            if (a_searchPattern == null)
+                throw new ArgumentNullException(nameof(a_searchPattern));
+
+            #endregion
+
+            var searchPattern = "^" + Regex.Escape(a_searchPattern).Replace("\\*", ".*") + "$";
+            var rexSearch = new Regex(searchPattern, RegexOptions.IgnoreCase);
+
+            var files = GetFiles(a_path).Where(i => rexSearch.IsMatch(i.Name()));
 
             return files.ToArray();
         }

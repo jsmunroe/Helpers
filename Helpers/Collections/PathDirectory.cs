@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Helpers.Contracts;
 using Helpers.IO;
 
@@ -63,7 +64,7 @@ namespace Helpers.Collections
         /// <summary>
         /// Whether this directory is empty of subdirectories and files.
         /// </summary>
-        public bool IsEmpty => Exists && !(Files.Any() || Directories.Any());
+        public bool IsEmpty => Exists && !(Files().Any() || Directories().Any());
 
         /// <summary>
         /// Directory name.
@@ -86,19 +87,32 @@ namespace Helpers.Collections
         }
 
         /// <summary>
-        /// All subdirectories.
+        /// Get all directories directly under this directory.
         /// </summary>
-        public IEnumerable<PathDirectory<TLeaf>> Directories
+        /// <returns>All files directly under this directory.</returns>
+        public IEnumerable<PathDirectory<TLeaf>> Directories()
         {
-            get { return FileSystem.GetDirectories(Path).Select(i => new PathDirectory<TLeaf>(FileSystem, i)); }
+             return FileSystem.GetDirectories(Path).Select(i => new PathDirectory<TLeaf>(FileSystem, i)); 
         }
 
         /// <summary>
-        /// All files in this directory.
+        /// Get all files in this directory.
         /// </summary>
-        public IEnumerable<PathFile<TLeaf>> Files
+        /// <returns>All files in this directory.</returns>
+        public IEnumerable<PathFile<TLeaf>> Files()
         {
-            get { return FileSystem.GetFiles(Path).Select(i => new PathFile<TLeaf>(FileSystem, i)); }
+             return FileSystem.GetFiles(Path).Select(i => new PathFile<TLeaf>(FileSystem, i)); 
+        }
+
+
+        /// <summary>
+        /// Get all files in this directory matching the given pattern (<paramref name="a_pattern"/>).
+        /// </summary>
+        /// <param name="a_pattern">File match pattern.</param>
+        /// <returns>All files in this directory matching the pattern.</returns>
+        public IEnumerable<IFile> Files(string a_pattern)
+        {
+             return FileSystem.GetFiles(Path, a_pattern).Select(i => new PathFile<TLeaf>(FileSystem, i)); 
         }
 
         /// <summary>
@@ -152,10 +166,10 @@ namespace Helpers.Collections
             if (!Exists)
                 throw new DirectoryNotFoundException($"Directory at path \"{Path}\" does not exist.");
 
-            foreach (var file in Files)
+            foreach (var file in Files())
                 file.Delete();
 
-            foreach (var directory in Directories)
+            foreach (var directory in Directories())
                 directory.Delete();
         }
 
@@ -185,19 +199,31 @@ namespace Helpers.Collections
         #region IDirectory 
 
         /// <summary>
-        /// All subdirectories.
+        /// Get all directories directly under this directory.
         /// </summary>
-        IEnumerable<IDirectory> IDirectory.Directories
+        /// <returns>All files directly under this directory.</returns>
+        IEnumerable<IDirectory> IDirectory.Directories()
         {
-            get { return FileSystem.GetDirectories(Path).Select(i => new PathDirectory<TLeaf>(FileSystem, i)); }
+            return Directories();
         }
 
         /// <summary>
-        /// All files in this directory.
+        /// Get all files in this directory.
         /// </summary>
-        IEnumerable<IFile> IDirectory.Files
+        /// <returns>All files in this directory.</returns>
+        IEnumerable<IFile> IDirectory.Files()
         {
-            get { return FileSystem.GetFiles(Path).Select(i => new PathFile<TLeaf>(FileSystem, i)); }
+            return Files();
+        }
+
+        /// <summary>
+        /// Get all files in this directory matching the given pattern (<paramref name="a_pattern"/>).
+        /// </summary>
+        /// <param name="a_pattern">File match pattern.</param>
+        /// <returns>All files in this directory matching the pattern.</returns>
+        IEnumerable<IFile> IDirectory.Files(string a_pattern)
+        {
+            return Files(a_pattern);
         }
 
         /// <summary>
@@ -207,9 +233,7 @@ namespace Helpers.Collections
         /// <returns>Child directory.</returns>
         IDirectory IDirectory.Directory(string a_name)
         {
-            var childPath = PathBuilder.Create(Path).Child(a_name);
-
-            return new PathDirectory<TLeaf>(FileSystem, childPath);
+            return Directory(a_name);
         }
 
         /// <summary>
@@ -219,9 +243,7 @@ namespace Helpers.Collections
         /// <returns>File.</returns>
         IFile IDirectory.File(string a_name)
         {
-            var childPath = PathBuilder.Create(Path).Child(a_name);
-
-            return new PathFile<TLeaf>(FileSystem, childPath);
+            return File(a_name);
         }
 
         #endregion

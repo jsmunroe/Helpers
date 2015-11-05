@@ -75,7 +75,7 @@ namespace Helpers.Test
         /// <summary>
         /// Whether this directory is empty of subdirectories and files.
         /// </summary>
-        public bool IsEmpty => Exists && !(Files.Any() || Directories.Any());
+        public bool IsEmpty => Exists && !(Files().Any() || Directories().Any());
 
 
         /// <summary>
@@ -94,20 +94,33 @@ namespace Helpers.Test
         }
 
         /// <summary>
-        /// All subdirectories.
+        /// Get all directories directly under this directory.
         /// </summary>
-        public IEnumerable<IDirectory> Directories
+        /// <returns>All files directly under this directory.</returns>
+        public IEnumerable<IDirectory> Directories()
         {
-            get { return FileSystem.GetDirectories(Path).Select(i => new TestDirectory(FileSystem, i)); }
+            return FileSystem.GetDirectories(Path).Select(i => new TestDirectory(FileSystem, i));
         }
 
         /// <summary>
-        /// All files in this directory.
+        /// Get all files in this directory.
         /// </summary>
-        public IEnumerable<IFile> Files
+        /// <returns>All files in this directory.</returns>
+        public IEnumerable<IFile> Files()
         {
-            get { return FileSystem.GetFiles(Path).Select(i => new TestFile(FileSystem, i)); }
+            return FileSystem.GetFiles(Path).Select(i => new TestFile(FileSystem, i));
         }
+
+        /// <summary>
+        /// Get all files in this directory matching the given pattern (<paramref name="a_pattern"/>).
+        /// </summary>
+        /// <param name="a_pattern">File match pattern.</param>
+        /// <returns>All files in this directory matching the pattern.</returns>
+        public IEnumerable<IFile> Files(string a_pattern)
+        {
+            return FileSystem.GetFiles(Path, a_pattern).Select(i => new TestFile(FileSystem, i));
+        }
+
 
         /// <summary>
         /// Get a direct child directory with the given name (<paramref name="a_name"/>).
@@ -160,10 +173,10 @@ namespace Helpers.Test
             if (!Exists)
                 throw new DirectoryNotFoundException($"Directory at path \"{Path}\" does not exist.");
 
-            foreach (var file in Files)
+            foreach (var file in Files())
                 file.Delete();
 
-            foreach (var directory in Directories)
+            foreach (var directory in Directories())
                 directory.Delete();
         }
 

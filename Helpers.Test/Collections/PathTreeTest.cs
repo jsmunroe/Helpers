@@ -287,6 +287,35 @@ namespace Helpers.Test.Collections
         }
 
         [TestMethod]
+        public void GetFilesWithASearchPattern()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"x:\mydirectory\file1.dat", "Value1");
+            fileSystem.CreateFile(@"x:\mydirectory\file2.css", "Value2");
+            fileSystem.CreateFile(@"x:\mydirectory\file3.dat", "Value3");
+            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat", "Value4");
+
+            // Execute
+            var filePaths = fileSystem.GetFiles(@"X:\MYDIRECTORY", "*.dat");
+
+            // Assert
+            Assert.AreEqual(2, filePaths.Length);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetFilesWithNullSearchPattern()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+
+            // Execute
+            fileSystem.GetFiles(@"X:\MYDIRECTORY", a_searchPattern: null);
+        }
+
+        [TestMethod]
         public void GetDirectoriesInDirectory()
         {
             // Setup

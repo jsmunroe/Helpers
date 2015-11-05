@@ -15,16 +15,25 @@ namespace Helpers.Contracts
         IDirectory Parent { get; }
 
         /// <summary>
-        /// All subdirectories.
+        /// Get all directories directly under this directory.
         /// </summary>
-        IEnumerable<IDirectory> Directories { get; }
+        /// <returns>All files directly under this directory.</returns>
+        IEnumerable<IDirectory> Directories();
 
         /// <summary>
-        /// All files in this directory.
+        /// Get all files in this directory.
         /// </summary>
-        IEnumerable<IFile> Files { get; }
+        /// <returns>All files in this directory.</returns>
+        IEnumerable<IFile> Files();
 
-            /// <summary>
+        /// <summary>
+        /// Get all files in this directory matching the given pattern (<paramref name="a_pattern"/>).
+        /// </summary>
+        /// <param name="a_pattern">File match pattern.</param>
+        /// <returns>All files in this directory matching the pattern.</returns>
+        IEnumerable<IFile> Files(string a_pattern);
+
+        /// <summary>
         /// Get a direct child directory with the given name (<paramref name="a_name"/>).
         /// </summary>
         /// <param name="a_name">Child directory name.</param>

@@ -22,7 +22,7 @@ namespace Helpers.Extensions
 
             #endregion
 
-            foreach (var directory in a_this.Directories)
+            foreach (var directory in a_this.Directories())
             {
                 yield return directory;
 
@@ -46,10 +46,10 @@ namespace Helpers.Extensions
 
             #endregion
 
-            foreach (var file in a_this.Files)
+            foreach (var file in a_this.Files())
                 yield return file;
 
-            foreach (var directory in a_this.Directories)
+            foreach (var directory in a_this.Directories())
             {
                 foreach (var file in EnumerateDescendentFiles(directory))
                     yield return file;
@@ -97,13 +97,13 @@ namespace Helpers.Extensions
 
             a_destination.Create();
 
-            foreach (var file in a_this.Files)
+            foreach (var file in a_this.Files())
             {
                 var dest = a_destination.File(file.Name);
                 file.CopyTo(dest);
             }
 
-            foreach (var directory in a_this.Directories)
+            foreach (var directory in a_this.Directories())
             {
                 var dest = a_destination.Directory(directory.Name);
                 directory.CopyTo(dest);

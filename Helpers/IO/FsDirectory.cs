@@ -50,7 +50,7 @@ namespace Helpers.IO
         /// <summary>
         /// Whether this directory is empty of subdirectories and files.
         /// </summary>
-        public bool IsEmpty => Exists && !(Files.Any() || Directories.Any());
+        public bool IsEmpty => Exists && !(Files().Any() || Directories().Any());
 
         /// <summary>
         /// Directory name.
@@ -78,14 +78,32 @@ namespace Helpers.IO
         public IDirectory Parent => TargetDirectory.Parent == null ? null : new FsDirectory(TargetDirectory.Parent);
 
         /// <summary>
-        /// All subdirectories.
+        /// Get all directories directly under this directory.
         /// </summary>
-        public IEnumerable<IDirectory> Directories => TargetDirectory.EnumerateDirectories().Select(i => new FsDirectory(i));
+        /// <returns>All files directly under this directory.</returns>
+        public IEnumerable<IDirectory> Directories()
+        {
+            return TargetDirectory.EnumerateDirectories().Select(i => new FsDirectory(i));
+        }
 
         /// <summary>
-        /// All files in this directory.
+        /// Get all files in this directory.
         /// </summary>
-        public IEnumerable<IFile> Files => TargetDirectory.EnumerateFiles().Select(i => new FsFile(i));
+        /// <returns>All files in this directory.</returns>
+        public IEnumerable<IFile> Files()
+        {
+            return TargetDirectory.EnumerateFiles().Select(i => new FsFile(i));
+        }
+
+        /// <summary>
+        /// Get all files in this directory matching the given pattern (<paramref name="a_pattern"/>).
+        /// </summary>
+        /// <param name="a_pattern">File match pattern.</param>
+        /// <returns>All files in this directory matching the pattern.</returns>
+        public IEnumerable<IFile> Files(string a_pattern)
+        {
+            return TargetDirectory.EnumerateFiles(a_pattern).Select(i => new FsFile(i));
+        }
 
         /// <summary>
         /// Get a direct child directory with the given name (<paramref name="a_name"/>).

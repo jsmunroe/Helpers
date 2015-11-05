@@ -345,6 +345,38 @@ namespace Helpers.Test.Test
             fileSystem.GetFiles(@"X:\MYDIRECTORY");
         }
 
+
+        [TestMethod]
+        public void GetFilesWithASearchPattern()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\file2.css", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats());
+
+            // Execute
+            var filePaths = fileSystem.GetFiles(@"X:\MYDIRECTORY", "*.dat");
+
+            // Assert
+            Assert.AreEqual(2, filePaths.Length);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetFilesWithNullSearchPattern()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+
+            // Execute
+            fileSystem.GetFiles(@"X:\MYDIRECTORY", a_searchPattern: null);
+        }
+
+
+
         [TestMethod]
         public void GetDirectoriesInDirectory()
         {
