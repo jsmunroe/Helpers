@@ -140,6 +140,26 @@ namespace Helpers.Collections
         }
 
         /// <summary>
+        /// Get the directory path for a file with the given name (<paramref name="a_name"/>) or relative path under this directory.
+        /// </summary>
+        /// <param name="a_name">Directory name or relative path.</param>
+        /// <returns>Directory path.</returns>
+        public PathBuilder DirectoryPath(string a_name)
+        {
+            return PathBuilder.Create(Path).Child(a_name);
+        }
+
+        /// <summary>
+        /// Get the file path for a file with the given name (<paramref name="a_name"/>) or relative path under this directory.
+        /// </summary>
+        /// <param name="a_name">File name or relative path.</param>
+        /// <returns>File path.</returns>
+        public PathBuilder FilePath(string a_name)
+        {
+            return PathBuilder.Create(Path).Child(a_name);
+        }
+
+        /// <summary>
         /// Create the directory and every parent that is not already created.
         /// </summary>
         public void Create()

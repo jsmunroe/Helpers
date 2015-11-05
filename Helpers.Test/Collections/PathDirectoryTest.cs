@@ -214,8 +214,8 @@ namespace Helpers.Test.Collections
         public void GetChildFilesWithNullSearchPattern()
         {
             // Setup
-            var fileSystem = new TestFileSystem();
-            var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
+            var fileSystem = new PathTree<string>();
+            var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
 
             // Execute
             directory.Files(a_pattern: null);
@@ -273,6 +273,47 @@ namespace Helpers.Test.Collections
         }
 
         [TestMethod]
+        public void GetDirectoryPath()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            var result = directory.DirectoryPath("Directory2");
+
+            // Assert
+            Assert.AreEqual(@"x:\mydirectory\Directory2", result);
+        }
+
+
+        [TestMethod]
+        public void GetDirectoryPathForNotExistingChild()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            var result = directory.DirectoryPath("Directory4");
+
+            // Assert
+            Assert.AreEqual(@"x:\mydirectory\Directory4", result);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetDirectoryPathWithNullName()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            directory.DirectoryPath(a_name: null);
+        }
+
+        [TestMethod]
         public void GetChildFileByName()
         {
             // Setup
@@ -291,7 +332,51 @@ namespace Helpers.Test.Collections
             // Assert
             Assert.AreEqual("File1.dat", result.Name);
             Assert.IsTrue(result.Exists);
-            Assert.AreEqual("Value1", ((PathFile<string>)result).Value);
+            Assert.AreEqual("Value1", result.Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetFileByNameWithNull()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            directory.File(a_name: null);
+        }
+
+        [TestMethod]
+        public void GetFilePathByName()
+        {
+            // Setup
+            var created = DateTime.UtcNow;
+            var lastModified = DateTime.UtcNow;
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"x:\mydirectory\file1.dat", "Value1");
+            fileSystem.CreateFile(@"x:\mydirectory\file2.dat", "Value2");
+            fileSystem.CreateFile(@"x:\mydirectory\file3.dat", "Value3");
+            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat", "Value4");
+            var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            var result = directory.FilePath("File1.dat");
+
+            // Assert
+            Assert.AreEqual(@"x:\mydirectory\File1.dat", result);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetDirectoryByNameWithNull()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = new PathDirectory<string>(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            directory.File(a_name: null);
         }
 
         [TestMethod]

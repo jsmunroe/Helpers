@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Helpers.IO;
 
 namespace Helpers.Contracts
 {
@@ -34,18 +35,32 @@ namespace Helpers.Contracts
         IEnumerable<IFile> Files(string a_pattern);
 
         /// <summary>
-        /// Get a direct child directory with the given name (<paramref name="a_name"/>).
+        /// Get the directory with the given name (<paramref name="a_name"/>) or relative path under this directory.
         /// </summary>
-        /// <param name="a_name">Child directory name.</param>
-        /// <returns>Child directory.</returns>
+        /// <param name="a_name">Directory name or relative path.</param>
+        /// <returns>Directory path.</returns>
         IDirectory Directory(string a_name);
 
         /// <summary>
-        /// Get a file with the given name (<paramref name="a_name"/>) in this directory.
+        /// Get the directory path for a file with the given name (<paramref name="a_name"/>) or relative path under this directory.
         /// </summary>
-        /// <param name="a_name">File name.</param>
-        /// <returns>File.</returns>
+        /// <param name="a_name">Directory name or relative path.</param>
+        /// <returns>Directory path.</returns>
         IFile File(string a_name);
+
+        /// <summary>
+        /// Get the directory path for a file with the given name (<paramref name="a_name"/>) or relative path under this directory.
+        /// </summary>
+        /// <param name="a_name">Directory name or relative path.</param>
+        /// <returns>Directory path.</returns>
+        PathBuilder DirectoryPath(string a_name);
+
+        /// <summary>
+        /// Get the file path for a file with the given name (<paramref name="a_name"/>) or relative path under this directory.
+        /// </summary>
+        /// <param name="a_name">File name or relative path.</param>
+        /// <returns>File path.</returns>
+        PathBuilder FilePath(string a_name);
 
         /// <summary>
         /// Create the directory and every parent that is not already created.

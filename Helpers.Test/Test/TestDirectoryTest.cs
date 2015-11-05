@@ -261,7 +261,7 @@ namespace Helpers.Test.Test
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void GetChildDirectoryByNameWithNull()
+        public void GetDirectoryWithNullName()
         {
             // Setup
             var fileSystem = new TestFileSystem();
@@ -269,6 +269,53 @@ namespace Helpers.Test.Test
 
             // Execute
             var result = directory.Directory(a_name: null);
+        }
+
+        [TestMethod]
+        public void GetDirectoryPath()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.StageDirectory(@"x:\mydirectory\directory1");
+            fileSystem.StageDirectory(@"x:\mydirectory\directory2\child");
+            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
+            var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            var result = directory.DirectoryPath("Directory2");
+
+            // Assert
+            Assert.AreEqual(@"x:\mydirectory\Directory2", result);
+        }
+
+
+        [TestMethod]
+        public void GetDirectoryPathForNotExistingChild()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.StageDirectory(@"x:\mydirectory\directory1");
+            fileSystem.StageDirectory(@"x:\mydirectory\directory2\child");
+            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
+            var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            var result = directory.DirectoryPath("Directory4");
+
+            // Assert
+            Assert.AreEqual(@"x:\mydirectory\Directory4", result);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetDirectoryPathWithNullName()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            directory.DirectoryPath(a_name: null);
         }
 
         [TestMethod]
@@ -293,6 +340,50 @@ namespace Helpers.Test.Test
             Assert.AreEqual(1024, result.Size);
             Assert.AreEqual(created, result.LastModifiedTimeUtc);
             Assert.AreEqual(lastModified, result.LastModifiedTimeUtc);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetFileByNameWithNull()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            directory.File(a_name: null);
+        }
+
+        [TestMethod]
+        public void GetFilePathByName()
+        {
+            // Setup
+            var created = DateTime.UtcNow;
+            var lastModified = DateTime.UtcNow;
+            var fileSystem = new TestFileSystem();
+            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileStats { Size = 1024, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\file2.dat", new TestFileStats { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileStats { Size = 2017, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats { Size = 8740, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            var result = directory.FilePath("File1.dat");
+
+            // Assert
+            Assert.AreEqual(@"x:\mydirectory\File1.dat", result);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetDirectoryByNameWithNull()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
+
+            // Execute
+            directory.File(a_name: null);
         }
 
         [TestMethod]

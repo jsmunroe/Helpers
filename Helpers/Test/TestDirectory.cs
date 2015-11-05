@@ -127,11 +127,17 @@ namespace Helpers.Test
         /// </summary>
         /// <param name="a_name">Child directory name.</param>
         /// <returns>Child directory.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_name"/> is null.</exception>
         public IDirectory Directory(string a_name)
         {
-            var childPath = PathBuilder.Create(Path).Child(a_name);
+            #region Argument Validation
 
-            return new TestDirectory(FileSystem, childPath);
+            if (a_name == null)
+                throw new ArgumentNullException(nameof(a_name));
+
+            #endregion
+
+            return new TestDirectory(FileSystem, DirectoryPath(a_name));
         }
 
         /// <summary>
@@ -139,11 +145,53 @@ namespace Helpers.Test
         /// </summary>
         /// <param name="a_name">File name.</param>
         /// <returns>File.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_name"/> is null.</exception>
         public IFile File(string a_name)
         {
-            var childPath = PathBuilder.Create(Path).Child(a_name);
+            #region Argument Validation
 
-            return new TestFile(FileSystem, childPath);
+            if (a_name == null)
+                throw new ArgumentNullException(nameof(a_name));
+
+            #endregion
+
+            return new TestFile(FileSystem, FilePath(a_name));
+        }
+
+        /// <summary>
+        /// Get the directory path for a file with the given name (<paramref name="a_name"/>) or relative path under this directory.
+        /// </summary>
+        /// <param name="a_name">Directory name or relative path.</param>
+        /// <returns>Directory path.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_name"/> is null.</exception>
+        public PathBuilder DirectoryPath(string a_name)
+        {
+            #region Argument Validation
+
+            if (a_name == null)
+                throw new ArgumentNullException(nameof(a_name));
+
+            #endregion
+
+            return PathBuilder.Create(Path).Child(a_name);
+        }
+
+        /// <summary>
+        /// Get the file path for a file with the given name (<paramref name="a_name"/>) or relative path under this directory.
+        /// </summary>
+        /// <param name="a_name">File name or relative path.</param>
+        /// <returns>File path.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_name"/> is null.</exception>
+        public PathBuilder FilePath(string a_name)
+        {
+            #region Argument Validation
+
+            if (a_name == null)
+                throw new ArgumentNullException(nameof(a_name));
+
+            #endregion
+
+            return PathBuilder.Create(Path).Child(a_name);
         }
 
         /// <summary>
