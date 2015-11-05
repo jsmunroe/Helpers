@@ -22,6 +22,13 @@ namespace Helpers.Contracts
         IEnumerable<IDirectory> Directories();
 
         /// <summary>
+        /// Get all directories in this directory matching the given pattern (<paramref name="a_pattern"/>).
+        /// </summary>
+        /// <param name="a_pattern">File match pattern.</param>
+        /// <returns>All directories in this directory matching the pattern.</returns>
+        IEnumerable<IDirectory> Directories(string a_pattern);
+
+        /// <summary>
         /// Get all files in this directory.
         /// </summary>
         /// <returns>All files in this directory.</returns>

@@ -312,6 +312,23 @@ namespace Helpers.Test.Test
 
 
         [TestMethod]
+        public void GetFilesInDirectoryWithSearchPattern()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\file2.dat", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats());
+
+            // Execute
+            var filePaths = fileSystem.GetFiles(@"X:\MYDIRECTORY", "file*.dat");
+
+            // Assert
+            Assert.AreEqual(3, filePaths.Length);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void GetFilesInDirectoryWithNull()
         {
@@ -375,8 +392,6 @@ namespace Helpers.Test.Test
             fileSystem.GetFiles(@"X:\MYDIRECTORY", a_searchPattern: null);
         }
 
-
-
         [TestMethod]
         public void GetDirectoriesInDirectory()
         {
@@ -387,11 +402,29 @@ namespace Helpers.Test.Test
             fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
 
             // Execute
-            string[] directoryPaths = fileSystem.GetDirectories(@"X:\MYDIRECTORY");
+            var directoryPaths = fileSystem.GetDirectories(@"X:\MYDIRECTORY");
 
             // Assert
             Assert.AreEqual(3, directoryPaths.Length);
         }
+
+        [TestMethod]
+        public void GetDirectoriesWithSearchPattern()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.StageDirectory(@"x:\mydirectory\directory1");
+            fileSystem.StageDirectory(@"x:\mydirectory\directory2\child");
+            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
+
+            // Execute
+            var directoryPaths = fileSystem.GetDirectories(@"X:\MYDIRECTORY", "*1");
+
+            // Assert
+            Assert.AreEqual(1, directoryPaths.Length);
+        }
+
+
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]

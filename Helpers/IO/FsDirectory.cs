@@ -87,6 +87,16 @@ namespace Helpers.IO
         }
 
         /// <summary>
+        /// Get all directories in this directory matching the given pattern (<paramref name="a_pattern"/>).
+        /// </summary>
+        /// <param name="a_pattern">File match pattern.</param>
+        /// <returns>All directories in this directory matching the pattern.</returns>
+        public IEnumerable<IDirectory> Directories(string a_pattern)
+        {
+            return TargetDirectory.EnumerateDirectories(a_pattern).Select(i => new FsDirectory(i));
+        }
+
+        /// <summary>
         /// Get all files in this directory.
         /// </summary>
         /// <returns>All files in this directory.</returns>

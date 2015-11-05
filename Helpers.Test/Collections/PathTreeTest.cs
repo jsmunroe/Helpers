@@ -263,6 +263,23 @@ namespace Helpers.Test.Collections
             Assert.AreEqual(3, filePaths.Length);
         }
 
+        [TestMethod]
+        public void GetFilesInDirectoryWithSearchPattern()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateFile(@"x:\mydirectory\file1.dat", "Value");
+            fileSystem.CreateFile(@"x:\mydirectory\file2.dat", "Value");
+            fileSystem.CreateFile(@"x:\mydirectory\file3.dat", "Value");
+            fileSystem.CreateFile(@"x:\mydirectory\otherdirectory\file4.dat", "Value");
+
+            // Execute
+            var filePaths = fileSystem.GetFiles(@"X:\MYDIRECTORY", "file*.dat");
+
+            // Assert
+            Assert.AreEqual(3, filePaths.Length);
+        }
+
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -325,12 +342,27 @@ namespace Helpers.Test.Collections
             fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb", "Value");
 
             // Execute
-            string[] directoryPaths = fileSystem.GetDirectories(@"X:\MYDIRECTORY");
+            var directoryPaths = fileSystem.GetDirectories(@"X:\MYDIRECTORY");
 
             // Assert
             Assert.AreEqual(3, directoryPaths.Length);
         }
 
+        [TestMethod]
+        public void GetDirectoriesWithSearchPattern()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateDirectory(@"x:\mydirectory\directory1");
+            fileSystem.CreateDirectory(@"x:\mydirectory\directory2\child");
+            fileSystem.CreateFile(@"x:\mydirectory\directory3\file.rgb", "Value");
+
+            // Execute
+            var directoryPaths = fileSystem.GetDirectories(@"X:\MYDIRECTORY", "*1");
+
+            // Assert
+            Assert.AreEqual(1, directoryPaths.Length);
+        }
 
         [TestMethod]
         public void GetDirectoriesInRoot()
@@ -344,7 +376,7 @@ namespace Helpers.Test.Collections
             fileSystem.CreateDirectory(@"\directory5");
 
             // Execute
-            string[] directoryPaths = fileSystem.GetDirectories("");
+            var directoryPaths = fileSystem.GetDirectories("");
 
             // Assert
             Assert.AreEqual(3, directoryPaths.Length);
