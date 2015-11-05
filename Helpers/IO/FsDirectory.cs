@@ -154,6 +154,14 @@ namespace Helpers.IO
         }
 
         /// <summary>
+        /// Refresh the state of this directory.
+        /// </summary>
+        public void Refresh()
+        {
+            TargetDirectory.Refresh();
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>

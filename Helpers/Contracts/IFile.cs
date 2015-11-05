@@ -40,5 +40,10 @@ namespace Helpers.Contracts
         /// <returns>Created file with the new extension.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_extension"/> is null.</exception>
         IFile ChangeExtension(string a_extension);
+
+        /// <summary>
+        /// Refresh the state of this file.
+        /// </summary>
+        void Refresh();
     }
 }

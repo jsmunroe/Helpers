@@ -128,6 +128,14 @@ namespace Helpers.IO
         }
 
         /// <summary>
+        /// Refresh the state of this file.
+        /// </summary>
+        public void Refresh()
+        {
+            TargetFile.Refresh();
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>

@@ -188,5 +188,18 @@ namespace Helpers.Test
         {
             return Path;
         }
+
+        #region IDirectory 
+
+        /// <summary>
+        /// Refresh the state of this directory.
+        /// </summary>
+        void IDirectory.Refresh()
+        {
+
+        }
+
+        #endregion
+
     }
 }

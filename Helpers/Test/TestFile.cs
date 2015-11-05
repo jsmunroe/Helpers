@@ -183,5 +183,17 @@ namespace Helpers.Test
         {
             return Path;
         }
+
+        #region IFile Members 
+
+        /// <summary>
+        /// Refresh the state of this file.
+        /// </summary>
+        void IFile.Refresh()
+        {
+            // Not used.
+        }
+
+        #endregion
     }
 }

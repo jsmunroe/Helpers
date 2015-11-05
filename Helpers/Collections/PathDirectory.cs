@@ -246,6 +246,14 @@ namespace Helpers.Collections
             return File(a_name);
         }
 
+        /// <summary>
+        /// Refresh the state of this directory.
+        /// </summary>
+        void IDirectory.Refresh()
+        {
+            
+        }
+
         #endregion
     }
 }

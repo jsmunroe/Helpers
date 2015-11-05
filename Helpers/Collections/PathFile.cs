@@ -165,6 +165,7 @@ namespace Helpers.Collections
             return new PathFile<TLeaf>(FileSystem, newPath);
         }
 
+
         /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
@@ -219,6 +220,14 @@ namespace Helpers.Collections
 
                 return new PathDirectory<TLeaf>(FileSystem, parentPath);
             }
+        }
+
+        /// <summary>
+        /// Refresh the state of this file.
+        /// </summary>
+        void IFile.Refresh()
+        {
+
         }
 
         #endregion
