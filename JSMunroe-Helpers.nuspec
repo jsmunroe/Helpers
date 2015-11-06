@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>JSMunroe-Helpers</id>
+    <id>JSMunroe-Helpers-Legacy</id>
     <version>$version$</version>
-    <title>JSMunroe-Helpers</title>
+    <title>Helpers (.NET 4.5.1)</title>
     <authors>JSMunroe.com, Jordan Munroe</authors>
     <owners>Jordan Munroe</owners>
     <projectUrl>https://github.com/jsmunroe/Helpers</projectUrl>
