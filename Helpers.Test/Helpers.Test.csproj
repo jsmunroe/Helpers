@@ -68,6 +68,7 @@
     <Compile Include="IO\FsFileTest.cs" />
     <Compile Include="IO\PathBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test\TestFIleInstanceTest.cs" />
     <Compile Include="Test\TestSetTest.cs" />
     <Compile Include="SemanticVersionTest.cs" />
     <Compile Include="Test\TestDirectoryTest.cs" />

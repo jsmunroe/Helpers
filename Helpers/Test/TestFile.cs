@@ -77,17 +77,17 @@ namespace Helpers.Test
         /// <summary>
         /// Size of the file.
         /// </summary>
-        public long Size => FileSystem.GetFileStats(Path).Size;
+        public long Size => FileSystem.GetFileInstance(Path).Size;
 
         /// <summary>
         /// Time of creation (UTC).
         /// </summary>
-        public DateTime CreatedTimeUtc => FileSystem.GetFileStats(Path).CreatedTimeUtc;
+        public DateTime CreatedTimeUtc => FileSystem.GetFileInstance(Path).CreatedTimeUtc;
 
         /// <summary>
         /// Time of last modification (UTC).
         /// </summary>
-        public DateTime LastModifiedTimeUtc => FileSystem.GetFileStats(Path).LastModifiedTimeUtc;
+        public DateTime LastModifiedTimeUtc => FileSystem.GetFileInstance(Path).LastModifiedTimeUtc;
 
         /// <summary>
         /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
@@ -103,7 +103,7 @@ namespace Helpers.Test
 
             #endregion
 
-            var fileStats = new TestFileStats();
+            var fileStats = new TestFileInstance();
             fileStats.Size = a_contents.Length;
             fileStats.CreatedTimeUtc = DateTime.UtcNow;
             fileStats.LastModifiedTimeUtc = DateTime.UtcNow;
@@ -142,7 +142,7 @@ namespace Helpers.Test
             if (!Exists)
                 throw new FileNotFoundException("Cannot CopyTo because source file does not exist.");
 
-            var stats = new TestFileStats
+            var stats = new TestFileInstance
             {
                 Size = Size,
                 CreatedTimeUtc = DateTime.UtcNow,
@@ -173,6 +173,25 @@ namespace Helpers.Test
             var newPath = PathBuilder.Create(Path).Parent().Child(newName);
 
             return new TestFile(FileSystem, newPath);
+        }
+
+
+        /// <summary>
+        /// Get a readable stream for this file.
+        /// </summary>
+        /// <returns>Readable stream.</returns>
+        public Stream OpenRead()
+        {
+            return FileSystem.OpenRead(Path);
+        }
+
+        /// <summary>
+        /// Get a writable stream for this file.
+        /// </summary>
+        /// <returns>Writable stream.</returns>
+        public Stream OpenWrite()
+        {
+            return FileSystem.OpenWrite(Path);
         }
 
         /// <summary>

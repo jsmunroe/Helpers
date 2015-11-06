@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Helpers.Contracts;
 using Helpers.IO;
 
 namespace Helpers.Test
 {
     public class TestFileSystem
     {
-        private readonly Dictionary<string, Dictionary<string, TestFileStats>> _directories = new Dictionary<string, Dictionary<string, TestFileStats>>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, Dictionary<string, TestFileInstance>> _directories = new Dictionary<string, Dictionary<string, TestFileInstance>>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// Create the directory with the given path (<paramref name="a_path"/>) within this file system.
@@ -30,7 +31,7 @@ namespace Helpers.Test
 
             if (!_directories.ContainsKey(a_path))
             {
-                _directories.Add(a_path, new Dictionary<string, TestFileStats>(StringComparer.OrdinalIgnoreCase));
+                _directories.Add(a_path, new Dictionary<string, TestFileInstance>(StringComparer.OrdinalIgnoreCase));
 
                 var parent = PathBuilder.Create(a_path).WithRoot(PathBuilder.WindowsDriveRoot).Parent();
                 if (parent != null)
@@ -85,11 +86,11 @@ namespace Helpers.Test
         /// Create a file with the given path (<paramref name="a_path"/>) within this file system.
         /// </summary>
         /// <param name="a_path">File path.</param>
-        /// <param name="a_stats">File stats.</param>
+        /// <param name="a_file">File stats.</param>
         /// <returns>This file system used with fluent interface.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_stats"/> is null.</exception>
-        public TestFile StageFile(string a_path, TestFileStats a_stats = null)
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_file"/> is null.</exception>
+        public TestFile StageFile(string a_path, TestFileInstance a_file = null)
         {
             #region Argument Validation
 
@@ -107,7 +108,7 @@ namespace Helpers.Test
             StageDirectory(directory);
 
             var files = _directories[directory];
-            files[file] = a_stats ?? new TestFileStats();
+            files[file] = a_file ?? new TestFileInstance();
 
             return new TestFile(this, a_path);
         }
@@ -279,12 +280,12 @@ namespace Helpers.Test
         }
 
         /// <summary>
-        /// Get the stats for the given path (<paramref name="a_path"/>).
+        /// Get an input stream for the file at the given path (<paramref name="a_path"/>).
         /// </summary>
-        /// <param name="a_path">Relative path.</param>
-        /// <returns>File stats.</returns>
+        /// <param name="a_path">File path.</param>
+        /// <returns>Input stream.</returns>
         /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
-        public TestFileStats GetFileStats(string a_path)
+        public Stream OpenRead(string a_path)
         {
             #region Argument Validation
 
@@ -292,6 +293,52 @@ namespace Helpers.Test
                 throw new ArgumentNullException(nameof(a_path));
 
             #endregion
+
+            var instance = GetFileInstance(a_path);
+
+            return new TestMemoryStream(instance);
+        }
+
+        /// <summary>
+        /// get an output stream for the file at the given path (<paramref name="a_path"/>).
+        /// </summary>
+        /// <param name="a_path">File path.</param>
+        /// <returns>Input stream.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        public Stream OpenWrite(string a_path)
+        {
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            #endregion
+
+            if (!FileExists(a_path))
+                StageFile(a_path, new TestFileInstance());
+
+            var instance = GetFileInstance(a_path);
+
+            return new TestMemoryStream(instance);
+        }
+
+        /// <summary>
+        /// Get the actual instance for the given path (<paramref name="a_path"/>).
+        /// </summary>
+        /// <param name="a_path">Relative path.</param>
+        /// <returns>File instance.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        public TestFileInstance GetFileInstance(string a_path)
+        {
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            #endregion
+
+            if (!FileExists(a_path))
+                throw new FileNotFoundException();
 
             a_path = PreparePath(a_path);
 
@@ -351,37 +398,54 @@ namespace Helpers.Test
 
             return othersParent.Equals(a_parent, StringComparison.OrdinalIgnoreCase);
         }
-    }
 
-    public class TestFileStats
-    {
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public TestFileStats()
+        class TestMemoryStream : MemoryStream
         {
-            CreatedTimeUtc = DateTime.UtcNow;
-            LastModifiedTimeUtc = DateTime.UtcNow;
+            private readonly TestFileInstance _instance;
+
+            /// <summary>
+            /// Constructor.
+            /// </summary>
+            /// <param name="a_instance">File instance.</param>
+            /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_instance"/> is null.</exception>
+            public TestMemoryStream(TestFileInstance a_instance)
+            {
+                #region Argument Validation
+
+                if (a_instance == null)
+                    throw new ArgumentNullException(nameof(a_instance));
+
+                #endregion
+
+                _instance = a_instance;
+
+                if (a_instance.Data.Any())
+                {
+                    var writer = new BinaryWriter(this);
+                    writer.Write(_instance.Data, 0, _instance.Data.Length);
+                    writer.Flush();
+                    Seek(0, SeekOrigin.Begin);
+                }
+            }
+
+            /// <summary>
+            /// Closes the current stream and releases any resources (such as sockets and file handles) associated with the current stream. Instead of calling this method, 
+            /// ensure that the stream is properly disposed.
+            /// </summary>
+            public override void Close()
+            {
+                _instance.Size = Length;
+                _instance.Data = new byte[Length];
+
+                if (Length > 0)
+                {
+                    Seek(0, SeekOrigin.Begin);
+                    var reader = new BinaryReader(this);
+                    _instance.Data = reader.ReadBytes((int) Length);
+                }
+
+                base.Close();
+            }
         }
-
-        /// <summary>
-        /// Size of the file.
-        /// </summary>
-        public long Size { get; set; }
-
-        /// <summary>
-        /// Tag object.
-        /// </summary>
-        public object Tag { get; set; }
-
-        /// <summary>
-        /// Time of creation (UTC).
-        /// </summary>
-        public DateTime CreatedTimeUtc { get; set; }
-
-        /// <summary>
-        /// Time of last modification (UTC).
-        /// </summary>
-        public DateTime LastModifiedTimeUtc { get; set; }
     }
 }

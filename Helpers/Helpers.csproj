@@ -63,6 +63,7 @@
     <Compile Include="SemanticVersion.cs" />
     <Compile Include="Test\TestDirectory.cs" />
     <Compile Include="Test\TestFile.cs" />
+    <Compile Include="Test\TestFileInstance.cs" />
     <Compile Include="Test\TestFileSystem.cs" />
     <Compile Include="Test\TestSet.cs" />
     <Compile Include="Xml\XmlSet.cs" />

@@ -160,7 +160,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.StageDirectory(@"x:\mydirectory\directory1");
             fileSystem.StageDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileInstance());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -176,10 +176,10 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileStats());
-            fileSystem.StageFile(@"x:\mydirectory\file2.dat", new TestFileStats());
-            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileStats());
-            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileInstance());
+            fileSystem.StageFile(@"x:\mydirectory\file2.dat", new TestFileInstance());
+            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileInstance());
+            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileInstance());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -195,10 +195,10 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileStats());
-            fileSystem.StageFile(@"x:\mydirectory\file2.css", new TestFileStats());
-            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileStats());
-            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileInstance());
+            fileSystem.StageFile(@"x:\mydirectory\file2.css", new TestFileInstance());
+            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileInstance());
+            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileInstance());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -229,7 +229,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.StageDirectory(@"x:\mydirectory\directory1");
             fileSystem.StageDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileInstance());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -248,7 +248,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.StageDirectory(@"x:\mydirectory\directory1");
             fileSystem.StageDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileInstance());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -278,7 +278,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.StageDirectory(@"x:\mydirectory\directory1");
             fileSystem.StageDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileInstance());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -296,7 +296,7 @@ namespace Helpers.Test.Test
             var fileSystem = new TestFileSystem();
             fileSystem.StageDirectory(@"x:\mydirectory\directory1");
             fileSystem.StageDirectory(@"x:\mydirectory\directory2\child");
-            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileStats());
+            fileSystem.StageFile(@"x:\mydirectory\directory3\file.rgb", new TestFileInstance());
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -325,10 +325,10 @@ namespace Helpers.Test.Test
             var created = DateTime.UtcNow;
             var lastModified = DateTime.UtcNow;
             var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileStats { Size = 1024, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
-            fileSystem.StageFile(@"x:\mydirectory\file2.dat", new TestFileStats { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
-            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileStats { Size = 2017, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
-            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats { Size = 8740, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileInstance { Size = 1024, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\file2.dat", new TestFileInstance { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileInstance { Size = 2017, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileInstance { Size = 8740, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -361,10 +361,10 @@ namespace Helpers.Test.Test
             var created = DateTime.UtcNow;
             var lastModified = DateTime.UtcNow;
             var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileStats { Size = 1024, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
-            fileSystem.StageFile(@"x:\mydirectory\file2.dat", new TestFileStats { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
-            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileStats { Size = 2017, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
-            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileStats { Size = 8740, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\file1.dat", new TestFileInstance { Size = 1024, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\file2.dat", new TestFileInstance { Size = 14067, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\file3.dat", new TestFileInstance { Size = 2017, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
+            fileSystem.StageFile(@"x:\mydirectory\otherdirectory\file4.dat", new TestFileInstance { Size = 8740, CreatedTimeUtc = created, LastModifiedTimeUtc = lastModified });
             var directory = new TestDirectory(fileSystem, @"x:\mydirectory");
 
             // Execute
@@ -470,9 +470,9 @@ namespace Helpers.Test.Test
             fileSystem.StageDirectory(@"\Root\Directory\Sub1");
             fileSystem.StageDirectory(@"\Root\Directory\Sub2");
             fileSystem.StageDirectory(@"\Root\Directory\Sub3");
-            fileSystem.StageFile(@"\Root\Directory\File1.hsf", new TestFileStats());
-            fileSystem.StageFile(@"\Root\Directory\File2.hsf", new TestFileStats());
-            fileSystem.StageFile(@"\Root\Directory\File3.hsf", new TestFileStats());
+            fileSystem.StageFile(@"\Root\Directory\File1.hsf", new TestFileInstance());
+            fileSystem.StageFile(@"\Root\Directory\File2.hsf", new TestFileInstance());
+            fileSystem.StageFile(@"\Root\Directory\File3.hsf", new TestFileInstance());
 
             var directory = new TestDirectory(fileSystem, @"\");
 

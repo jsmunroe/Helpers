@@ -136,6 +136,24 @@ namespace Helpers.IO
         }
 
         /// <summary>
+        /// Open a readable stream for this file.
+        /// </summary>
+        /// <returns>Readable stream.</returns>
+        public Stream OpenRead()
+        {
+            return TargetFile.OpenRead();
+        }
+
+        /// <summary>
+        /// Open a writable stream for this file.
+        /// </summary>
+        /// <returns></returns>
+        public Stream OpenWrite()
+        {
+            return TargetFile.OpenWrite();
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>

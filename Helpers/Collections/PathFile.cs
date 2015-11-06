@@ -230,6 +230,24 @@ namespace Helpers.Collections
 
         }
 
+        /// <summary>
+        /// Get a readable stream for this file.
+        /// </summary>
+        /// <returns>Readable stream.</returns>
+        Stream IFile.OpenRead()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Get a writable stream for this file.
+        /// </summary>
+        /// <returns></returns>
+        Stream IFile.OpenWrite()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
     }

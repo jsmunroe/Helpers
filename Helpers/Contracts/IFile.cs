@@ -45,5 +45,17 @@ namespace Helpers.Contracts
         /// Refresh the state of this file.
         /// </summary>
         void Refresh();
+
+        /// <summary>
+        /// Get a readable stream for this file.
+        /// </summary>
+        /// <returns>Readable stream.</returns>
+        Stream OpenRead();
+
+        /// <summary>
+        /// Get a writable stream for this file.
+        /// </summary>
+        /// <returns></returns>
+        Stream OpenWrite();
     }
 }

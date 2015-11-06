@@ -52,7 +52,7 @@ namespace Helpers.Test.Test
             // Setup
             var path = "\\file\\does\\exist.dat";
             var fileSystem = new TestFileSystem();
-            fileSystem.StageFile(path, new TestFileStats());
+            fileSystem.StageFile(path, new TestFileInstance());
             var file = new TestFile(fileSystem, path);
 
             // Execute
@@ -213,7 +213,7 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            var file = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
+            var file = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileInstance { Size = 240 });
             var dest = new TestFile(fileSystem, @"x:\directory\file2.bmp");
 
             // Execute
@@ -230,7 +230,7 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            var file = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
+            var file = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileInstance { Size = 240 });
 
             // Execute
             file.CopyTo(a_dest: null);
@@ -256,8 +256,8 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            var file = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileStats { Size = 240 });
-            var dest = fileSystem.StageFile(@"x:\directory\File2.bmp", new TestFileStats { Size = 480 });
+            var file = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileInstance { Size = 240 });
+            var dest = fileSystem.StageFile(@"x:\directory\File2.bmp", new TestFileInstance { Size = 480 });
 
             // Execute
             file.CopyTo(dest);
@@ -266,6 +266,93 @@ namespace Helpers.Test.Test
             Assert.IsTrue(dest.Exists);
             Assert.AreEqual(240, dest.Size);
         }
+
+
+        [TestMethod]
+        public void OpenWrite()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = fileSystem.StageFile(@"x:\directory\File.xml", new TestFileInstance ());
+
+            // Execute
+            using (var stream = file.OpenWrite())
+            {
+                var writer = new StreamWriter(stream);
+                writer.Write("Some data.");
+                writer.Flush();
+
+                // Assert
+                Assert.IsNotNull(stream);
+                Assert.IsTrue(stream.Length > 0);
+            }
+
+            // Assert
+            using (var stream = file.OpenRead())
+            {
+                var reader = new StreamReader(stream);
+                Assert.AreEqual("Some data.", reader.ReadToEnd());
+            }
+        }
+
+
+        [TestMethod]
+        public void OpenWriteWithNotExistingFile()
+        {
+            // Setup
+            var file = new TestFile(@"x:\directory\File.xml");
+
+            // Execute
+            using (var stream = file.OpenWrite())
+            {
+                var writer = new StreamWriter(stream);
+                writer.Write("Some data.");
+                writer.Flush();
+
+                // Assert
+                Assert.IsTrue(file.Exists); // File was created on write.
+                Assert.IsNotNull(stream);
+                Assert.IsTrue(stream.Length > 0);
+            }
+
+            // Assert
+            using (var stream = file.OpenRead())
+            {
+                var reader = new StreamReader(stream);
+                Assert.AreEqual("Some data.", reader.ReadToEnd());
+            }
+        }
+
+
+
+        [TestMethod]
+        public void OpenRead()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = fileSystem.StageFile(@"x:\directory\File.xml", new TestFileInstance("This is data."));
+
+            // Assert
+            using (var stream = file.OpenRead())
+            {
+                var reader = new StreamReader(stream);
+                Assert.AreEqual("This is data.", reader.ReadToEnd());
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void OpenReadWithNotExistingFile()
+        {
+            // Setup
+            var file = new TestFile(@"x:\directory\File.xml");
+
+            // Execute
+            file.OpenRead();
+        }
+
+
+
 
         // [CustomTest_I]
         public void TestMethod()
