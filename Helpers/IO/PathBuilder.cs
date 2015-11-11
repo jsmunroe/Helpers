@@ -250,6 +250,34 @@ namespace Helpers.IO
         }
 
         /// <summary>
+        /// Change the extension of the last segment to the given extension (<paramref name="a_extension"/>).
+        /// </summary>
+        /// <param name="a_extension">New extension.</param>
+        /// <param name="a_extensionMarker">String that indicates the start of an extension.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_extension"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_extensionMarker"/> is null.</exception>
+        public PathBuilder ChangeExtension(string a_extension, string a_extensionMarker = ".")
+        {
+            #region Argument Validation
+
+            if (a_extension == null)
+                throw new ArgumentNullException(nameof(a_extension));
+
+            if (a_extensionMarker == null)
+                throw new ArgumentNullException(nameof(a_extensionMarker));
+
+            #endregion
+
+            var parent = Parent();
+            var name = NameWithoutExtension(a_extensionMarker) + a_extensionMarker + a_extension;
+
+            var path = parent + name;
+
+            return path;
+        }
+
+        /// <summary>
         /// Whether this path is at root.
         /// </summary>
         /// <returns>True iff this path is at root.</returns>

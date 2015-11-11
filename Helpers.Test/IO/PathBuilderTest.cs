@@ -511,6 +511,58 @@ namespace Helpers.Test.IO
             Assert.AreEqual(@".jpg", result);
         }
 
+
+        [TestMethod]
+        public void ChangeExtension()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\path.jpg");
+
+            // Execute
+            var result = path.ChangeExtension("txt", ".");
+
+            // Assert
+            Assert.AreEqual(@"\some\odd\path.txt", result);
+        }
+
+
+        [TestMethod]
+        public void ChangeExtensionWithPathWithoutExtension()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\path");
+
+            // Execute
+            var result = path.ChangeExtension("txt", ".");
+
+            // Assert
+            Assert.AreEqual(@"\some\odd\path.txt", result);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ChangeExtensionWithNullPath()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\path");
+
+            // Execute
+            path.ChangeExtension(a_extension:null, a_extensionMarker:".");
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ChangeExtensionWithNullExtensionMarker()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\path");
+
+            // Execute
+            path.ChangeExtension(a_extension: "txt", a_extensionMarker: null);
+        }
+
         [TestMethod]
         public void AddPaths()
         {
