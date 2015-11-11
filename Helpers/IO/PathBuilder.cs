@@ -292,5 +292,39 @@ namespace Helpers.IO
             return a_pathBuilder?.ToString();
         }
 
+        /// <summary>
+        /// Add the given segment (<paramref name="a_segment"/>) to the end of the given path (<paramref name="a_path"/>).
+        /// </summary>
+        /// <param name="a_path">Path.</param>
+        /// <param name="a_segment">Segment.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_segment"/> is null.</exception>
+        public static PathBuilder operator+(PathBuilder a_path, string a_segment)
+        {
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            if (a_segment == null)
+                throw new ArgumentNullException(nameof(a_segment));
+
+            #endregion
+
+            var delimiter = a_path._delimiter;
+            var path = a_path.ToString();
+
+            while (path.EndsWith(delimiter))
+                path = path.Substring(0, path.Length - delimiter.Length);
+
+            while (a_segment.StartsWith(delimiter))
+                a_segment = a_segment.Substring(delimiter.Length);
+
+            path = path + delimiter + a_segment;
+
+            return new PathBuilder(path);
+        }
+
     }
 }

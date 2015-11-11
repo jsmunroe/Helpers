@@ -510,6 +510,70 @@ namespace Helpers.Test.IO
             // Assert
             Assert.AreEqual(@".jpg", result);
         }
+
+        [TestMethod]
+        public void AddPaths()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd");
+
+            // Execute
+            path += @"path.jpg";
+
+            // Assert
+            Assert.AreEqual(@"\some\odd\path.jpg", path);
+        }
+
+
+        [TestMethod]
+        public void AddPathsWithEndingDelimiterOnPath()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\");
+
+            // Execute
+            path += @"path.jpg";
+
+            // Assert
+            Assert.AreEqual(@"\some\odd\path.jpg", path);
+        }
+
+        [TestMethod]
+        public void AddPathsWithStartingDelimiterOnSegment()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd");
+
+            // Execute
+            path += @"\path.jpg";
+
+            // Assert
+            Assert.AreEqual(@"\some\odd\path.jpg", path);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddPathWithNullPath()
+        {
+            // Setup
+            PathBuilder path = null;
+
+            // Execute
+            path += @"\path.jpg";
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AddPathWithNullSegment()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd");
+
+            // Execute
+            path += (string)null;
+        }
+
         [TestMethod]
         public void Temp()
         {
