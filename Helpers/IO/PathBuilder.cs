@@ -354,5 +354,52 @@ namespace Helpers.IO
             return new PathBuilder(path);
         }
 
+        /// <summary>
+        /// Get the relative path between given paths (<paramref name="a_first"/>, <paramref name="a_second"/>).
+        /// </summary>
+        /// <param name="a_first">First path.</param>
+        /// <param name="a_second">Second path.</param>
+        /// <returns>
+        /// Relative path.
+        /// Empty string if the paths are the same.
+        /// Null if there is no relationship.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_first"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_second"/> is null.</exception>
+        public static string Relative(PathBuilder a_first, PathBuilder a_second)
+        {
+            #region Argument Validation
+
+            if (a_first == null)
+                throw new ArgumentNullException(nameof(a_first));
+
+            if (a_second == null)
+                throw new ArgumentNullException(nameof(a_second));
+
+            #endregion
+
+            var first = a_first.ToString().ToLower();
+            var second = a_second.ToString().ToLower();
+
+            if (a_first._delimiter != a_second._delimiter)
+                throw new InvalidOperationException("Delimiter mismatch.");
+
+            if (first == second)
+                return "";
+
+            if (first.StartsWith(second))
+                return Relative(a_second, a_first);
+
+            if (!second.StartsWith(first))
+                return null;
+
+            var baseLength = first.Length;
+            var relative = second.Substring(baseLength);
+
+            while (relative.StartsWith(a_first._delimiter))
+                relative = relative.Substring(a_second._delimiter.Length);
+
+            return relative;
+        }
     }
 }

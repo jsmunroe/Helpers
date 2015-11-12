@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using Helpers.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -626,10 +627,107 @@ namespace Helpers.Test.IO
             path += (string)null;
         }
 
+
+        [TestMethod]
+        public void Relative()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd");
+            var child = PathBuilder.Create(@"\some\odd\path\or\other");
+
+            // Execute
+            var result = PathBuilder.Relative(path, child);
+
+            // Assert
+            Assert.AreEqual(@"path\or\other", result);
+        }
+
+
+        [TestMethod]
+        public void RelativeWithSwichedArguments()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd");
+            var child = PathBuilder.Create(@"\some\odd\path\or\other");
+
+            // Execute
+            var result = PathBuilder.Relative(child, path);
+
+            // Assert
+            Assert.AreEqual(@"path\or\other", result);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void RelativeWithDifferentDelimeters()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd");
+            var child = PathBuilder.Create(@":some:odd:path:or:other", ":");
+
+            // Execute
+            PathBuilder.Relative(child, path);
+        }
+
+        
+        [TestMethod]
+        public void RelativeWithSamePath()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\path");
+            var child = PathBuilder.Create(@"\some\odd\path");
+
+            // Execute
+            var result = PathBuilder.Relative(path, child);
+
+            // Assert
+            Assert.AreEqual(@"", result);
+        }
+
+
+        [TestMethod]
+        public void RelativeWithNoRelationship()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\other");
+            var child = PathBuilder.Create(@"\some\odd\path\or\other");
+
+            // Execute
+            var result = PathBuilder.Relative(path, child);
+
+            // Assert
+            Assert.IsNull(result);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void RelativeWithNullFirst()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\other");
+
+            // Execute
+            PathBuilder.Relative(a_first: null, a_second: path);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void RelativeWithNullSecond()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\other");
+
+            // Execute
+            PathBuilder.Relative(a_first: path, a_second: null);
+        }
+
         [TestMethod]
         public void Temp()
         {
-            Assert.AreEqual("filename.txt", System.IO.Path.GetFileNameWithoutExtension("filename.txt.dat"));
+            Assert.AreEqual("456789", "123456789".Substring(3));
         }
 
 

@@ -329,5 +329,43 @@ namespace Helpers.Test.Collections
             file.CopyTo(a_dest: dest, a_fileCopier: null);
         }
 
+
+        //[TestMethod]
+        public void Temp()
+        {
+            var fileSystem = new TestFileSystem();
+            var pathTree = new PathTree<IFile>();
+            pathTree.CreateDirectory(@"urban stuff");
+            pathTree.CreateFile(@"urban stuff\urban1.hsf", fileSystem.StageFile(@"x:\root\urban stuff\urban1.hsf"));
+            pathTree.CreateFile(@"urban stuff\urban1.jpg", fileSystem.StageFile(@"x:\root\urban stuff\urban1.jpg"));
+            pathTree.CreateFile(@"urban stuff\urban2.hsf", fileSystem.StageFile(@"x:\root\urban stuff\urban2.hsf"));
+            pathTree.CreateFile(@"urban stuff\urban2.jpg", fileSystem.StageFile(@"x:\root\urban stuff\urban2.jpg"));
+            pathTree.CreateFile(@"urban stuff\urban3.hsf", fileSystem.StageFile(@"x:\root\urban stuff\urban3.hsf"));
+            pathTree.CreateFile(@"urban stuff\urban3.jpg", fileSystem.StageFile(@"x:\root\urban stuff\urban3.jpg"));
+            pathTree.CreateDirectory(@"curved case stuff");
+            pathTree.CreateFile(@"curved case stuff\curved1.hsf", fileSystem.StageFile(@"x:\root\curved case stuff\curved1.hsf"));
+            pathTree.CreateFile(@"curved case stuff\curved1.jpg", fileSystem.StageFile(@"x:\root\curved case stuff\curved1.jpg"));
+            pathTree.CreateFile(@"curved case stuff\curved2.hsf", fileSystem.StageFile(@"x:\root\curved case stuff\curved2.hsf"));
+            pathTree.CreateFile(@"curved case stuff\curved2.jpg", fileSystem.StageFile(@"x:\root\curved case stuff\curved2.jpg"));
+            pathTree.CreateFile(@"curved case stuff\curved3.hsf", fileSystem.StageFile(@"x:\root\curved case stuff\curved3.hsf"));
+            pathTree.CreateFile(@"curved case stuff\curved3.jpg", fileSystem.StageFile(@"x:\root\curved case stuff\curved3.jpg"));
+
+            IFile file = new PathFile<IFile>(pathTree, @"urban stuff\urban1.hsf");
+            IFile destination = new PathFile<IFile>(pathTree, @"curved case stuff\carved urban1.esa");
+
+            if (file.Exists)
+                file.CopyTo(destination);
+
+            file = file.ChangeExtension(".jpg");
+            destination = destination.ChangeExtension(".jpg");
+
+            if (file.Exists)
+                file.CopyTo(destination);
+
+            Assert.IsFalse(pathTree.FileExists(@"urban stuff\urban1.hsf"));
+            Assert.IsTrue(pathTree.FileExists(@"curved case stuff\carved urban1.esa"));
+        }
+
+
     }
 }
