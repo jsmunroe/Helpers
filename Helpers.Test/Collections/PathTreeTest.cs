@@ -518,5 +518,20 @@ namespace Helpers.Test.Collections
         }
 
 
+        [TestMethod]
+        public void DeleteDirectoryWithPartialName()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            fileSystem.CreateDirectory(@"x:\directory\this is a directory");
+            fileSystem.CreateDirectory(@"x:\directory\this is");
+
+            // Execute
+            fileSystem.DeleteDirectory(@"x:\directory\this is");
+
+            // Assert
+            Assert.IsTrue(fileSystem.DirectoryExists(@"x:\directory\this is a directory"));
+        }
+
     }
 }
