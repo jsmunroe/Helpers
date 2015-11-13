@@ -740,5 +740,23 @@ namespace Helpers.Test.Test
                 Assert.AreEqual("Yet more data.", data);
             }
         }
+
+
+        [TestMethod]
+        public void DeleteDirectoryWithPartialName()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.StageDirectory(@"x:\directory\this is a directory");
+            fileSystem.StageDirectory(@"x:\directory\this is");
+
+            // Execute
+            fileSystem.DeleteDirectory(@"x:\directory\this is");
+
+            // Assert
+            Assert.IsTrue(fileSystem.DirectoryExists(@"x:\directory\this is a directory"));
+        }
+
+
     }
 }

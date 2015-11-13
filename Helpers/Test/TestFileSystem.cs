@@ -76,7 +76,16 @@ namespace Helpers.Test
 
             a_path = PreparePath(a_path);
 
-            var toDelete = _directories.Keys.Where(i => i.StartsWith(a_path, StringComparison.OrdinalIgnoreCase)).ToArray();
+            var toDelete = _directories.Keys.Where(i =>
+            {
+                if (i.Equals(a_path, StringComparison.OrdinalIgnoreCase))
+                    return true;
+
+                if (i.StartsWith(a_path + "\\", StringComparison.OrdinalIgnoreCase))
+                    return true;
+
+                return false;
+            }).ToArray();
 
             foreach (var key in toDelete)
                 _directories.Remove(key);
