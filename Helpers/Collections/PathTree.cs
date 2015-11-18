@@ -336,6 +336,24 @@ namespace Helpers.Collections
         }
 
         /// <summary>
+        /// Clone this tree.
+        /// </summary>
+        /// <returns>Clone of this tree.</returns>
+        public PathTree<TLeaf> Clone()
+        {
+            var clone = new PathTree<TLeaf>();
+
+            foreach (var keyValue in _directories)
+            {
+                var clonedDirectory = keyValue.Value.ToDictionary(i => i.Key, i => i.Value);
+
+                clone._directories.Add(keyValue.Key, clonedDirectory);
+            }
+
+            return clone;
+        }   
+
+        /// <summary>
         /// Prepare the given path (<paramref name="a_path"/>).
         /// </summary>
         /// <param name="a_path">PathResult to prepare.</param>
