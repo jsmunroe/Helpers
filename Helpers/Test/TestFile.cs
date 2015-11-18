@@ -149,7 +149,14 @@ namespace Helpers.Test
                 LastModifiedTimeUtc = DateTime.UtcNow,
             };
 
-            FileSystem.StageFile(a_dest.Path, stats);
+            var file = a_dest as TestFile;
+
+            if (file?.FileSystem == null)
+                return; // Cannot create another type of file system's file.
+
+            var fileSystem = file.FileSystem;
+
+            fileSystem.StageFile(a_dest.Path, stats);
         }
 
         /// <summary>
