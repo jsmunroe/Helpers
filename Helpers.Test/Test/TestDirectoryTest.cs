@@ -467,8 +467,8 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            var directory = fileSystem.StageDirectory(@"\directory");
-            var file = fileSystem.StageFile(@"\file1.dat");
+            var directory = fileSystem.StageDirectory(@"C:\directory");
+            var file = fileSystem.StageFile(@"C:\file1.dat");
 
             // Execute
             var result = directory.CopyIn(file);
