@@ -97,10 +97,30 @@ namespace Helpers.IO
 
             #endregion
 
-            if (!TargetFile.Exists)
+            a_dest.CopyFrom(this); // This allows "CopyTo" to work in betweeen file system types.
+        }
+
+        /// <summary>
+        /// Copy from the given file (<paramref name="a_source"/> to this one overwriting if necessary..
+        /// </summary>
+        /// <param name="a_source">File from which to copy.</param>
+        public void CopyFrom(IFile a_source)
+        {
+            #region Argument Validation
+
+            if (a_source == null)
+                throw new ArgumentNullException(nameof(a_source));
+
+            #endregion
+
+            if (!a_source.Exists)
                 throw new FileNotFoundException("File cannot be copied because it does not exist.");
 
-            TargetFile.CopyTo(a_dest.Path, true);
+            var source = a_source as FsFile;
+            if (source == null)
+                throw new InvalidOperationException($"Cannot copy from a source of type\"{a_source.GetType().Name}\".");
+
+            TargetFile.CopyTo(a_source.Path, true);
         }
 
         /// <summary>

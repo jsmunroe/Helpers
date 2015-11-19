@@ -78,5 +78,21 @@ namespace Helpers.Test
         /// Data for this file.
         /// </summary>
         public byte[] Data { get; set; } = new byte[0];
+
+        /// <summary>
+        /// Clone this instance.
+        /// </summary>
+        /// <returns>Clone of this instance.</returns>
+        public TestFileInstance Clone()
+        {
+            return new TestFileInstance
+            {
+                Size = Size,
+                Tag = Tag,
+                CreatedTimeUtc =  CreatedTimeUtc,
+                LastModifiedTimeUtc = LastModifiedTimeUtc,
+                Data = (Data.Clone() as byte[]) ?? new byte[0]
+            };
+        }
     }
 }

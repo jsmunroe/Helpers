@@ -284,6 +284,65 @@ namespace Helpers.Test.Collections
         }
 
         [TestMethod]
+        public void CopyFrom()
+        {
+            // Setup
+            var pathTree = new PathTree<string>();
+            var source = pathTree.CreateFile(@"x:\directory\File.bmp", "Value");
+            var file = new PathFile<string>(pathTree, @"x:\directory\file2.bmp");
+
+            // Execute
+            file.CopyFrom(source);
+
+            // Assert
+            Assert.IsTrue(file.Exists);
+            Assert.AreEqual("Value", file.Value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CopyFromWithNullDest()
+        {
+            // Setup
+            var pathTree = new PathTree<string>();
+            var file = new PathFile<string>(pathTree, @"x:\directory\file2.bmp");
+
+            // Execute
+            file.CopyFrom(a_source: null);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void CopyFromWithNotExistingSource()
+        {
+            // Setup
+            var pathTree = new PathTree<string>();
+            pathTree.CreateDirectory(@"x:\directory");
+            var source = new PathFile<string>(pathTree, @"x:\directory\File.bmp");
+            var file = new PathFile<string>(pathTree, @"x:\directory\file2.bmp");
+
+            // Execute
+            file.CopyFrom(source);
+        }
+
+        [TestMethod]
+        public void CopyFromWithExistingDest()
+        {
+            // Setup
+            var pathTree = new PathTree<string>();
+            var source = pathTree.CreateFile(@"x:\directory\File.bmp", "Value");
+            var file = pathTree.CreateFile(@"x:\directory\File2.bmp", "Value2");
+
+            // Execute
+            file.CopyFrom(source);
+
+            // Assert
+            Assert.IsTrue(file.Exists);
+            Assert.AreEqual("Value", file.Value);
+        }
+
+        [TestMethod]
         public void CopyToWithCopier()
         {
             // Setup

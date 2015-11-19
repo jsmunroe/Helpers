@@ -109,13 +109,34 @@ namespace Helpers.Collections
 
             #endregion
 
-            if (!Directory.Exists)
+            a_dest.CopyFrom(this); // This allows "CopyTo" to work in betweeen file system types.
+        }
+
+        /// <summary>
+        /// Copy from the given file (<paramref name="a_source"/> to this one overwriting if necessary..
+        /// </summary>
+        /// <param name="a_source">File from which to copy.</param>
+        public void CopyFrom(IFile a_source)
+        {
+            #region Argument Validation
+
+            if (a_source == null)
+                throw new ArgumentNullException(nameof(a_source));
+
+            #endregion
+
+            if (!a_source.Directory.Exists)
                 throw new DirectoryNotFoundException("Cannot CopyTo because directory of source file does not exist");
 
-            if (!Exists)
+            if (!a_source.Exists)
                 throw new FileNotFoundException("Cannot CopyTo because source file does not exist.");
 
-            FileSystem.CreateFile(a_dest.Path, Value);
+            TLeaf value = default(TLeaf);
+            var source = a_source as PathFile<TLeaf>;
+            if (source != null)
+                value = source.Value;
+
+            FileSystem.CreateFile(Path, value);
         }
 
         /// <summary>

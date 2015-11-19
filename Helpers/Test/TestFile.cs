@@ -35,7 +35,7 @@ namespace Helpers.Test
 
             FileSystem = a_fileSystem ?? new TestFileSystem();
             Path = new PathBuilder(a_path);
-            
+
             Name = PathBuilder.Create(Path).Name();
         }
 
@@ -77,17 +77,22 @@ namespace Helpers.Test
         /// <summary>
         /// Size of the file.
         /// </summary>
-        public long Size => FileSystem.GetFileInstance(Path).Size;
+        public long Size => Instance.Size;
 
         /// <summary>
         /// Time of creation (UTC).
         /// </summary>
-        public DateTime CreatedTimeUtc => FileSystem.GetFileInstance(Path).CreatedTimeUtc;
+        public DateTime CreatedTimeUtc => Instance.CreatedTimeUtc;
 
         /// <summary>
         /// Time of last modification (UTC).
         /// </summary>
-        public DateTime LastModifiedTimeUtc => FileSystem.GetFileInstance(Path).LastModifiedTimeUtc;
+        public DateTime LastModifiedTimeUtc => Instance.LastModifiedTimeUtc;
+
+        /// <summary>
+        /// Get the test file instance for this item.
+        /// </summary>
+        public TestFileInstance Instance => FileSystem.GetFileInstance(Path);
 
         /// <summary>
         /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
@@ -136,27 +141,35 @@ namespace Helpers.Test
 
             #endregion
 
-            if (!Directory.Exists)
+            a_dest.CopyFrom(this); // This allows "CopyTo" to work in betweeen file system types.
+        }
+
+        /// <summary>
+        /// Copy from the given file (<paramref name="a_source"/> to this one overwriting if necessary..
+        /// </summary>
+        /// <param name="a_source">File from which to copy.</param>
+        public void CopyFrom(IFile a_source)
+        {
+            #region Argument Validation
+
+            if (a_source == null)
+                throw new ArgumentNullException(nameof(a_source));
+
+            #endregion
+
+            if (!a_source.Directory.Exists)
                 throw new DirectoryNotFoundException("Cannot CopyTo because directory of source file does not exist");
 
-            if (!Exists)
+            if (!a_source.Exists)
                 throw new FileNotFoundException("Cannot CopyTo because source file does not exist.");
 
-            var stats = new TestFileInstance
-            {
-                Size = Size,
-                CreatedTimeUtc = DateTime.UtcNow,
-                LastModifiedTimeUtc = DateTime.UtcNow,
-            };
+            TestFileInstance instance = null;
 
-            var file = a_dest as TestFile;
+            var source = a_source as TestFile;
+            if (source != null)
+                instance = source.Instance.Clone();
 
-            if (file?.FileSystem == null)
-                return; // Cannot create another type of file system's file.
-
-            var fileSystem = file.FileSystem;
-
-            fileSystem.StageFile(a_dest.Path, stats);
+            FileSystem.StageFile(Path, instance);
         }
 
         /// <summary>

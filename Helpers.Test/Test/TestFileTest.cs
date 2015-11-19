@@ -266,6 +266,64 @@ namespace Helpers.Test.Test
             Assert.IsTrue(dest.Exists);
             Assert.AreEqual(240, dest.Size);
         }
+        [TestMethod]
+        public void CopyFrom()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var source = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileInstance { Size = 240 });
+            var file = new TestFile(fileSystem, @"x:\directory\file2.bmp");
+
+            // Execute
+            file.CopyFrom(source);
+
+            // Assert
+            Assert.IsTrue(file.Exists);
+            Assert.AreEqual(240, file.Size);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CopyFromWithNullDest()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = new TestFile(fileSystem, @"x:\directory\file2.bmp");
+
+            // Execute
+            file.CopyFrom(a_source: null);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void CopyFromWithNotExistingSource()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            fileSystem.StageDirectory(@"x:\directory");
+            var source = new TestFile(fileSystem, @"x:\directory\File.bmp");
+            var file = new TestFile(fileSystem, @"x:\directory\file2.bmp");
+
+            // Execute
+            file.CopyFrom(source);
+        }
+
+        [TestMethod]
+        public void CopyFromWithExistingDest()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var source = fileSystem.StageFile(@"x:\directory\File.bmp", new TestFileInstance { Size = 240 });
+            var file = fileSystem.StageFile(@"x:\directory\File2.bmp", new TestFileInstance { Size = 480 });
+
+            // Execute
+            file.CopyFrom(source);
+
+            // Assert
+            Assert.IsTrue(file.Exists);
+            Assert.AreEqual(240, file.Size);
+        }
 
 
         [TestMethod]

@@ -28,10 +28,16 @@ namespace Helpers.Contracts
         void Delete();
 
         /// <summary>
-        /// Copy from the given file (<paramref name="a_dest"/>) to this file.
+        /// Copy this file to the given file (<paramref name="a_dest"/>) overwriting if necessary.
         /// </summary>
-        /// <param name="a_dest">File from which to copy.</param>
+        /// <param name="a_dest">File to which to copy.</param>
         void CopyTo(IFile a_dest);
+
+        /// <summary>
+        /// Copy from the given file (<paramref name="a_source"/> to this one overwriting if necessary..
+        /// </summary>
+        /// <param name="a_source">File from which to copy.</param>
+        void CopyFrom(IFile a_source);
 
         /// <summary>
         /// Create a file that is this file but with the given extension (<paramref name="a_extension"/>).
