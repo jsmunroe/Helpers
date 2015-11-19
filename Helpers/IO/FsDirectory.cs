@@ -192,6 +192,33 @@ namespace Helpers.IO
         }
 
         /// <summary>
+        /// Copy the given file (<paramref name="a_file"/>) into this directory keeping the file name the same overwrite if necessary.
+        /// </summary>
+        /// <param name="a_file">File to copy.</param>
+        public IFile CopyIn(IFile a_file)
+        {
+            #region Argument Validation
+
+            if (a_file == null)
+                throw new ArgumentNullException(nameof(a_file));
+
+            #endregion
+
+            if (!a_file.Exists)
+                throw new FileNotFoundException($"File at path \"{a_file.Path}\" does not exist.");
+
+            if (!Exists)
+                throw new DirectoryNotFoundException($"Directory at path \"{Path}\" does not exist.");
+
+            var newPath = Path.Child(a_file.Name);
+
+            var file = new FsFile(newPath);
+            file.CopyFrom(a_file);
+
+            return file;
+        }
+
+        /// <summary>
         /// Returns a string that represents the current object.
         /// </summary>
         /// <returns>A string that represents the current object.</returns>

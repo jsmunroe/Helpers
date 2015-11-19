@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using Helpers.Contracts;
 
 namespace Helpers.Extensions
@@ -109,6 +110,5 @@ namespace Helpers.Extensions
                 directory.CopyTo(dest);
             }
         }
-
     }
 }

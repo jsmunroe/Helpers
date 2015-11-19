@@ -34,7 +34,7 @@ namespace Helpers.Test
             #endregion
 
             FileSystem = a_fileSystem ?? new TestFileSystem();
-            Path = new PathBuilder(a_path);
+            Path = new PathBuilder(a_path).WithRoot(PathBuilder.WindowsDriveRoot);
 
             Name = PathBuilder.Create(Path).Name();
         }
@@ -66,7 +66,7 @@ namespace Helpers.Test
         {
             get
             {
-                var parentPath = PathBuilder.Create(Path).Parent();
+                var parentPath = Path.Parent();
                 if (parentPath == null)
                     return null;
 

@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Helpers.Collections;
+using Helpers.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Helpers.Test.Collections
@@ -456,6 +457,81 @@ namespace Helpers.Test.Collections
 
 
         [TestMethod]
+        public void CopyIn()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = fileSystem.CreateDirectory(@"\directory");
+            var file = fileSystem.CreateFile(@"\file1.dat", "Value");
+
+            // Execute
+            var result = directory.CopyIn(file);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Exists);
+            Assert.AreEqual(@"\directory\file1.dat", result.Path);
+            Assert.IsTrue(fileSystem.FileExists(@"\directory\file1.dat"));
+            Assert.IsInstanceOfType(result, typeof (PathFile<string>));
+            Assert.AreSame(fileSystem, (result as PathFile<string>)?.FileSystem);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CopyInWithNullFile()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = fileSystem.CreateDirectory(@"\directory");
+            fileSystem.CreateFile(@"\file1.dat", "Value");
+
+            // Execute
+            directory.CopyIn(a_file: null);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void CopyInWithNotExistingFile()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = fileSystem.CreateDirectory(@"\directory");
+            var file = new PathFile<string>(fileSystem, @"\file1.dat");
+
+            // Execute
+            directory.CopyIn(file);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void CopyInWithNotExistingDirectory()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = fileSystem.CreateDirectory(@"\directory");
+            var file = new PathFile<string>(fileSystem, @"\noexisty\file1.dat");
+
+            // Execute
+            directory.CopyIn(file);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
+        public void CopyInOnNotExistingDirectory()
+        {
+            // Setup
+            var fileSystem = new PathTree<string>();
+            var directory = new PathDirectory<string>(@"\directory");
+            var file = fileSystem.CreateFile(@"\file1.dat", "Value");
+
+            // Execute
+            directory.CopyIn(file);
+        }
+
+        [TestMethod]
         public void CustomTest_I()
         {
             var fileSystem = new PathTree<string>();
@@ -473,7 +549,6 @@ namespace Helpers.Test.Collections
 
             Assert.IsTrue(result);
         }
-
 
     }
 }

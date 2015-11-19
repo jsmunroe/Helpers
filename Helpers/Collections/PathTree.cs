@@ -360,7 +360,8 @@ namespace Helpers.Collections
         /// <returns>Prepared.</returns>
         protected virtual string PreparePath(string a_path)
         {
-            if (!Regex.IsMatch(a_path, @"^(?:[a-zA-Z]\:\\)$"))
+            if (!Regex.IsMatch(a_path, @"^(?:[a-zA-Z]\:\\)$") && 
+                !Regex.IsMatch(a_path, @"^\\$"))
                 a_path = a_path.TrimEnd('\\');
 
             return a_path;

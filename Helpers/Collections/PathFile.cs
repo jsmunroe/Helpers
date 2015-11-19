@@ -40,11 +40,6 @@ namespace Helpers.Collections
         public PathBuilder Path { get; }
 
         /// <summary>
-        /// Time of creation (UTC).
-        /// </summary>
-        public DateTime CreatedTimeUtc { get; }
-
-        /// <summary>
         /// Whether the file exists.
         /// </summary>
         public bool Exists => FileSystem.FileExists(Path);
@@ -235,7 +230,7 @@ namespace Helpers.Collections
         {
             get
             {
-                var parentPath = PathBuilder.Create(Path).Parent();
+                var parentPath = Path.Parent();
                 if (parentPath == null)
                     return null;
 

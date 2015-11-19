@@ -88,5 +88,11 @@ namespace Helpers.Contracts
         /// Refresh the state of this directory.
         /// </summary>
         void Refresh();
+
+        /// <summary>
+        /// Copy the given file (<paramref name="a_file"/>) into this directory keeping the file name the same overwrite if necessary.
+        /// </summary>
+        /// <param name="a_file">File to copy.</param>
+        IFile CopyIn(IFile a_file);
     }
 }
