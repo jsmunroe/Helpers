@@ -168,8 +168,8 @@ namespace Helpers.Test.Extensions
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            var directory = fileSystem.StageDirectory(@"\directory");
-            var other = fileSystem.StageDirectory(@"\other");
+            var directory = fileSystem.StageDirectory(@"D:\directory");
+            var other = fileSystem.StageDirectory(@"D:\other");
 
             // Executea
             var result = DirectoryHelpers.CopyIn(directory, other);
@@ -177,8 +177,8 @@ namespace Helpers.Test.Extensions
             // Assert
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Exists);
-            Assert.AreEqual(@"C:\directory\other", result.Path);
-            Assert.IsTrue(fileSystem.DirectoryExists(@"\directory\other"));
+            Assert.AreEqual(@"D:\directory\other", result.Path);
+            Assert.IsTrue(fileSystem.DirectoryExists(@"D:\directory\other"));
             Assert.IsInstanceOfType(result, typeof(TestDirectory));
             Assert.AreSame(fileSystem, (result as TestDirectory)?.FileSystem);
         }
