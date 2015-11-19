@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Helpers.Contracts;
@@ -110,5 +111,38 @@ namespace Helpers.Extensions
                 directory.CopyTo(dest);
             }
         }
+
+        /// <summary>
+        /// Copy the given directory (<paramref name="a_directory"/>) into "this" directory (<paramref name="a_this"/>).
+        /// </summary>
+        /// <param name="a_this">"This" directory.</param>
+        /// <param name="a_directory">Directory to copy.</param>
+        /// <exception cref="NullReferenceException">Thrown if <paramref name="a_this"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_directory"/> is null.</exception>
+        public static IDirectory CopyIn(this IDirectory a_this, IDirectory a_directory)
+        {
+            #region Argument Validation
+
+            if (a_this == null)
+                throw new NullReferenceException(nameof(a_this));
+
+            if (a_directory == null)
+                throw new ArgumentNullException(nameof(a_directory));
+
+            #endregion
+
+            if (!a_directory.Exists)
+                throw new DirectoryNotFoundException($"Directory at path \"{a_directory.Path}\" does not exist.");
+
+            if (!a_this.Exists)
+                throw new DirectoryNotFoundException($"Directory at path \"{a_this.Path}\" does not exist.");
+
+            var newDirectory = a_this.Directory(a_directory.Name);
+            a_directory.CopyTo(newDirectory);
+
+            return newDirectory;
+        }
+
+
     }
 }

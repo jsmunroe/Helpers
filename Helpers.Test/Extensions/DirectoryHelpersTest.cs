@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -161,5 +162,66 @@ namespace Helpers.Test.Extensions
             // Execute
             DirectoryHelpers.CopyTo(a_this: null, a_destination: dest);
         }
+
+        [TestMethod]
+        public void CopyIn()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = fileSystem.StageDirectory(@"\directory");
+            var other = fileSystem.StageDirectory(@"\other");
+
+            // Executea
+            var result = DirectoryHelpers.CopyIn(directory, other);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Exists);
+            Assert.AreEqual(@"C:\directory\other", result.Path);
+            Assert.IsTrue(fileSystem.DirectoryExists(@"\directory\other"));
+            Assert.IsInstanceOfType(result, typeof(TestDirectory));
+            Assert.AreSame(fileSystem, (result as TestDirectory)?.FileSystem);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CopyInWithNullDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = fileSystem.StageDirectory(@"\directory");
+
+            // Execute
+            DirectoryHelpers.CopyIn(directory, a_directory: null);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
+        public void CopyInWithNotExistingDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = fileSystem.StageDirectory(@"\directory");
+            var other = new TestDirectory(fileSystem, @"\other");
+
+            // Execute
+            DirectoryHelpers.CopyIn(directory, other);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(DirectoryNotFoundException))]
+        public void CopyInOnNotExistingDirectory()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var directory = new TestDirectory(@"\directory");
+            var file = fileSystem.StageDirectory(@"\.dat");
+
+            // Execute
+            directory.CopyIn(file);
+        }
+
     }
 }
