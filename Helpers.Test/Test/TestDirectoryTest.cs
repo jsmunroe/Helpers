@@ -467,8 +467,8 @@ namespace Helpers.Test.Test
         {
             // Setup
             var fileSystem = new TestFileSystem();
-            var directory = fileSystem.StageDirectory(@"C:\directory");
-            var file = fileSystem.StageFile(@"C:\file1.dat");
+            var directory = fileSystem.StageDirectory(@"D:\directory");
+            var file = fileSystem.StageFile(@"D:\file1.dat");
 
             // Execute
             var result = directory.CopyIn(file);
@@ -476,8 +476,8 @@ namespace Helpers.Test.Test
             // Assert
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Exists);
-            Assert.AreEqual(@"C:\directory\file1.dat", result.Path);
-            Assert.IsTrue(fileSystem.FileExists(@"\directory\file1.dat"));
+            Assert.AreEqual(@"D:\directory\file1.dat", result.Path);
+            Assert.IsTrue(fileSystem.FileExists(@"D:\directory\file1.dat"));
             Assert.IsInstanceOfType(result, typeof(TestFile));
             Assert.AreSame(fileSystem, (result as TestFile)?.FileSystem);
         }
