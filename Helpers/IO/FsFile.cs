@@ -120,7 +120,7 @@ namespace Helpers.IO
             if (source == null)
                 throw new InvalidOperationException($"Cannot copy from a source of type\"{a_source.GetType().Name}\".");
 
-            TargetFile.CopyTo(a_source.Path, true);
+            File.Copy(a_source.Path, Path, true);
         }
 
         /// <summary>
