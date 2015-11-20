@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -61,6 +62,46 @@ namespace Helpers.IO
             _delimiter = a_other._delimiter;
             _rootPattern = a_other._rootPattern;
             _padRoot = a_other._padRoot;
+        }
+
+        /// <summary>
+        /// Get all ancestor paths to this path from parent to child.
+        /// </summary>
+        public PathBuilder[] Ancestors
+        {
+            get
+            {
+                var ancestors = new List<PathBuilder>();
+                var path = Parent();
+                while (path != null)
+                {
+                    ancestors.Add(path);
+                    path = path.Parent();
+                }
+
+                ancestors.Reverse();
+                return ancestors.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Get all ancestor paths and this path to this path from parent to child.
+        /// </summary>
+        public PathBuilder[] AncestorsAndSelf
+        {
+            get
+            {
+                var ancestors = new List<PathBuilder>();
+                var path = this;
+                while (path != null)
+                {
+                    ancestors.Add(path);
+                    path = path.Parent();
+                }
+
+                ancestors.Reverse();
+                return ancestors.ToArray();
+            }
         }
 
         /// <summary>

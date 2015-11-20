@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom;
+using System.Linq;
 using Helpers.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -723,6 +724,95 @@ namespace Helpers.Test.IO
             // Execute
             PathBuilder.Relative(a_first: path, a_second: null);
         }
+
+
+        [TestMethod]
+        public void GetAncestors()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\path\or\other");
+
+            // Execute
+            var result = path.Ancestors;
+
+            // Assert
+            Assert.AreEqual(5, result.Length);
+            CollectionAssert.AreEqual(new [] {@"\", @"\some", @"\some\odd", @"\some\odd\path", @"\some\odd\path\or"  }, result.Select(i => i.ToString()).ToArray());
+        }
+
+
+        [TestMethod]
+        public void GetAncestorsOnEmptyPath()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"");
+
+            // Execute
+            var result = path.Ancestors;
+
+            // Assert
+            Assert.AreEqual(0, result.Length);
+        }
+
+
+        [TestMethod]
+        public void GetAncestorsOnRoot()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"C:\");
+
+            // Execute
+            var result = path.Ancestors;
+
+            // Assert
+            Assert.AreEqual(0, result.Length);
+        }
+
+        [TestMethod]
+        public void GetAncestorsAndSelf()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"\some\odd\path\or\other");
+
+            // Execute
+            var result = path.AncestorsAndSelf;
+
+            // Assert
+            Assert.AreEqual(6, result.Length);
+            CollectionAssert.AreEqual(new[] { @"\", @"\some", @"\some\odd", @"\some\odd\path", @"\some\odd\path\or", @"\some\odd\path\or\other" }, result.Select(i => i.ToString()).ToArray());
+        }
+
+
+        [TestMethod]
+        public void GetAncestorsOnEmptyPathAndSelf()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"");
+
+            // Execute
+            var result = path.AncestorsAndSelf;
+
+            // Assert
+            Assert.AreEqual(1, result.Length);
+            CollectionAssert.AreEqual(new[] { @"" }, result.Select(i => i.ToString()).ToArray());
+        }
+
+
+        [TestMethod]
+        public void GetAncestorsOnRootAndSelf()
+        {
+            // Setup
+            var path = PathBuilder.Create(@"C:\");
+
+            // Execute
+            var result = path.AncestorsAndSelf;
+
+            // Assert
+            Assert.AreEqual(1, result.Length);
+            CollectionAssert.AreEqual(new[] { @"C:\" }, result.Select(i => i.ToString()).ToArray());
+        }
+
+
 
         [TestMethod]
         public void Temp()
