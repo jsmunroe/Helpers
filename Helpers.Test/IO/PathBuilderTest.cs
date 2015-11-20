@@ -272,7 +272,7 @@ namespace Helpers.Test.IO
             var result = path.Parent();
 
             // Assert
-            Assert.IsNull(result);
+            Assert.AreEqual("", result);
         }
 
         [TestMethod]
@@ -759,7 +759,7 @@ namespace Helpers.Test.IO
         public void GetAncestorsOnRoot()
         {
             // Setup
-            var path = PathBuilder.Create(@"C:\");
+            var path = PathBuilder.Create(@"C:\").WithRoot(PathBuilder.WindowsDriveRoot);
 
             // Execute
             var result = path.Ancestors;
@@ -802,7 +802,7 @@ namespace Helpers.Test.IO
         public void GetAncestorsOnRootAndSelf()
         {
             // Setup
-            var path = PathBuilder.Create(@"C:\");
+            var path = PathBuilder.Create(@"C:\").WithRoot(PathBuilder.WindowsDriveRoot);
 
             // Execute
             var result = path.AncestorsAndSelf;

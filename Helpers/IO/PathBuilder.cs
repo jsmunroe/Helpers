@@ -208,7 +208,7 @@ namespace Helpers.IO
                 lastIndex = _path.LastIndexOf(_delimiter, lastIndex - 1, StringComparison.Ordinal);
 
             if (lastIndex < 0)
-                return null;
+                return ApplyOptions(Create(""));
 
             var value = _path.Substring(0, lastIndex);
 
