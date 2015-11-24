@@ -826,7 +826,140 @@ namespace Helpers.Test.IO
             // Assert
             Assert.IsTrue(result);
         }
-        
+
+
+        [TestMethod]
+        public void EqualsWithDifferentCase()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a\path");
+            var second = PathBuilder.Create(@"\This\Is\A\Path");
+
+            // Execute
+            var result = first.Equals(second);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+
+        [TestMethod]
+        public void EqualsWithParent()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a\path");
+            var second = PathBuilder.Create(@"\this\is\a");
+
+            // Execute
+            var result = first.Equals(second);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+        [TestMethod]
+        public void EqualsWithChild()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a\path");
+            var second = PathBuilder.Create(@"\this\is\a\path\again");
+
+            // Execute
+            var result = first.Equals(second);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+        [TestMethod]
+        public void EqualsWithNullPath()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a");
+
+            // Execute
+            var result = first.Equals(a_other: (PathBuilder)null);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void EqualsWithString()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a\path");
+            var second = @"\this\is\a\path";
+
+            // Execute
+            var result = first.Equals(second);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void EqualsWithDifferentCaseAsString()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a\path");
+            var second = @"\This\Is\A\Path";
+
+            // Execute
+            var result = first.Equals(second);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+
+        [TestMethod]
+        public void EqualsWithParentAsString()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a\path");
+            var second = @"\this\is\a";
+
+            // Execute
+            var result = first.Equals(second);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+        [TestMethod]
+        public void EqualsWithChildAsString()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a\path");
+            var second = @"\this\is\a\path\again";
+
+            // Execute
+            var result = first.Equals(second);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+        [TestMethod]
+        public void EqualsWithNullString()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a\path");
+
+            // Execute
+            var result = first.Equals(a_other: (string) null);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+
+
         [TestMethod]
         public void Temp()
         {
