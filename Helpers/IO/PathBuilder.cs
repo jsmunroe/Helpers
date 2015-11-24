@@ -353,49 +353,6 @@ namespace Helpers.IO
         }
 
         /// <summary>
-        /// Implicit cast operator to string.
-        /// </summary>
-        /// <param name="a_pathBuilder">Full path instance.</param>
-        public static implicit operator string (PathBuilder a_pathBuilder)
-        {
-            return a_pathBuilder?.ToString();
-        }
-
-        /// <summary>
-        /// Add the given segment (<paramref name="a_segment"/>) to the end of the given path (<paramref name="a_path"/>).
-        /// </summary>
-        /// <param name="a_path">Path.</param>
-        /// <param name="a_segment">Segment.</param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
-        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_segment"/> is null.</exception>
-        public static PathBuilder operator+(PathBuilder a_path, string a_segment)
-        {
-            #region Argument Validation
-
-            if (a_path == null)
-                throw new ArgumentNullException(nameof(a_path));
-
-            if (a_segment == null)
-                throw new ArgumentNullException(nameof(a_segment));
-
-            #endregion
-
-            var delimiter = a_path._delimiter;
-            var path = a_path.ToString();
-
-            while (path.EndsWith(delimiter))
-                path = path.Substring(0, path.Length - delimiter.Length);
-
-            while (a_segment.StartsWith(delimiter))
-                a_segment = a_segment.Substring(delimiter.Length);
-
-            path = path + delimiter + a_segment;
-
-            return new PathBuilder(path);
-        }
-
-        /// <summary>
         /// Get the relative path between given paths (<paramref name="a_first"/>, <paramref name="a_second"/>).
         /// </summary>
         /// <param name="a_first">First path.</param>
@@ -442,5 +399,103 @@ namespace Helpers.IO
 
             return relative;
         }
+
+        /// <summary>
+        /// Determine whether the other given object (<paramref name="obj"/>) is equal to this one.
+        /// </summary>
+        /// <param name="obj">Other object.</param>
+        /// <returns>True iff objects are equal.</returns>
+        public override bool Equals(object obj)
+        {
+            // See the full list of guidelines at http://go.microsoft.com/fwlink/?LinkID=85237  
+            // and also the guidance for operator== at http://go.microsoft.com/fwlink/?LinkId=85238
+
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            if (Equals(obj as PathBuilder))
+                return true;
+
+            if (Equals(obj as string))
+                return true;
+
+            return base.Equals(obj);
+        }
+
+        /// <summary>
+        /// Determine whether the other given path (<paramref name="a_other"/>) is equal to this one.
+        /// </summary>
+        /// <param name="a_other">Other path.</param>
+        /// <returns>True iff paths are equal.</returns>
+        public bool Equals(PathBuilder a_other)
+        {
+            if (a_other == null)
+                return false;
+
+            return _path.Equals(a_other._path, StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
+        /// Determine whether the other given path (<paramref name="a_other"/>) is equal to this one.
+        /// </summary>
+        /// <param name="a_other">Other path.</param>
+        /// <returns>True iff paths are equal.</returns>
+        public bool Equals(string a_other)
+        {
+            if (a_other == null)
+                return false;
+
+            return _path.Equals(a_other, StringComparison.OrdinalIgnoreCase);
+        }
+
+        // override object.GetHashCode
+        public override int GetHashCode()
+        {
+            return _path.ToLower().GetHashCode();
+        }
+
+        /// <summary>
+        /// Implicit cast operator to string.
+        /// </summary>
+        /// <param name="a_pathBuilder">Full path instance.</param>
+        public static implicit operator string (PathBuilder a_pathBuilder)
+        {
+            return a_pathBuilder?.ToString();
+        }
+
+        /// <summary>
+        /// Add the given segment (<paramref name="a_segment"/>) to the end of the given path (<paramref name="a_path"/>).
+        /// </summary>
+        /// <param name="a_path">Path.</param>
+        /// <param name="a_segment">Segment.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_path"/> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if <paramref name="a_segment"/> is null.</exception>
+        public static PathBuilder operator +(PathBuilder a_path, string a_segment)
+        {
+            #region Argument Validation
+
+            if (a_path == null)
+                throw new ArgumentNullException(nameof(a_path));
+
+            if (a_segment == null)
+                throw new ArgumentNullException(nameof(a_segment));
+
+            #endregion
+
+            var delimiter = a_path._delimiter;
+            var path = a_path.ToString();
+
+            while (path.EndsWith(delimiter))
+                path = path.Substring(0, path.Length - delimiter.Length);
+
+            while (a_segment.StartsWith(delimiter))
+                a_segment = a_segment.Substring(delimiter.Length);
+
+            path = path + delimiter + a_segment;
+
+            return new PathBuilder(path);
+        }
+
     }
 }

@@ -813,7 +813,20 @@ namespace Helpers.Test.IO
         }
 
 
+        [TestMethod]
+        public void Equals()
+        {
+            // Setup
+            var first = PathBuilder.Create(@"\this\is\a\path");
+            var second = PathBuilder.Create(@"\this\is\a\path");
 
+            // Execute
+            var result = first.Equals(second);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+        
         [TestMethod]
         public void Temp()
         {
