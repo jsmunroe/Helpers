@@ -464,6 +464,15 @@ namespace Helpers.IO
         }
 
         /// <summary>
+        /// Explicit cast operator from string.
+        /// </summary>
+        /// <param name="a_path">Full path value.</param>
+        public static explicit operator PathBuilder(string a_path)
+        {
+            return Create(a_path);
+        }
+
+        /// <summary>
         /// Add the given segment (<paramref name="a_segment"/>) to the end of the given path (<paramref name="a_path"/>).
         /// </summary>
         /// <param name="a_path">Path.</param>
