@@ -66,13 +66,29 @@ namespace Helpers.IO
         public long Size => TargetFile.Length;
 
         /// <summary>
+        /// Create a file with the given text (<paramref name="a_text"/>) as its contents.
+        /// </summary>
+        /// <param name="a_text">Text contents.</param>
+        public void Create(string a_text)
+        {
+            using (var writer = TargetFile.CreateText())
+            {
+                writer.Write(a_text);
+                writer.Close();
+            }
+        }
+
+        /// <summary>
         /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
         /// </summary>
         /// <param name="a_contents">Stream contents.</param>
         public void Create(Stream a_contents)
         {
             using (var fout = TargetFile.Create())
+            {
                 a_contents.CopyTo(fout);
+                fout.Close();
+            }
         }
 
         /// <summary>

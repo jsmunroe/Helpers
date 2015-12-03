@@ -214,6 +214,15 @@ namespace Helpers.Collections
 
 
         /// <summary>
+        /// Create a file with the given text (<paramref name="a_text"/>) as its contents.
+        /// </summary>
+        /// <param name="a_text">Text contents.</param>
+        void IFile.Create(string a_text)
+        {
+            
+        }
+
+        /// <summary>
         /// Create the file with the given stream (<paramref name="a_contents"/>) as its contents.
         /// </summary>
         /// <param name="a_contents">Stream contents.</param>

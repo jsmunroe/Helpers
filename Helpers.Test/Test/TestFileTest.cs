@@ -115,7 +115,7 @@ namespace Helpers.Test.Test
             var stream = new MemoryStream(new byte[1234]);
 
             // Execute
-            file.Create(stream); // Stream is ignored by this implementation.
+            file.Create(stream);
 
             // Assert
             Assert.IsTrue(file.Exists);
@@ -127,7 +127,7 @@ namespace Helpers.Test.Test
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void CreateFileWithNullStream() // TestFile don't care.
+        public void CreateFileWithNullStream()
         {
             // Setup
             var fileSystem = new TestFileSystem();
@@ -136,7 +136,39 @@ namespace Helpers.Test.Test
             // Execute
             file.Create(a_contents: null);
         }
-        
+
+
+        [TestMethod]
+        public void CreatFileWithText()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = new TestFile(fileSystem, @"\a\file\this\is.txt");
+
+            // Execute
+            file.Create("This is a file!"); 
+
+            // Assert
+            Assert.IsTrue(file.Exists);
+            Assert.AreEqual(15, file.Size); // File length determined here: https://mothereff.in/byte-counter#This%20is%20a%20file%21
+            Assert.AreEqual(DateTime.UtcNow.Date, file.CreatedTimeUtc.Date);
+            Assert.AreEqual(DateTime.UtcNow.Hour, file.CreatedTimeUtc.Hour);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void CreateFileWithNullText()
+        {
+            // Setup
+            var fileSystem = new TestFileSystem();
+            var file = new TestFile(fileSystem, @"\a\file\this\is.txt");
+
+            // Execute
+            file.Create(a_text: null);
+        }
+
+
         [TestMethod]
         public void DeleteFile()
         {
