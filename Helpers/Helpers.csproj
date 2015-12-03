@@ -53,6 +53,7 @@
     <Compile Include="Extensions\CollectionHelpers.cs" />
     <Compile Include="Extensions\DictionaryHelpers.cs" />
     <Compile Include="Extensions\DirectoryHelpers.cs" />
+    <Compile Include="Files\IniFile.cs" />
     <Compile Include="IO\DirectoryInfoExtensions.cs" />
     <Compile Include="IO\FsDirectory.cs" />
     <Compile Include="IO\FsFile.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Test\TestFileInstance.cs" />
     <Compile Include="Test\TestFileSystem.cs" />
     <Compile Include="Test\TestSet.cs" />
+    <Compile Include="Files\TextValue.cs" />
     <Compile Include="Xml\XmlSet.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
