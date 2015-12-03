@@ -139,7 +139,7 @@ namespace Helpers.Test.Test
 
 
         [TestMethod]
-        public void CreatFileWithText()
+        public void CreateFileWithText()
         {
             // Setup
             var fileSystem = new TestFileSystem();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using Helpers.Contracts;
 using Helpers.IO;
@@ -98,9 +99,18 @@ namespace Helpers.Test
         /// Create a file with the given text (<paramref name="a_text"/>) as its contents.
         /// </summary>
         /// <param name="a_text">Text contents.</param>
-        public void Create(string a_text)
+        /// <param name="a_encoding"></param>
+        public void Create(string a_text, Encoding a_encoding = null)
         {
-            throw new NotImplementedException();
+            a_encoding = a_encoding ?? Encoding.UTF8;
+
+            var fileStats = new TestFileInstance();
+            fileStats.Data = a_encoding.GetBytes(a_text);
+            fileStats.Size = fileStats.Data.Length;
+            fileStats.CreatedTimeUtc = DateTime.UtcNow;
+            fileStats.LastModifiedTimeUtc = DateTime.UtcNow;
+
+            FileSystem.StageFile(Path, fileStats);
         }
 
         /// <summary>
@@ -121,6 +131,9 @@ namespace Helpers.Test
             fileStats.Size = a_contents.Length;
             fileStats.CreatedTimeUtc = DateTime.UtcNow;
             fileStats.LastModifiedTimeUtc = DateTime.UtcNow;
+
+            fileStats.Data = new byte[a_contents.Length];
+            a_contents.Read(fileStats.Data, 0, (int)a_contents.Length);
 
             FileSystem.StageFile(Path, fileStats);
         }

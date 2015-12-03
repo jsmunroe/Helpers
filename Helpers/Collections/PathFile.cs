@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Text;
 using Helpers.Contracts;
 using Helpers.IO;
 using Helpers.Test;
@@ -217,7 +218,8 @@ namespace Helpers.Collections
         /// Create a file with the given text (<paramref name="a_text"/>) as its contents.
         /// </summary>
         /// <param name="a_text">Text contents.</param>
-        void IFile.Create(string a_text)
+        /// <param name="a_encoding">Text encoding.</param>
+        void IFile.Create(string a_text, Encoding a_encoding)
         {
             
         }

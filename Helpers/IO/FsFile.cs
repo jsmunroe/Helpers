@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using Helpers.Contracts;
 
 namespace Helpers.IO
@@ -69,12 +70,16 @@ namespace Helpers.IO
         /// Create a file with the given text (<paramref name="a_text"/>) as its contents.
         /// </summary>
         /// <param name="a_text">Text contents.</param>
-        public void Create(string a_text)
+        /// <param name="a_encoding">Text encoding.</param>
+        public void Create(string a_text, Encoding a_encoding = null)
         {
-            using (var writer = TargetFile.CreateText())
+            a_encoding = a_encoding ?? Encoding.UTF8;
+
+            using (var fout = TargetFile.Create())
             {
-                writer.Write(a_text);
-                writer.Close();
+                var textBytes = a_encoding.GetBytes(a_text);
+                fout.Write(textBytes, 0, textBytes.Length);
+                fout.Close();
             }
         }
 
