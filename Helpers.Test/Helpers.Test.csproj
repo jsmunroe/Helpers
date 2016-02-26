@@ -65,6 +65,7 @@
     <Compile Include="Extensions\DictionaryHelpersTest.cs" />
     <Compile Include="Extensions\DirectoryHelpersTest.cs" />
     <Compile Include="Files\TextValueTest.cs" />
+    <Compile Include="IO\AdvancedStreamReaderTest.cs" />
     <Compile Include="IO\DirectoryInfoExtensionsTest.cs" />
     <Compile Include="IO\FsFileTest.cs" />
     <Compile Include="IO\PathBuilderTest.cs" />
