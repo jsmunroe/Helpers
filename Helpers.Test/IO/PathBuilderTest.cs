@@ -633,14 +633,14 @@ namespace Helpers.Test.IO
         public void Relative()
         {
             // Setup
-            var path = PathBuilder.Create(@"\some\odd");
-            var child = PathBuilder.Create(@"\some\odd\path\or\other");
+            var path = PathBuilder.Create(@"\Some\Odd");
+            var child = PathBuilder.Create(@"\Some\Odd\Path\Or\Other");
 
             // Execute
             var result = PathBuilder.Relative(path, child);
 
             // Assert
-            Assert.AreEqual(@"path\or\other", result);
+            Assert.AreEqual(@"Path\Or\Other", result);
         }
 
 

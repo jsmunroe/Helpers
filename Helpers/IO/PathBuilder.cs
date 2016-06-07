@@ -202,10 +202,10 @@ namespace Helpers.IO
             if (IsRoot(_path))
                 return null;
 
-            var lastIndex = _path.LastIndexOf(_delimiter, StringComparison.Ordinal);
+            var lastIndex = _path.LastIndexOf(_delimiter, StringComparison.OrdinalIgnoreCase);
 
             if (lastIndex >= _path.Length - 1)
-                lastIndex = _path.LastIndexOf(_delimiter, lastIndex - 1, StringComparison.Ordinal);
+                lastIndex = _path.LastIndexOf(_delimiter, lastIndex - 1, StringComparison.OrdinalIgnoreCase);
 
             if (lastIndex < 0)
                 return ApplyOptions(Create(""));
@@ -232,10 +232,10 @@ namespace Helpers.IO
             if (IsRoot(_path))
                 return "";
 
-            var lastIndex = _path.LastIndexOf(_delimiter, StringComparison.Ordinal);
+            var lastIndex = _path.LastIndexOf(_delimiter, StringComparison.OrdinalIgnoreCase);
 
             if (lastIndex >= _path.Length - 1)
-                lastIndex = _path.LastIndexOf(_delimiter, lastIndex - 1, StringComparison.Ordinal);
+                lastIndex = _path.LastIndexOf(_delimiter, lastIndex - 1, StringComparison.OrdinalIgnoreCase);
 
             if (lastIndex < 0)
                 return _path;
@@ -260,7 +260,7 @@ namespace Helpers.IO
             if (name == null)
                 return null;
 
-            var lastIndex = name.LastIndexOf(a_extensionMarker, StringComparison.Ordinal);
+            var lastIndex = name.LastIndexOf(a_extensionMarker, StringComparison.OrdinalIgnoreCase);
             if (lastIndex < 0)
                 return name;
 
@@ -281,7 +281,7 @@ namespace Helpers.IO
             if (name == null)
                 return null;
 
-            var lastIndex = name.LastIndexOf(a_extensionMarker, StringComparison.Ordinal);
+            var lastIndex = name.LastIndexOf(a_extensionMarker, StringComparison.OrdinalIgnoreCase);
             if (lastIndex < 0)
                 return name;
 
@@ -376,8 +376,8 @@ namespace Helpers.IO
 
             #endregion
 
-            var first = a_first.ToString().ToLower();
-            var second = a_second.ToString().ToLower();
+            var first = a_first.ToString();
+            var second = a_second.ToString();
 
             if (a_first._delimiter != a_second._delimiter)
                 throw new InvalidOperationException("Delimiter mismatch.");
@@ -388,7 +388,7 @@ namespace Helpers.IO
             if (first.StartsWith(second))
                 return Relative(a_second, a_first);
 
-            if (!second.StartsWith(first))
+            if (!second.StartsWith(first, StringComparison.OrdinalIgnoreCase))
                 return null;
 
             var baseLength = first.Length;
